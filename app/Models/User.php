@@ -2,23 +2,56 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
-use Laravel\Sanctum\HasApiTokens; // Pastikan baris ini ada
+use Laravel\Sanctum\HasApiTokens;
 
 class User extends Authenticatable
 {
-    use HasApiTokens, Notifiable; // Tambahkan HasApiTokens di sini
+    use HasApiTokens, Notifiable;
 
+    /**
+     * @var list<string>
+     */
     protected $fillable = [
         'name',
         'email',
         'password',
         'role',
+        'jurusan_id',
     ];
 
+    /**
+     * @var list<string>
+     */
     protected $hidden = [
         'password',
         'remember_token',
     ];
+
+    /**
+     * @return BelongsTo<Jurusan, $this>
+     */
+    public function jurusan(): BelongsTo
+    {
+        return $this->belongsTo(Jurusan::class, 'jurusan_id');
+    }
+
+    /**
+     * @return HasMany<Pesanan, $this>
+     */
+    public function pesanans(): HasMany
+    {
+        return $this->hasMany(Pesanan::class, 'user_id');
+    }
+
+    /**
+     * @return HasMany<Penugasan, $this>
+     */
+    public function penugasans(): HasMany
+    {
+        return $this->hasMany(Penugasan::class, 'worker_id');
+    }
 }
