@@ -1,17 +1,17 @@
 @extends('layouts.admin')
 
-@section('title', 'Dashboard Admin ' . ($jurusan->nama_jurusan ?? 'Jurusan') . ' — TEFA Hub')
+@section('title', 'DASHBOARD — Admin ' . ($jurusan->nama_jurusan ?? 'Jurusan'))
 
 @section('content')
   <div class="page-head">
     <div>
       <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 4px;">
-        <h1 class="page-title">Dashboard Admin Jurusan</h1>
+        <h1 class="page-title">DASHBOARD</h1>
         <span class="badge-dept">
-          ★ {{ $jurusan->nama_jurusan ?? 'Katalog TEFA' }}
+          ★ Jurusan {{ $jurusan->nama_jurusan ?? 'TEFA' }}
         </span>
       </div>
-      <p class="page-sub">Ringkasan aktivitas pesanan, performa pendapatan, dan penugasan siswa Teaching Factory hari ini.</p>
+      <p class="page-sub">Ringkasan aktivitas pesanan, performa pendapatan, progress projek berjalan, dan penugasan siswa.</p>
     </div>
 
     <div>
@@ -24,9 +24,15 @@
   <!-- 1. Stats Metrik -->
   @include('admin.partials.stats')
 
-  <!-- 2. Grafik Tren Aktivitas -->
+  <!-- 2. Grafik Tren Aktivitas Bulanan -->
   @include('admin.partials.charts')
 
-  <!-- 3. Tabel Pesanan & Aksi Operasional -->
+  <!-- 3. Projek Sedang Berjalan (Projects in Progress) -->
+  @include('admin.partials.projects')
+
+  <!-- 4. Manajemen Siswa / Worker -->
+  @include('admin.partials.workers')
+
+  <!-- 5. Tabel Pesanan & Aksi Operasional -->
   @include('admin.partials.table')
 @endsection

@@ -30,4 +30,20 @@ class Jurusan extends Model
     {
         return $this->hasMany(User::class, 'jurusan_id');
     }
+
+    /**
+     * @return HasMany<Project, $this>
+     */
+    public function projects(): HasMany
+    {
+        return $this->hasMany(Project::class, 'jurusan_id');
+    }
+
+    /**
+     * @return HasMany<PesanMasuk, $this>
+     */
+    public function pesanMasuks(): HasMany
+    {
+        return $this->hasMany(PesanMasuk::class, 'jurusan_id');
+    }
 }

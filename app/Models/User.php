@@ -54,4 +54,12 @@ class User extends Authenticatable
     {
         return $this->hasMany(Penugasan::class, 'worker_id');
     }
+
+    /**
+     * @return HasMany<Project, $this>
+     */
+    public function projects(): HasMany
+    {
+        return $this->hasMany(Project::class, 'worker_id');
+    }
 }

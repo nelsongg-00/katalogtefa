@@ -5,10 +5,13 @@ namespace App\Http\Controllers;
 use App\Models\DetailPesanan;
 use App\Models\Penugasan;
 use App\Models\Pesanan;
+use App\Models\PesanMasuk;
 use App\Models\Produk;
+use App\Models\Project;
 use App\Models\User;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\View\View;
 
 class AdminJurusanController extends Controller
@@ -88,6 +91,24 @@ class AdminJurusanController extends Controller
             'pesananSelesai' => $pesananSelesaiPerBulan,
         ];
 
+        // 5. Projek Sedang Berjalan
+        $projectsQuery = Project::with('worker');
+        if ($jurusanId) {
+            $projectsQuery->where('jurusan_id', $jurusanId);
+        }
+        $projects = $projectsQuery->orderBy('created_at', 'desc')->get();
+
+        // 6. Notifikasi Pesan Masuk
+        $pesanMasuksQuery = PesanMasuk::where(function ($q) use ($jurusanId) {
+            $q->whereNull('jurusan_id');
+            if ($jurusanId) {
+                $q->orWhere('jurusan_id', $jurusanId);
+            }
+        });
+
+        $unreadMessagesCount = (clone $pesanMasuksQuery)->where('is_read', false)->count();
+        $pesanMasuks = $pesanMasuksQuery->orderBy('created_at', 'desc')->take(8)->get();
+
         return view('admin.index', compact(
             'jurusan',
             'pesanans',
@@ -101,7 +122,10 @@ class AdminJurusanController extends Controller
             'totalProduk',
             'totalFisik',
             'totalJasa',
-            'dataChart'
+            'dataChart',
+            'projects',
+            'pesanMasuks',
+            'unreadMessagesCount'
         ));
     }
 
@@ -132,5 +156,110 @@ class AdminJurusanController extends Controller
         $pesanan->update(['status_pesanan' => 'In Progress']);
 
         return redirect()->back()->with('success', 'Tugas berhasil diberikan kepada siswa/worker.');
+    }
+
+    /**
+     * Store a new worker for the department.
+     */
+    public function storeWorker(Request $request): RedirectResponse
+    {
+        $request->validate([
+            'name' => 'required|string|max:255',
+            'email' => 'required|email|unique:users,email',
+            'password' => 'required|string|min:6',
+        ]);
+
+        User::create([
+            'name' => $request->name,
+            'email' => $request->email,
+            'password' => Hash::make($request->password),
+            'role' => 'worker',
+            'jurusan_id' => auth()->user()->jurusan_id,
+        ]);
+
+        return redirect()->back()->with('success', 'Worker/siswa baru berhasil ditambahkan.');
+    }
+
+    /**
+     * Delete or remove a worker from department.
+     */
+    public function deleteWorker(User $user): RedirectResponse
+    {
+        if ($user->role === 'worker' && $user->jurusan_id == auth()->user()->jurusan_id) {
+            $user->delete();
+
+            return redirect()->back()->with('success', 'Worker/siswa berhasil dihapus.');
+        }
+
+        return redirect()->back()->with('error', 'Anda tidak memiliki otoritas untuk menghapus akun ini.');
+    }
+
+    /**
+     * Store a new project.
+     */
+    public function storeProject(Request $request): RedirectResponse
+    {
+        $request->validate([
+            'nama_projek' => 'required|string|max:255',
+            'deskripsi' => 'nullable|string',
+            'status' => 'required|in:pending,in_progress,completed,cancelled',
+            'progress' => 'required|integer|min:0|max:100',
+            'worker_id' => 'nullable|exists:users,id',
+            'tenggat_waktu' => 'nullable|date',
+        ]);
+
+        Project::create([
+            'jurusan_id' => auth()->user()->jurusan_id,
+            'nama_projek' => $request->nama_projek,
+            'deskripsi' => $request->deskripsi,
+            'status' => $request->status,
+            'progress' => $request->progress,
+            'worker_id' => $request->worker_id,
+            'tenggat_waktu' => $request->tenggat_waktu,
+        ]);
+
+        return redirect()->back()->with('success', 'Projek baru berhasil ditambahkan.');
+    }
+
+    /**
+     * Update project progress and status.
+     */
+    public function updateProject(Request $request, Project $project): RedirectResponse
+    {
+        $request->validate([
+            'status' => 'required|in:pending,in_progress,completed,cancelled',
+            'progress' => 'required|integer|min:0|max:100',
+            'worker_id' => 'nullable|exists:users,id',
+            'tenggat_waktu' => 'nullable|date',
+        ]);
+
+        $project->update([
+            'status' => $request->status,
+            'progress' => $request->progress,
+            'worker_id' => $request->worker_id,
+            'tenggat_waktu' => $request->tenggat_waktu,
+        ]);
+
+        return redirect()->back()->with('success', 'Progress dan data projek berhasil diperbarui.');
+    }
+
+    /**
+     * Delete a project.
+     */
+    public function deleteProject(Project $project): RedirectResponse
+    {
+        $project->delete();
+
+        return redirect()->back()->with('success', 'Projek berhasil dihapus.');
+    }
+
+    /**
+     * Mark message as read.
+     */
+    public function markMessageAsRead(PesanMasuk $pesanMasuk): RedirectResponse
+    {
+        $pesanMasuk->update(['is_read' => true]);
+
+        return redirect()->back()->with('success', 'Pesan ditandai sebagai sudah dibaca.');
     }
 }
