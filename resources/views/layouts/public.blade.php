@@ -19,6 +19,28 @@
             overflow-x: hidden;
         }
 
+        /* --- TOPBAR (Baris Atas Informasi) --- */
+        .topbar {
+            background-color: #081b4b;
+            color: #e2e8f0;
+            font-size: 13px;
+            padding: 10px 50px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 30px;
+            font-weight: 500;
+        }
+        .topbar-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .topbar-icon {
+            color: #d946ef;
+            font-size: 14px;
+        }
+
         /* --- NAVBAR --- */
         .navbar {
             display: flex;
@@ -26,18 +48,110 @@
             align-items: center;
             padding: 15px 50px;
             background-color: #ffffff;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+            box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05);
             position: sticky;
             top: 0;
             z-index: 999;
         }
-        .navbar-brand { font-weight: 800; color: #0a215e; display: flex; align-items: center; gap: 10px; }
-        .navbar-brand img { height: 40px; }
-        .navbar-links a { margin: 0 15px; text-decoration: none; color: #333; font-weight: 600; }
-        .navbar-links a.active { color: #2563eb; background: #eff6ff; padding: 8px 15px; border-radius: 20px; }
-        .navbar-auth { display: flex; align-items: center; gap: 15px; }
-        .navbar-auth a { text-decoration: none; font-weight: 600; color: #333; }
-        .btn-hamburger { background: none; border: 1px solid #ccc; padding: 5px 10px; border-radius: 5px; cursor: pointer; font-size: 18px; }
+        
+        /* Bagian Kiri (Logo) */
+        .navbar-brand { 
+            flex: 1; /* Memastikan logo mengambil sepertiga ruang kiri */
+            display: flex; 
+            align-items: center; 
+            gap: 12px; 
+            text-decoration: none;
+        }
+        
+        .navbar-brand img { 
+            height: 50px; 
+            width: auto;
+            object-fit: contain;
+        }
+        
+        .brand-text {
+            display: flex;
+            flex-direction: column;
+            line-height: 1.2;
+        }
+
+        .brand-text-main {
+            color: #0a215e;
+            font-weight: 700;
+            font-size: 17px;
+            letter-spacing: 0.5px;
+        }
+
+        .brand-text-sub {
+            color: #2563eb;
+            font-weight: 600;
+            font-size: 12px;
+            letter-spacing: 0.5px;
+        }
+
+        /* Bagian Tengah (Menu Beranda dll) */
+        .navbar-center {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .navbar-links {
+            display: flex;
+            align-items: center;
+            gap: 25px;
+        }
+
+        .navbar-links a { 
+            text-decoration: none; 
+            color: #1e3a8a;
+            font-weight: 600; 
+            font-size: 15px;
+            transition: 0.2s;
+        }
+        
+        .navbar-links a:hover {
+            color: #2563eb;
+        }
+
+        .navbar-links a.active { 
+            color: #ffffff; 
+            background-color: #2563eb; 
+            padding: 10px 24px; 
+            border-radius: 50px; 
+        }
+
+        /* Bagian Kanan (Auth/Login) */
+        .navbar-auth { 
+            flex: 1; /* Memastikan auth mengambil sepertiga ruang kanan (menyeimbangkan logo) */
+            display: flex; 
+            justify-content: flex-end; /* Memaksa tombol ke ujung kanan */
+            align-items: center; 
+            gap: 15px; 
+        }
+        
+        .btn-login {
+            text-decoration: none; 
+            font-weight: 600; 
+            color: #1e3a8a; 
+            font-size: 15px;
+        }
+
+        .btn-register {
+            text-decoration: none;
+            font-weight: 600;
+            color: #2563eb;
+            font-size: 14px;
+            padding: 8px 18px;
+            border: 1.5px solid #2563eb;
+            border-radius: 50px;
+            transition: 0.3s;
+        }
+        
+        .btn-register:hover {
+            background-color: #2563eb;
+            color: #fff;
+        }
 
         /* --- HERO SECTION (VIDEO BACKGROUND) --- */
         .hero-section {
@@ -88,7 +202,6 @@
         .btn-outline:hover { background-color: #fff; color: #0a215e; transform: translateY(-2px); }
         .btn-blue { background-color: #2563eb; color: white; display: inline-block; padding: 10px 20px; border-radius: 20px; text-decoration: none; border: none; cursor: pointer;}
         .btn-blue:hover { background-color: #1d4ed8; transform: translateY(-2px); }
-
 
         /* --- KONTEN BAWAH (BERANDA LENGKAP) --- */
         .container { max-width: 1200px; margin: 0 auto; padding: 80px 20px; }
@@ -158,22 +271,46 @@
 </head>
 <body>
 
-    <!-- NAVBAR -->
+    <!-- TOPBAR INFORMASI -->
+    <div class="topbar">
+        <div class="topbar-item">
+            <span class="topbar-icon">📍</span> Jl. Nusantara No.KM.14 Batu IX, Kec. Tanjungpinang, Kepulauan Riau 29157
+        </div>
+        <div class="topbar-item">
+            <span class="topbar-icon">✉️</span> smkntpi4@gmail.com
+        </div>
+        <div class="topbar-item">
+            <span class="topbar-icon">📞</span> +62 878-1948-317
+        </div>
+    </div>
+
+    <!-- NAVBAR UTAMA -->
     <nav class="navbar">
-        <div class="navbar-brand">
-            SMKN 4 TANJUNGPINANG<br><small style="font-size: 10px; color:#2563eb;">KATALOG TEFA</small>
+        <!-- BAGIAN KIRI: Logo & Tulisan -->
+        <a href="{{ route('home') }}" class="navbar-brand">
+            <img src="{{ asset('asset/img/logo-smkn4.png') }}" alt="Logo SMKN 4">
+            <div class="brand-text">
+                <span class="brand-text-main">SMKN 4 TANJUNGPINANG</span>
+                <span class="brand-text-sub">KATALOG TEFA</span>
+            </div>
+        </a>
+
+        <!-- BAGIAN TENGAH: Menu Utama -->
+        <div class="navbar-center">
+            <div class="navbar-links">
+                <a href="{{ route('home') }}" class="{{ request()->routeIs('home') ? 'active' : '' }}">Beranda</a>
+                <a href="{{ route('profil') }}" class="{{ request()->routeIs('profil') ? 'active' : '' }}">Profil Tefa</a>
+                <a href="{{ route('produk') }}" class="{{ request()->routeIs('produk') ? 'active' : '' }}">Produk</a>
+                <a href="{{ route('jasa') }}" class="{{ request()->routeIs('jasa') ? 'active' : '' }}">Layanan Jasa</a>
+            </div>
         </div>
-        <div class="navbar-links">
-            <a href="{{ route('home') }}" class="{{ request()->routeIs('home') ? 'active' : '' }}">Beranda</a>
-            <a href="{{ route('profil') }}" class="{{ request()->routeIs('profil') ? 'active' : '' }}">Profil Sekolah</a>
-            <a href="{{ route('produk') }}" class="{{ request()->routeIs('produk') ? 'active' : '' }}">Produk</a>
-            <a href="{{ route('jasa') }}" class="{{ request()->routeIs('jasa') ? 'active' : '' }}">Layanan Jasa</a>
-        </div>
+
+        <!-- BAGIAN KANAN: Auth & Register -->
         <div class="navbar-auth">
             @guest
                 <!-- Tampil Jika Belum Login -->
-                <a href="{{ route('login') }}" style="color: #0a215e;">Login</a>
-                <a href="{{ route('register') }}" class="btn btn-primary" style="padding: 8px 20px; border-radius: 20px; font-size: 14px; text-decoration:none;">Daftar</a>
+                <a href="{{ route('login') }}" class="btn-login">Log in</a>
+                <a href="{{ route('register') }}" class="btn-register">Register</a>
             @endguest
             @auth
                 <!-- Tampil Jika Sudah Login -->
@@ -182,16 +319,16 @@
                 @endif
                 
                 @if(auth()->user()->role == 'super_admin')
-                    <a href="{{ route('superadmin.dashboard') }}" class="btn btn-primary" style="padding: 8px 15px; border-radius: 20px; font-size: 14px; text-decoration:none;">Dashboard</a>
+                    <a href="{{ route('superadmin.dashboard') }}" class="btn-register">Dashboard</a>
                 @elseif(auth()->user()->role == 'admin_jurusan')
-                    <a href="{{ route('admin.dashboard') }}" class="btn btn-primary" style="padding: 8px 15px; border-radius: 20px; font-size: 14px; text-decoration:none;">Dashboard</a>
+                    <a href="{{ route('admin.dashboard') }}" class="btn-register">Dashboard</a>
                 @elseif(auth()->user()->role == 'worker')
-                    <a href="{{ route('worker.dashboard') }}" class="btn btn-primary" style="padding: 8px 15px; border-radius: 20px; font-size: 14px; text-decoration:none;">Dashboard</a>
+                    <a href="{{ route('worker.dashboard') }}" class="btn-register">Dashboard</a>
                 @endif
                 
                 <form method="POST" action="{{ route('logout') }}" style="display:inline;">
                     @csrf
-                    <button type="submit" style="background: none; border: none; cursor: pointer; color: #dc2626; font-weight: 600;">Logout</button>
+                    <button type="submit" style="background: none; border: none; cursor: pointer; color: #dc2626; font-weight: 600; font-size: 15px;">Logout</button>
                 </form>
             @endauth
         </div>
@@ -245,4 +382,4 @@
     </footer>
 
 </body>
-</html>
+</html> 

@@ -5,7 +5,7 @@
     <section class="hero-section">
         <video autoplay loop muted playsinline class="hero-video">
             <!-- SUMBER VIDEO KAMU -->
-            <source src="{{ asset('asset/video/profil-smk.mp4') }}" type="video/mp4">
+            <source src="{{ asset('asset/vid/profil-smk.mp4') }}" type="video/mp4">
         </video>
         <div class="hero-overlay"></div>
         <div class="hero-content">
@@ -20,7 +20,7 @@
                 jasa hasil Teaching Factory siswa SMKN 4 Tanjungpinang.
             </p>
             <div class="hero-buttons">
-                <a href="{{ route('produk') }}" class="btn btn-primary">Jelajahi Produk &rarr;</a>
+                <a href="{{ route('produk') }}" class="btn btn-primary">Jelajahi Produk</a>
                 <a href="{{ route('jasa') }}" class="btn btn-outline">Lihat Layanan Jasa</a>
             </div>
         </div>
@@ -38,7 +38,7 @@
             <p class="section-subtitle">
                 SMKN 4 Tanjungpinang adalah sekolah menengah kejuruan negeri yang berfokus pada pendidikan berbasis teknologi dan kreativitas, memadukan pembelajaran teori dengan praktik nyata melalui program Teaching Factory di enam bidang keahlian.
             </p>
-            <a href="{{ route('profil') }}" class="btn-blue">Kenali TEFA &rarr;</a>
+            <a href="{{ route('profil') }}" class="btn-blue">Kenali TEFA</a>
         </div>
     </div>
 
