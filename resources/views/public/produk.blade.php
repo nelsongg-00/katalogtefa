@@ -10,91 +10,52 @@
 
     <div class="container">
         <div class="produk-grid">
-            @foreach($produks as $produk)
+            @forelse($products as $product)
                 <div class="produk-card">
-                    @if($produk->foto_produk)
-                        <img src="{{ Storage::url($produk->foto_produk) }}" alt="{{ $produk->nama_produk }}" class="produk-img">
-                    @else
-                        <div class="produk-img" style="display: flex; align-items: center; justify-content: center; background: #e2e8f0; color: #94a3b8; font-size: 40px;">
-                            📦
-                        </div>
-                    @endif
+                    <img src="{{ $product->foto ? asset('storage/' . $product->foto) : asset('images/placeholder-product.png') }}" 
+                         alt="{{ $product->nama_produk }}" 
+                         class="produk-img" 
+                         style="object-fit: cover; width: 100%; height: 200px; border-top-left-radius: 12px; border-top-right-radius: 12px; display: block;">
+                    
                     <div class="produk-info">
-                        <h3>{{ $produk->nama_produk }}</h3>
-                        <span style="font-size: 12px; color: #2563eb; background: #eff6ff; padding: 3px 10px; border-radius: 10px; display: inline-block; margin-bottom: 10px; width: fit-content;">
-                            {{ $produk->jurusan->nama_jurusan ?? 'Produk Fisik' }}
-                        </span>
-                        <p>{{ Str::limit($produk->deskripsi, 80) }}</p>
-                        <div class="produk-price">Rp {{ number_format($produk->harga, 0, ',', '.') }}</div>
+                        <h3>{{ $product->nama_produk }}</h3>
                         
-                        @if($produk->tipe == 'Layanan Jasa')
-                            <a href="https://wa.me/6281234567890?text=Halo%20saya%20ingin%20memesan%20jasa%20{{ urlencode($produk->nama_produk) }}" target="_blank" class="btn-blue text-center" style="width: 100%; border-radius: 10px; background: #10b981;">Tanya via WhatsApp</a>
+                        @if($product->jurusan)
+                            <span style="font-size: 12px; color: #2563eb; background: #eff6ff; padding: 3px 10px; border-radius: 10px; display: inline-block; margin-bottom: 10px; width: fit-content; font-weight: 600;">
+                                {{ $product->jurusan->nama_jurusan }}
+                            </span>
                         @else
-                            @auth
-                                @if(auth()->user()->role == 'pelanggan')
-                                    <form action="{{ route('checkout.store', $produk->id) }}" method="POST">
-                                        @csrf
-                                        <button type="submit" class="btn-blue" style="width: 100%; border-radius: 10px; cursor: pointer; border: none;">Pesan Sekarang</button>
-                                    </form>
-                                @else
-                                    <button disabled class="btn-blue" style="width: 100%; border-radius: 10px; background: #94a3b8; cursor: not-allowed; border: none;">Pesan Sekarang</button>
-                                @endif
-                            @else
-                                <a href="{{ route('login') }}" class="btn-blue text-center" style="width: 100%; border-radius: 10px; display: block;">Login untuk Pesan</a>
-                            @endauth
+                            <span style="font-size: 12px; color: #2563eb; background: #eff6ff; padding: 3px 10px; border-radius: 10px; display: inline-block; margin-bottom: 10px; width: fit-content; font-weight: 600;">
+                                Produk Fisik TEFA
+                            </span>
                         @endif
+
+                        <div style="font-size: 12.5px; color: #64748b; margin-bottom: 6px;">
+                            Stok: <strong style="color: {{ $product->stok > 0 ? '#10b981' : '#ef4444' }};">{{ $product->stok }}</strong>
+                        </div>
+
+                        <p>{{ Str::limit($product->deskripsi, 100) }}</p>
+
+                        <div class="produk-price">Rp {{ number_format($product->harga, 0, ',', '.') }}</div>
+
+                        @auth
+                            @if(auth()->user()->role == 'pelanggan')
+                                <button type="button" class="btn-blue" style="width: 100%; border-radius: 10px; cursor: pointer; border: none;">Pesan Sekarang</button>
+                            @else
+                                <button disabled class="btn-blue" style="width: 100%; border-radius: 10px; background: #94a3b8; cursor: not-allowed; border: none;">Pesan Sekarang</button>
+                            @endif
+                        @else
+                            <a href="{{ route('login') }}" class="btn-blue text-center" style="width: 100%; border-radius: 10px; display: block;">Login untuk Pesan</a>
+                        @endauth
                     </div>
                 </div>
-            @endforeach
-
-            <!-- DUMMY PRODUK 1 -->
-            <div class="produk-card">
-                <div class="produk-img" style="display: flex; align-items: center; justify-content: center; background: #e2e8f0; color: #94a3b8; font-size: 40px;">👕</div>
-                <div class="produk-info">
-                    <h3>Kaos Sablon Custom</h3>
-                    <span style="font-size: 12px; color: #2563eb; background: #eff6ff; padding: 3px 10px; border-radius: 10px; display: inline-block; margin-bottom: 10px; width: fit-content;">Desain Komunikasi Visual</span>
-                    <p>Kaos katun combed 30s dengan sablon DTF desain custom sesuai permintaan pelanggan.</p>
-                    <div class="produk-price">Rp 85.000</div>
-                    <a href="{{ route('login') }}" class="btn-blue text-center" style="width: 100%; border-radius: 10px; display: block;">Login untuk Pesan</a>
+            @empty
+                <div style="grid-column: 1 / -1; text-align: center; padding: 60px 20px; background: #fff; border-radius: 16px; border: 1px solid #e2e8f0;">
+                    <div style="font-size: 48px; margin-bottom: 12px;">📦</div>
+                    <h3 style="font-size: 18px; font-weight: 700; color: #1e293b; margin-bottom: 6px;">Belum Ada Produk Tersedia</h3>
+                    <p style="color: #64748b; font-size: 14px; max-width: 480px; margin: 0 auto;">Saat ini katalog produk fisik belum memiliki data produk. Silakan kembali lagi nanti atau hubungi pihak sekolah.</p>
                 </div>
-            </div>
-
-            <!-- DUMMY PRODUK 2 -->
-            <div class="produk-card">
-                <div class="produk-img" style="display: flex; align-items: center; justify-content: center; background: #e2e8f0; color: #94a3b8; font-size: 40px;">☕</div>
-                <div class="produk-info">
-                    <h3>Mug Printing</h3>
-                    <span style="font-size: 12px; color: #2563eb; background: #eff6ff; padding: 3px 10px; border-radius: 10px; display: inline-block; margin-bottom: 10px; width: fit-content;">Desain Komunikasi Visual</span>
-                    <p>Mug keramik putih dengan desain cetak sublimasi full color anti luntur.</p>
-                    <div class="produk-price">Rp 35.000</div>
-                    <a href="{{ route('login') }}" class="btn-blue text-center" style="width: 100%; border-radius: 10px; display: block;">Login untuk Pesan</a>
-                </div>
-            </div>
-
-            <!-- DUMMY PRODUK 3 -->
-            <div class="produk-card">
-                <div class="produk-img" style="display: flex; align-items: center; justify-content: center; background: #e2e8f0; color: #94a3b8; font-size: 40px;">🔌</div>
-                <div class="produk-info">
-                    <h3>Kabel LAN 10 Meter</h3>
-                    <span style="font-size: 12px; color: #2563eb; background: #eff6ff; padding: 3px 10px; border-radius: 10px; display: inline-block; margin-bottom: 10px; width: fit-content;">Teknik Komputer Jaringan</span>
-                    <p>Kabel UTP Cat6 siap pakai dengan konektor RJ45 yang sudah di-crimping rapi.</p>
-                    <div class="produk-price">Rp 50.000</div>
-                    <a href="{{ route('login') }}" class="btn-blue text-center" style="width: 100%; border-radius: 10px; display: block;">Login untuk Pesan</a>
-                </div>
-            </div>
-
-            <!-- DUMMY PRODUK 4 -->
-            <div class="produk-card">
-                <div class="produk-img" style="display: flex; align-items: center; justify-content: center; background: #e2e8f0; color: #94a3b8; font-size: 40px;">🖼️</div>
-                <div class="produk-info">
-                    <h3>X-Banner Stand + Cetak</h3>
-                    <span style="font-size: 12px; color: #2563eb; background: #eff6ff; padding: 3px 10px; border-radius: 10px; display: inline-block; margin-bottom: 10px; width: fit-content;">Desain Komunikasi Visual</span>
-                    <p>Paket lengkap X-Banner ukuran 60x160 cm termasuk tiang penyangga dan cetakan hires.</p>
-                    <div class="produk-price">Rp 120.000</div>
-                    <a href="{{ route('login') }}" class="btn-blue text-center" style="width: 100%; border-radius: 10px; display: block;">Login untuk Pesan</a>
-                </div>
-            </div>
-
+            @endforelse
         </div>
     </div>
 @endsection

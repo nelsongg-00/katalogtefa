@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Project extends Model
 {
@@ -18,6 +19,10 @@ class Project extends Model
         'progress',
         'worker_id',
         'tenggat_waktu',
+        'file_hasil',
+        'catatan_worker',
+        'status_review',
+        'catatan_revisi_admin',
     ];
 
     /**
@@ -42,5 +47,15 @@ class Project extends Model
     public function jurusan(): BelongsTo
     {
         return $this->belongsTo(Jurusan::class, 'jurusan_id');
+    }
+
+    /**
+     * Get the timeline logs for the project.
+     *
+     * @return HasMany<ProjectLog, $this>
+     */
+    public function logs(): HasMany
+    {
+        return $this->hasMany(ProjectLog::class, 'project_id')->orderBy('created_at', 'desc');
     }
 }

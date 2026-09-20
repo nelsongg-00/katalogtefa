@@ -108,10 +108,12 @@ class DatabaseSeeder extends Seeder
             'subtotal' => 500000,
         ]);
 
-        // 5. Projects & Messages
+        // 5. Projects & Messages & Products & Worker Tasks
         $this->call([
+            ProductSeeder::class,
             ProjectSeeder::class,
             PesanMasukSeeder::class,
+            WorkerTaskSeeder::class,
         ]);
     }
 }

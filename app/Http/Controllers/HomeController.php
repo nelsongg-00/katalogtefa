@@ -2,9 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
-use App\Models\Jurusan;
-use App\Models\Produk;
+use App\Models\Product;
 
 class HomeController extends Controller
 {
@@ -20,13 +18,15 @@ class HomeController extends Controller
 
     public function produk()
     {
-        $produks = Produk::where('tipe', 'Produk Fisik')->get();
-        return view('public.produk', compact('produks'));
+        $products = Product::latest()->get();
+
+        return view('public.produk', compact('products'));
     }
 
     public function jasa()
     {
         $jasas = Produk::where('tipe', 'Layanan Jasa')->get();
+
         return view('public.jasa', compact('jasas'));
     }
 }

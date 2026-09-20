@@ -109,7 +109,7 @@ class AdminJurusanController extends Controller
         $unreadMessagesCount = (clone $pesanMasuksQuery)->where('is_read', false)->count();
         $pesanMasuks = $pesanMasuksQuery->orderBy('created_at', 'desc')->take(8)->get();
 
-        return view('admin.index', compact(
+        return view('admin.dashboard', compact(
             'jurusan',
             'pesanans',
             'workers',
