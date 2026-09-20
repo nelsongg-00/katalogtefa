@@ -18,7 +18,31 @@ class Jurusan extends Model
         'deskripsi_profil',
         'kepala_jurusan',
         'status_aktif',
+        'lokasi_pengambilan',
     ];
+
+    /**
+     * Dapatkan lokasi pengambilan dengan fallback cerdas berbasis kode jurusan.
+     */
+    public function getLokasiPengambilanAttribute(?string $value): string
+    {
+        if (! empty($value)) {
+            return $value;
+        }
+
+        $kode = strtoupper($this->kode ?? '');
+        $nama = strtolower($this->nama_jurusan ?? '');
+
+        return match (true) {
+            $kode === 'RPL' || str_contains($nama, 'perangkat lunak') => 'Lab Komputer & Rekayasa Perangkat Lunak',
+            $kode === 'TKJ' || str_contains($nama, 'komputer jaringan') => 'Lab Jaringan & Server TKJ',
+            $kode === 'DKV' || str_contains($nama, 'komunikasi visual') => 'Lab Desain Grafis DKV',
+            $kode === 'PSPT' || $kode === 'PSTV' || str_contains($nama, 'siaran') => 'Studio Siaran & Editing PSTV',
+            $kode === 'ANI' || str_contains($nama, 'animasi') => 'Lab Animasi 2D/3D',
+            $kode === 'GIM' || str_contains($nama, 'gim') || str_contains($nama, 'game') => 'Game Dev & VR Lab',
+            default => 'Lab Teaching Factory SMKN 4 Tanjungpinang',
+        };
+    }
 
     /**
      * @return array<string, string>

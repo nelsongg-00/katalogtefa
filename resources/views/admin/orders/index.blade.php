@@ -1,16 +1,16 @@
 @extends('layouts.admin')
 
-@section('title', 'Pencatatan Pesanan WhatsApp & Tracking — Admin Jurusan')
+@section('title', 'Manajemen Pesanan Produk Fisik & Jasa — Admin Jurusan')
 
 @section('content')
 <div class="content-head" style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 24px; flex-wrap: wrap; gap: 16px;">
     <div>
-        <h1 style="font-size: 22px; font-weight: 800; color: #16234a; margin-bottom: 4px;">Pencatatan Pesanan WhatsApp</h1>
-        <p style="color: #7a839c; font-size: 13.5px;">Input pesanan manual dari WhatsApp, dapatkan link pelacakan publik real-time untuk dibagikan ke pelanggan.</p>
+        <h1 style="font-size: 22px; font-weight: 800; color: #16234a; margin-bottom: 4px;">Manajemen Pesanan TeFa</h1>
+        <p style="color: #7a839c; font-size: 13.5px;">Kelola pesanan produk fisik (COD & Ambil di Tempat) dan pencatatan pesanan jasa WhatsApp jurusan.</p>
     </div>
     <div>
         <a href="{{ route('admin.orders.create') }}" class="btn btn-primary" style="background: #16a34a; color: #fff; padding: 10px 20px; border-radius: 10px; font-weight: 700; text-decoration: none; display: inline-flex; align-items: center; gap: 8px; font-size: 13.5px; box-shadow: 0 4px 12px rgba(22,163,74,0.25);">
-            <span>💬 +</span> Catat Pesanan Baru
+            <span>💬 +</span> Catat Pesanan Jasa Baru
         </a>
     </div>
 </div>
@@ -26,20 +26,39 @@
     </div>
 @endif
 
+<!-- Tabs Tipe Pesanan -->
+<div style="display: flex; gap: 10px; margin-bottom: 20px; border-bottom: 2px solid #e2e8f0; padding-bottom: 2px;">
+    <a href="{{ route('admin.orders.index') }}" 
+       style="padding: 10px 18px; font-size: 13.5px; font-weight: 700; text-decoration: none; border-bottom: 3px solid {{ !request('tipe') ? '#2563eb' : 'transparent' }}; color: {{ !request('tipe') ? '#2563eb' : '#64748b' }};">
+        Semua Pesanan
+    </a>
+    <a href="{{ route('admin.orders.index', ['tipe' => 'fisik']) }}" 
+       style="padding: 10px 18px; font-size: 13.5px; font-weight: 700; text-decoration: none; border-bottom: 3px solid {{ request('tipe') === 'fisik' ? '#2563eb' : 'transparent' }}; color: {{ request('tipe') === 'fisik' ? '#2563eb' : '#64748b' }};">
+        📦 Pesanan Produk Fisik (COD)
+    </a>
+    <a href="{{ route('admin.orders.index', ['tipe' => 'jasa']) }}" 
+       style="padding: 10px 18px; font-size: 13.5px; font-weight: 700; text-decoration: none; border-bottom: 3px solid {{ request('tipe') === 'jasa' ? '#2563eb' : 'transparent' }}; color: {{ request('tipe') === 'jasa' ? '#2563eb' : '#64748b' }};">
+        🤝 Pesanan Layanan Jasa WA
+    </a>
+</div>
+
 <div class="card" style="background: #fff; border-radius: 14px; border: 1px solid #e5e9f2; overflow: hidden; box-shadow: 0 2px 8px rgba(22,35,74,0.04);">
     <div style="padding: 16px 20px; border-bottom: 1px solid #e5e9f2; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px;">
         <form method="GET" action="{{ route('admin.orders.index') }}" style="display: flex; gap: 10px; flex-wrap: wrap; align-items: center;">
-            <input type="text" name="search" value="{{ request('search') }}" placeholder="Cari Kode TEFA / Nama / No HP..." style="border: 1px solid #cbd5e1; border-radius: 8px; padding: 7px 14px; font-size: 13px; width: 240px;">
+            @if(request('tipe'))
+                <input type="hidden" name="tipe" value="{{ request('tipe') }}">
+            @endif
+            <input type="text" name="search" value="{{ request('search') }}" placeholder="Cari Kode / Nama / No HP..." style="border: 1px solid #cbd5e1; border-radius: 8px; padding: 7px 14px; font-size: 13px; width: 230px;">
             <select name="status" style="border: 1px solid #cbd5e1; border-radius: 8px; padding: 7px 12px; font-size: 13px;">
                 <option value="">Semua Status</option>
-                <option value="pending" {{ request('status') === 'pending' ? 'selected' : '' }}>Pending (Antrean)</option>
-                <option value="in_progress" {{ request('status') === 'in_progress' ? 'selected' : '' }}>Dalam Pengerjaan</option>
-                <option value="review" {{ request('status') === 'review' ? 'selected' : '' }}>Review / Verifikasi</option>
-                <option value="completed" {{ request('status') === 'completed' ? 'selected' : '' }}>Selesai</option>
-                <option value="cancelled" {{ request('status') === 'cancelled' ? 'selected' : '' }}>Dibatalkan</option>
+                <option value="menunggu_konfirmasi" {{ request('status') === 'menunggu_konfirmasi' ? 'selected' : '' }}>Menunggu Konfirmasi</option>
+                <option value="sedang_dikemas" {{ request('status') === 'sedang_dikemas' ? 'selected' : '' }}>Sedang Dikemas</option>
+                <option value="bisa_diambil" {{ request('status') === 'bisa_diambil' ? 'selected' : '' }}>Bisa Diambil di Lab</option>
+                <option value="selesai" {{ request('status') === 'selesai' ? 'selected' : '' }}>Selesai / Lunas</option>
+                <option value="dibatalkan" {{ request('status') === 'dibatalkan' ? 'selected' : '' }}>Dibatalkan</option>
             </select>
             <button type="submit" style="background: #2563eb; color: #fff; border: none; padding: 7px 16px; border-radius: 8px; font-size: 13px; font-weight: 600; cursor: pointer;">Filter</button>
-            @if(request('search') || request('status'))
+            @if(request('search') || request('status') || request('tipe'))
                 <a href="{{ route('admin.orders.index') }}" style="color: #64748b; font-size: 13px; text-decoration: underline; margin-left: 6px;">Reset</a>
             @endif
         </form>
@@ -50,104 +69,184 @@
         <table style="width: 100%; border-collapse: collapse; text-align: left; font-size: 13px;">
             <thead>
                 <tr style="background: #f8fafd; border-bottom: 1px solid #e5e9f2; color: #64748b; font-size: 12px; font-weight: 700; text-transform: uppercase;">
-                    <th style="padding: 14px 18px;">Kode Tracking</th>
+                    <th style="padding: 14px 18px;">Kode & Tanggal</th>
                     <th style="padding: 14px 18px;">Pelanggan</th>
-                    <th style="padding: 14px 18px;">Layanan & Total Biaya</th>
-                    <th style="padding: 14px 18px;">Worker PJ</th>
+                    <th style="padding: 14px 18px;">Item & Total Tagihan</th>
+                    <th style="padding: 14px 18px;">Lokasi / Penanggung Jawab</th>
                     <th style="padding: 14px 18px;">Status</th>
-                    <th style="padding: 14px 18px; text-align: right;">Aksi</th>
+                    <th style="padding: 14px 18px; text-align: right;">Aksi Workflow</th>
                 </tr>
             </thead>
             <tbody>
                 @forelse($orders as $order)
                     @php
+                        $isPhysical = $order->isPhysicalProduct();
                         $trackingUrl = route('order.track', $order->order_code);
                         $cleanPhone = preg_replace('/[^0-9]/', '', $order->customer_phone);
                         if (str_starts_with($cleanPhone, '0')) {
                             $cleanPhone = '62' . substr($cleanPhone, 1);
                         }
-                        $serviceName = $order->service->nama_layanan ?? 'Layanan Jasa';
-                        $waText = "Halo Kak {$order->customer_name}! Pesanan pengerjaan {$serviceName} sudah kami proses. Kakak bisa memantau perkembangan pengerjaannya secara real-time kapan saja melalui link berikut: {$trackingUrl}";
-                        $waUrl = "https://wa.me/{$cleanPhone}?text=" . rawurlencode($waText);
                     @endphp
-                    <tr style="border-bottom: 1px solid #f1f5f9;">
+                    <tr style="border-bottom: 1px solid #f1f5f9; background: {{ $order->status === 'menunggu_konfirmasi' ? '#fffdf7' : 'inherit' }};">
                         <td style="padding: 14px 18px;">
-                            <a href="{{ $trackingUrl }}" target="_blank" style="font-family: monospace; font-size: 13.5px; font-weight: 800; color: #2563eb; text-decoration: underline; background: #eff6ff; padding: 4px 8px; border-radius: 6px; display: inline-block;">
+                            <a href="{{ $trackingUrl }}" target="_blank" style="font-family: monospace; font-size: 13.5px; font-weight: 800; color: #2563eb; text-decoration: underline; background: #eff6ff; padding: 3px 8px; border-radius: 6px; display: inline-block;">
                                 {{ $order->order_code }} ↗
                             </a>
                             <div style="font-size: 11px; color: #94a3b8; margin-top: 4px;">{{ $order->created_at->format('d M Y, H:i') }}</div>
+                            <span style="font-size: 11px; font-weight: 700; color: {{ $isPhysical ? '#059669' : '#2563eb' }};">
+                                {{ $isPhysical ? '📦 Produk Fisik (COD)' : '🤝 Jasa WA' }}
+                            </span>
                         </td>
+
                         <td style="padding: 14px 18px;">
                             <strong style="color: #0f172a; font-size: 13.5px; display: block;">{{ $order->customer_name }}</strong>
                             <a href="https://wa.me/{{ $cleanPhone }}" target="_blank" style="color: #16a34a; font-size: 12px; text-decoration: none; font-weight: 600; display: inline-flex; align-items: center; gap: 4px;">
                                 <span>📱</span> {{ $order->customer_phone }}
                             </a>
-                        </td>
-                        <td style="padding: 14px 18px;">
-                            <div style="font-weight: 700; color: #1e293b;">{{ $serviceName }}</div>
-                            <div style="color: #2563eb; font-weight: 800; font-size: 12.5px;">Rp {{ number_format($order->total_biaya, 0, ',', '.') }}</div>
-                        </td>
-                        <td style="padding: 14px 18px;">
-                            @if($order->worker)
-                                <div style="display: flex; align-items: center; gap: 6px;">
-                                    <div style="width: 26px; height: 26px; border-radius: 999px; background: #2563eb; color: #fff; display: flex; align-items: center; justify-content: center; font-size: 11px; font-weight: 700;">
-                                        {{ strtoupper(substr($order->worker->name, 0, 1)) }}
-                                    </div>
-                                    <span style="font-weight: 600; color: #334155;">{{ $order->worker->name }}</span>
+                            @if($order->catatan_pelanggan || $order->catatan)
+                                <div style="font-size: 11.5px; color: #64748b; margin-top: 4px; font-style: italic;">
+                                    "{{ Str::limit($order->catatan_pelanggan ?: $order->catatan, 45) }}"
                                 </div>
-                            @else
-                                <span style="color: #94a3b8; font-style: italic; font-size: 12px;">Belum ditugaskan</span>
                             @endif
                         </td>
+
+                        <td style="padding: 14px 18px;">
+                            <div style="font-weight: 700; color: #1e293b;">
+                                {{ $order->product->nama_produk ?? ($order->service->nama_layanan ?? 'Item TeFa') }}
+                            </div>
+                            @if($isPhysical)
+                                <div style="font-size: 12px; color: #64748b;">Jumlah: <strong>{{ $order->jumlah }} unit</strong></div>
+                            @endif
+                            <div style="color: #2563eb; font-weight: 800; font-size: 13px; margin-top: 2px;">
+                                Rp {{ number_format($order->total_harga ?: $order->total_biaya, 0, ',', '.') }}
+                            </div>
+                        </td>
+
+                        <td style="padding: 14px 18px;">
+                            @if($isPhysical)
+                                <div style="font-size: 12.5px; font-weight: 700; color: #166534; display: flex; align-items: center; gap: 4px;">
+                                    <span>📍</span> {{ $order->lokasi_pengambilan ?? 'Lab Jurusan' }}
+                                </div>
+                                <div style="font-size: 11.5px; color: #64748b;">Ambil Sendiri di Lab</div>
+                            @else
+                                @if($order->worker)
+                                    <div style="font-weight: 600; color: #334155;">{{ $order->worker->name }}</div>
+                                @else
+                                    <span style="color: #94a3b8; font-style: italic; font-size: 12px;">Tim Produksi</span>
+                                @endif
+                            @endif
+                        </td>
+
                         <td style="padding: 14px 18px;">
                             @php
                                 $badgeStyle = match($order->status) {
-                                    'completed' => 'background: #ecfdf5; color: #059669;',
-                                    'in_progress' => 'background: #eff6ff; color: #2563eb;',
-                                    'review' => 'background: #fef3c7; color: #b45309;',
-                                    'cancelled' => 'background: #fef2f2; color: #dc2626;',
+                                    'selesai', 'completed' => 'background: #ecfdf5; color: #059669;',
+                                    'bisa_diambil' => 'background: #eff6ff; color: #2563eb; border: 1px solid #bfdbfe;',
+                                    'sedang_dikemas', 'in_progress' => 'background: #fef3c7; color: #b45309;',
+                                    'dibatalkan', 'cancelled' => 'background: #fef2f2; color: #dc2626;',
                                     default => 'background: #f1f5f9; color: #475569;',
                                 };
                                 $statusLabel = match($order->status) {
-                                    'completed' => 'Selesai',
+                                    'selesai', 'completed' => 'Selesai (Lunas) ✓',
+                                    'bisa_diambil' => 'Siap Diambil 🏢',
+                                    'sedang_dikemas' => 'Sedang Dikemas 📦',
                                     'in_progress' => 'Pengerjaan',
-                                    'review' => 'Review File',
-                                    'cancelled' => 'Dibatalkan',
-                                    default => 'Antrean',
+                                    'dibatalkan', 'cancelled' => 'Dibatalkan',
+                                    default => 'Menunggu Konfirmasi ⏳',
                                 };
                             @endphp
-                            <span style="{{ $badgeStyle }} font-weight: 700; font-size: 11.5px; padding: 4px 10px; border-radius: 999px; display: inline-block;">
+                            <span style="{{ $badgeStyle }} font-weight: 800; font-size: 11.5px; padding: 4px 10px; border-radius: 999px; display: inline-block;">
                                 {{ $statusLabel }}
                             </span>
                         </td>
+
                         <td style="padding: 14px 18px; text-align: right;">
-                            <div style="display: flex; justify-content: flex-end; align-items: center; gap: 6px; flex-wrap: wrap;">
-                                <a href="{{ $waUrl }}" target="_blank" title="Kirim Pesan Pelacakan WhatsApp" style="background: #25d366; color: #fff; border: none; padding: 6px 10px; border-radius: 6px; font-size: 11.5px; font-weight: 700; text-decoration: none; display: inline-flex; align-items: center; gap: 4px;">
-                                    💬 Kirim WA
-                                </a>
-                                <button type="button" onclick="copyTrackingText('{{ addslashes($waText) }}', this)" title="Salin Template Pesan" style="background: #f1f5f9; color: #334155; border: 1px solid #cbd5e1; padding: 6px 10px; border-radius: 6px; font-size: 11.5px; font-weight: 700; cursor: pointer;">
-                                    📋 Salin
-                                </button>
-                                <button type="button" onclick="openStatusModal('{{ $order->id }}', '{{ $order->order_code }}', '{{ $order->status }}', '{{ $order->worker_id }}')" style="background: #eff6ff; color: #2563eb; border: 1px solid #bfdbfe; padding: 6px 10px; border-radius: 6px; font-size: 11.5px; font-weight: 700; cursor: pointer;">
-                                    ⚙️ Status
-                                </button>
-                                <form method="POST" action="{{ route('admin.orders.destroy', $order) }}" onsubmit="return confirm('Hapus pesanan {{ $order->order_code }} beserta riwayat pelacakannya?')" style="display: inline;">
-                                    @csrf
-                                    @method('DELETE')
-                                    <button type="submit" style="background: #fff; color: #ef4444; border: 1px solid #fecaca; padding: 6px 10px; border-radius: 6px; font-size: 11.5px; font-weight: 700; cursor: pointer;">
-                                        🗑️
+                            @if($isPhysical)
+                                <!-- Workflow Tombol 1-Klik untuk Produk Fisik COD -->
+                                <div style="display: flex; justify-content: flex-end; align-items: center; gap: 6px; flex-wrap: wrap;">
+                                    @if($order->status === 'menunggu_konfirmasi')
+                                        <form method="POST" action="{{ route('admin.orders.physicalStatus', $order) }}" style="display: inline;">
+                                            @csrf
+                                            @method('PATCH')
+                                            <input type="hidden" name="status" value="sedang_dikemas">
+                                            <button type="submit" style="background: #2563eb; color: #fff; border: none; padding: 6px 12px; border-radius: 6px; font-size: 11.5px; font-weight: 700; cursor: pointer; box-shadow: 0 2px 6px rgba(37,99,235,0.2);">
+                                                ✓ Terima & Proses
+                                            </button>
+                                        </form>
+
+                                        <form method="POST" action="{{ route('admin.orders.physicalStatus', $order) }}" onsubmit="return confirm('Batalkan pesanan ini? Stok produk akan dikembalikan.')" style="display: inline;">
+                                            @csrf
+                                            @method('PATCH')
+                                            <input type="hidden" name="status" value="dibatalkan">
+                                            <button type="submit" style="background: #fff; color: #ef4444; border: 1px solid #fecaca; padding: 6px 8px; border-radius: 6px; font-size: 11.5px; font-weight: 700; cursor: pointer;">
+                                                ✕ Tolak
+                                            </button>
+                                        </form>
+
+                                    @elseif($order->status === 'sedang_dikemas')
+                                        <form method="POST" action="{{ route('admin.orders.physicalStatus', $order) }}" style="display: inline;">
+                                            @csrf
+                                            @method('PATCH')
+                                            <input type="hidden" name="status" value="bisa_diambil">
+                                            <button type="submit" style="background: #059669; color: #fff; border: none; padding: 6px 12px; border-radius: 6px; font-size: 11.5px; font-weight: 700; cursor: pointer; box-shadow: 0 2px 6px rgba(5,150,105,0.2);">
+                                                🏢 Siap Diambil
+                                            </button>
+                                        </form>
+
+                                    @elseif($order->status === 'bisa_diambil')
+                                        <form method="POST" action="{{ route('admin.orders.physicalStatus', $order) }}" onsubmit="return confirm('Pastikan pembayaran tunai (COD) sebesar Rp {{ number_format($order->total_harga ?: $order->total_biaya, 0, ',', '.') }} sudah diterima di kasir lab.')" style="display: inline;">
+                                            @csrf
+                                            @method('PATCH')
+                                            <input type="hidden" name="status" value="selesai">
+                                            <button type="submit" style="background: #16a34a; color: #fff; border: none; padding: 6px 12px; border-radius: 6px; font-size: 11.5px; font-weight: 700; cursor: pointer; box-shadow: 0 2px 6px rgba(22,163,74,0.25);">
+                                                💰 Selesaikan Transaksi (COD Lunas)
+                                            </button>
+                                        </form>
+
+                                    @elseif($order->status === 'selesai')
+                                        <span style="color: #059669; font-weight: 700; font-size: 11.5px;">✓ Transaksi Tuntas</span>
+                                    @endif
+
+                                    <form method="POST" action="{{ route('admin.orders.destroy', $order) }}" onsubmit="return confirm('Hapus data pesanan ini?')" style="display: inline;">
+                                        @csrf
+                                        @method('DELETE')
+                                        <button type="submit" style="background: #fff; color: #ef4444; border: 1px solid #fecaca; padding: 6px 8px; border-radius: 6px; font-size: 11.5px; font-weight: 700; cursor: pointer;">
+                                            🗑️
+                                        </button>
+                                    </form>
+                                </div>
+
+                            @else
+                                <!-- Aksi untuk Pesanan Layanan Jasa -->
+                                @php
+                                    $serviceName = $order->service->nama_layanan ?? 'Layanan Jasa';
+                                    $waText = "Halo Kak {$order->customer_name}! Pesanan pengerjaan {$serviceName} sudah kami proses. Kakak bisa memantau perkembangan pengerjaannya secara real-time kapan saja melalui link berikut: {$trackingUrl}";
+                                    $waUrl = "https://wa.me/{$cleanPhone}?text=" . rawurlencode($waText);
+                                @endphp
+                                <div style="display: flex; justify-content: flex-end; align-items: center; gap: 6px; flex-wrap: wrap;">
+                                    <a href="{{ $waUrl }}" target="_blank" style="background: #25d366; color: #fff; border: none; padding: 6px 10px; border-radius: 6px; font-size: 11.5px; font-weight: 700; text-decoration: none;">
+                                        💬 WA
+                                    </a>
+                                    <button type="button" onclick="openStatusModal('{{ $order->id }}', '{{ $order->order_code }}', '{{ $order->status }}')" style="background: #eff6ff; color: #2563eb; border: 1px solid #bfdbfe; padding: 6px 10px; border-radius: 6px; font-size: 11.5px; font-weight: 700; cursor: pointer;">
+                                        ⚙️
                                     </button>
-                                </form>
-                            </div>
+                                    <form method="POST" action="{{ route('admin.orders.destroy', $order) }}" onsubmit="return confirm('Hapus pesanan ini?')" style="display: inline;">
+                                        @csrf
+                                        @method('DELETE')
+                                        <button type="submit" style="background: #fff; color: #ef4444; border: 1px solid #fecaca; padding: 6px 8px; border-radius: 6px; font-size: 11.5px; font-weight: 700; cursor: pointer;">
+                                            🗑️
+                                        </button>
+                                    </form>
+                                </div>
+                            @endif
                         </td>
                     </tr>
                 @empty
                     <tr>
                         <td colspan="6" style="text-align: center; padding: 48px; color: #64748b;">
                             <div style="font-size: 32px; margin-bottom: 8px;">📦</div>
-                            <div style="font-weight: 700; font-size: 15px; color: #1e293b;">Belum Ada Pesanan WhatsApp yang Dicatat</div>
-                            <p style="margin: 6px 0 16px; font-size: 13px;">Klik tombol "Catat Pesanan Baru" untuk membuat order dan generate kode tracking publik.</p>
-                            <a href="{{ route('admin.orders.create') }}" style="background: #16a34a; color: #fff; padding: 8px 18px; border-radius: 8px; font-weight: 700; text-decoration: none; font-size: 13px;">+ Buat Pesanan Baru</a>
+                            <div style="font-weight: 700; font-size: 15px; color: #1e293b;">Belum Ada Pesanan yang Terdaftar</div>
+                            <p style="margin: 6px 0 16px; font-size: 13px;">Pesanan produk fisik dari website publik atau input manual WhatsApp akan tampil di sini.</p>
                         </td>
                     </tr>
                 @endforelse
@@ -162,7 +261,7 @@
     @endif
 </div>
 
-<!-- Modal Update Status & Worker -->
+<!-- Modal Update Status Manual (Jasa) -->
 <div id="statusModal" style="display: none; position: fixed; inset: 0; background: rgba(15,23,42,0.6); z-index: 9999; align-items: center; justify-content: center; padding: 16px;">
     <div style="background: #fff; border-radius: 14px; width: 100%; max-width: 460px; overflow: hidden; box-shadow: 0 20px 25px -5px rgba(0,0,0,0.1);">
         <div style="padding: 16px 20px; border-bottom: 1px solid #e5e9f2; display: flex; justify-content: space-between; align-items: center;">
@@ -191,22 +290,6 @@
 </div>
 
 <script>
-function copyTrackingText(text, btn) {
-    navigator.clipboard.writeText(text).then(function() {
-        const originalText = btn.innerText;
-        btn.innerText = '✅ Tersalin!';
-        btn.style.background = '#dcfce7';
-        btn.style.color = '#15803d';
-        setTimeout(() => {
-            btn.innerText = originalText;
-            btn.style.background = '#f1f5f9';
-            btn.style.color = '#334155';
-        }, 2000);
-    }).catch(function() {
-        alert('Gagal menyalin. Silakan salin manual.');
-    });
-}
-
 function openStatusModal(orderId, orderCode, currentStatus) {
     document.getElementById('modalOrderTitle').innerText = 'Update Status: ' + orderCode;
     document.getElementById('modalStatusSelect').value = currentStatus;

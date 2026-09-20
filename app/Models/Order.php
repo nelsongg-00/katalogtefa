@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Order extends Model
 {
@@ -16,14 +17,23 @@ class Order extends Model
      */
     protected $fillable = [
         'order_code',
+        'user_id',
         'customer_name',
         'customer_phone',
         'service_id',
+        'product_id',
+        'department_id',
+        'jumlah',
         'worker_id',
         'project_id',
         'status',
         'total_biaya',
+        'total_harga',
+        'metode_pembayaran',
+        'metode_pengiriman',
+        'lokasi_pengambilan',
         'catatan',
+        'catatan_pelanggan',
     ];
 
     /**
@@ -32,8 +42,40 @@ class Order extends Model
     protected function casts(): array
     {
         return [
+            'jumlah' => 'integer',
             'total_biaya' => 'integer',
+            'total_harga' => 'integer',
         ];
+    }
+
+    /**
+     * Relasi ke pelanggan pemesan.
+     *
+     * @return BelongsTo<User, $this>
+     */
+    public function user(): BelongsTo
+    {
+        return $this->belongsTo(User::class, 'user_id');
+    }
+
+    /**
+     * Relasi ke produk fisik.
+     *
+     * @return BelongsTo<Product, $this>
+     */
+    public function product(): BelongsTo
+    {
+        return $this->belongsTo(Product::class, 'product_id');
+    }
+
+    /**
+     * Relasi ke jurusan / department asal produk atau pesanan.
+     *
+     * @return BelongsTo<Jurusan, $this>
+     */
+    public function department(): BelongsTo
+    {
+        return $this->belongsTo(Jurusan::class, 'department_id');
     }
 
     /**
@@ -64,6 +106,24 @@ class Order extends Model
     public function project(): BelongsTo
     {
         return $this->belongsTo(Project::class, 'project_id');
+    }
+
+    /**
+     * Relasi ke log aktivitas / riwayat pesanan fisik.
+     *
+     * @return HasMany<OrderLog, $this>
+     */
+    public function orderLogs(): HasMany
+    {
+        return $this->hasMany(OrderLog::class, 'order_id')->latest();
+    }
+
+    /**
+     * Mengecek apakah order ini adalah produk fisik.
+     */
+    public function isPhysicalProduct(): bool
+    {
+        return ! empty($this->product_id);
     }
 
     /**

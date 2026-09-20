@@ -28,6 +28,7 @@ class SuperAdminSeeder extends Seeder
                 'deskripsi_profil' => 'Fokus pada pemrograman web, aplikasi mobile, dan rekayasa perangkat lunak modern.',
                 'kepala_jurusan' => 'Bu Ratna Sari, S.Kom',
                 'status_aktif' => true,
+                'lokasi_pengambilan' => 'Lab Komputer & Rekayasa Perangkat Lunak',
             ],
             [
                 'nama_jurusan' => 'Teknik Komputer Jaringan',
@@ -37,6 +38,7 @@ class SuperAdminSeeder extends Seeder
                 'deskripsi_profil' => 'Fokus pada administrasi server, instalasi jaringan komputer, dan cyber security.',
                 'kepala_jurusan' => 'Pak Hendra Wijaya, S.T',
                 'status_aktif' => true,
+                'lokasi_pengambilan' => 'Lab Jaringan & Server TKJ',
             ],
             [
                 'nama_jurusan' => 'Desain Komunikasi Visual',
@@ -46,6 +48,7 @@ class SuperAdminSeeder extends Seeder
                 'deskripsi_profil' => 'Fokus pada branding visual, packaging produk, dan desain grafis profesional.',
                 'kepala_jurusan' => 'Bu Maya Anggraini, S.Sn',
                 'status_aktif' => true,
+                'lokasi_pengambilan' => 'Lab Desain Grafis DKV',
             ],
             [
                 'nama_jurusan' => 'Produksi Program Siaran Televisi',
@@ -55,6 +58,7 @@ class SuperAdminSeeder extends Seeder
                 'deskripsi_profil' => 'Fokus pada tata kamera, penulisan skenario, editing video, dan produksi penyiaran TV.',
                 'kepala_jurusan' => 'Pak Dedi Kurniawan, S.Sn',
                 'status_aktif' => true,
+                'lokasi_pengambilan' => 'Studio Siaran & Editing PSTV',
             ],
             [
                 'nama_jurusan' => 'Animasi',
@@ -64,6 +68,7 @@ class SuperAdminSeeder extends Seeder
                 'deskripsi_profil' => 'Fokus pada animasi 2 dimensi dan 3 dimensi serta visual effect sinematik.',
                 'kepala_jurusan' => 'Bu Lina Marlina, M.Ds',
                 'status_aktif' => true,
+                'lokasi_pengambilan' => 'Lab Animasi 2D/3D',
             ],
             [
                 'nama_jurusan' => 'Pengembangan Gim',
@@ -73,6 +78,7 @@ class SuperAdminSeeder extends Seeder
                 'deskripsi_profil' => 'Fokus pada pemrograman engine gim, perancangan level desain, dan media interaktif.',
                 'kepala_jurusan' => 'Pak Arif Budiman, M.Kom',
                 'status_aktif' => true,
+                'lokasi_pengambilan' => 'Game Dev & VR Lab',
             ],
         ];
 

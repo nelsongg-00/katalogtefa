@@ -67,7 +67,8 @@ Route::middleware(['auth', 'verified'])->group(function () {
         // 3. CRUD Layanan Jasa
         Route::resource('/admin/services', AdminServiceController::class)->names('admin.services');
 
-        // 4. Pencatatan Pesanan Manual WhatsApp & Tracking
+        // 4. Pencatatan Pesanan Manual WhatsApp & Tracking & Produk Fisik
+        Route::patch('/admin/orders/{order}/physical-status', [AdminOrderController::class, 'updatePhysicalStatus'])->name('admin.orders.physicalStatus');
         Route::resource('/admin/orders', AdminOrderController::class)->names('admin.orders');
 
         // 5. Project Management
@@ -99,8 +100,9 @@ Route::middleware(['auth', 'verified'])->group(function () {
     // Clients
     Route::middleware('role:pelanggan')->group(function () {
         Route::get('/my-orders', [DashboardController::class, 'clientOrders'])->name('client.orders');
-        Route::get('/checkout/{produk}', [CheckoutController::class, 'show'])->name('checkout.show');
-        Route::post('/checkout/{produk}', [CheckoutController::class, 'store'])->name('checkout.store');
+        Route::get('/my-orders/{order}', [DashboardController::class, 'clientOrderDetail'])->name('client.orders.show');
+        Route::get('/checkout/{product}', [CheckoutController::class, 'show'])->name('checkout.show');
+        Route::post('/checkout/{product}', [CheckoutController::class, 'store'])->name('checkout.store');
     });
 
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');

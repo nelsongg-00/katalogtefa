@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\Order;
+use App\Models\OrderLog;
 use App\Models\Project;
 use App\Models\ProjectLog;
 use App\Models\Service;
@@ -15,18 +16,29 @@ use Illuminate\View\View;
 class OrderController extends Controller
 {
     /**
-     * Display a listing of orders for the admin's department.
+     * Display a listing of orders (services & physical products) for the admin's department.
      */
     public function index(Request $request): View
     {
         $jurusanId = auth()->user()->jurusan_id;
 
-        $ordersQuery = Order::with(['service', 'worker', 'project']);
+        $ordersQuery = Order::with(['service', 'worker', 'project', 'product.jurusan', 'department', 'orderLogs']);
 
         if ($jurusanId) {
-            $ordersQuery->whereHas('service', function ($q) use ($jurusanId) {
-                $q->where('department_id', $jurusanId);
+            $ordersQuery->where(function ($q) use ($jurusanId) {
+                $q->where('department_id', $jurusanId)
+                    ->orWhereHas('service', fn ($s) => $s->where('department_id', $jurusanId))
+                    ->orWhereHas('product', fn ($p) => $p->where('jurusan_id', $jurusanId));
             });
+        }
+
+        // Filter tipe pesanan: semua, fisik, atau jasa
+        if ($request->filled('tipe')) {
+            if ($request->tipe === 'fisik') {
+                $ordersQuery->whereNotNull('product_id');
+            } elseif ($request->tipe === 'jasa') {
+                $ordersQuery->whereNotNull('service_id');
+            }
         }
 
         if ($request->filled('status')) {
@@ -70,7 +82,7 @@ class OrderController extends Controller
     }
 
     /**
-     * Store a newly created order, auto-generating project and initial log.
+     * Store a newly created manual service order.
      */
     public function store(Request $request): RedirectResponse
     {
@@ -115,15 +127,17 @@ class OrderController extends Controller
         ]);
 
         // 3. Create Order
-        $order = Order::create([
+        Order::create([
             'order_code' => $orderCode,
             'customer_name' => $request->customer_name,
             'customer_phone' => $request->customer_phone,
             'service_id' => $service->id,
+            'department_id' => $jurusanId ?? $service->department_id,
             'worker_id' => $request->worker_id,
             'project_id' => $project->id,
             'status' => 'pending',
             'total_biaya' => $request->total_biaya,
+            'total_harga' => $request->total_biaya,
             'catatan' => $request->catatan,
         ]);
 
@@ -140,7 +154,7 @@ class OrderController extends Controller
         $this->authorizeOrder($order);
 
         $request->validate([
-            'status' => 'required|in:pending,in_progress,review,completed,cancelled',
+            'status' => 'required|string',
             'worker_id' => 'nullable|exists:users,id',
         ]);
 
@@ -151,20 +165,70 @@ class OrderController extends Controller
 
         if ($order->project) {
             $projectStatus = match ($request->status) {
-                'completed' => 'completed',
-                'cancelled' => 'cancelled',
-                'in_progress', 'review' => 'in_progress',
+                'completed', 'selesai' => 'completed',
+                'cancelled', 'dibatalkan' => 'cancelled',
+                'in_progress', 'review', 'sedang_dikemas', 'bisa_diambil' => 'in_progress',
                 default => 'pending',
             };
 
             $order->project->update([
                 'status' => $projectStatus,
                 'worker_id' => $request->worker_id,
-                'progress' => $request->status === 'completed' ? 100 : $order->project->progress,
+                'progress' => in_array($request->status, ['completed', 'selesai']) ? 100 : $order->project->progress,
             ]);
         }
 
         return redirect()->route('admin.orders.index')->with('success', "Status pesanan {$order->order_code} berhasil diperbarui.");
+    }
+
+    /**
+     * One-click workflow status transitions for physical product orders.
+     */
+    public function updatePhysicalStatus(Request $request, Order $order): RedirectResponse
+    {
+        $this->authorizeOrder($order);
+
+        $request->validate([
+            'status' => 'required|in:menunggu_konfirmasi,sedang_dikemas,bisa_diambil,selesai,dibatalkan',
+        ]);
+
+        $prevStatus = $order->status;
+        $newStatus = $request->status;
+
+        // Jika dibatalkan, kembalikan stok produk
+        if ($newStatus === 'dibatalkan' && $prevStatus !== 'dibatalkan' && $order->product) {
+            $order->product->increment('stok', $order->jumlah);
+        }
+
+        $order->update([
+            'status' => $newStatus,
+        ]);
+
+        // Catat riwayat log aktivitas
+        $keterangan = match ($newStatus) {
+            'sedang_dikemas' => 'Admin Jurusan telah mengonfirmasi dan menyetujui pesanan. Produk fisik sedang dikemas di lab.',
+            'bisa_diambil' => "Produk fisik telah selesai dikemas dan siap diambil di {$order->lokasi_pengambilan}. Silakan siapkan uang pas saat pengambilan COD.",
+            'selesai' => 'Transaksi selesai. Pembayaran tunai (COD) lunas diterima di kasir lab dan produk telah diserahkan kepada pelanggan.',
+            'dibatalkan' => 'Pesanan dibatalkan oleh Admin Jurusan. Stok produk dikembalikan ke sistem.',
+            default => 'Status pesanan fisik diperbarui.',
+        };
+
+        OrderLog::create([
+            'order_id' => $order->id,
+            'user_id' => auth()->id(),
+            'aksi' => $newStatus,
+            'keterangan_log' => $keterangan,
+        ]);
+
+        $statusNotice = match ($newStatus) {
+            'sedang_dikemas' => 'Pesanan berhasil di-ACC dan status diubah ke Sedang Dikemas.',
+            'bisa_diambil' => 'Pesanan berhasil diubah menjadi Siap Diambil. Notifikasi tampil pada akun pelanggan.',
+            'selesai' => 'Transaksi diselesaikan. Pembayaran COD dicatat lunas.',
+            'dibatalkan' => 'Pesanan telah dibatalkan dan stok produk dikembalikan.',
+            default => 'Status pesanan berhasil diperbarui.',
+        };
+
+        return back()->with('success', $statusNotice);
     }
 
     /**
@@ -179,6 +243,13 @@ class OrderController extends Controller
             $order->project->delete();
         }
 
+        $order->orderLogs()->delete();
+
+        // Kembalikan stok jika pesanan fisik belum selesai
+        if ($order->product && $order->status !== 'selesai' && $order->status !== 'dibatalkan') {
+            $order->product->increment('stok', $order->jumlah);
+        }
+
         $order->delete();
 
         return redirect()->route('admin.orders.index')->with('success', 'Pesanan dan data pelacakan terkait berhasil dihapus.');
@@ -190,8 +261,14 @@ class OrderController extends Controller
     protected function authorizeOrder(Order $order): void
     {
         $jurusanId = auth()->user()->jurusan_id;
-        if ($jurusanId && $order->service && $order->service->department_id !== $jurusanId) {
-            abort(403, 'Aksi ini tidak diizinkan untuk jurusan Anda.');
+        if ($jurusanId) {
+            $orderDeptId = $order->department_id
+                ?? $order->service?->department_id
+                ?? $order->product?->jurusan_id;
+
+            if ($orderDeptId && $orderDeptId !== $jurusanId) {
+                abort(403, 'Aksi ini tidak diizinkan untuk jurusan Anda.');
+            }
         }
     }
 }

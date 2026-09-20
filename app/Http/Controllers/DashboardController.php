@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Order;
 use App\Models\Pesanan;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\View\View;
@@ -22,7 +23,7 @@ class DashboardController extends Controller
             return redirect()->route('worker.dashboard');
         }
 
-        return view('dashboard'); // Client default
+        return redirect()->route('client.orders');
     }
 
     /**
@@ -46,11 +47,30 @@ class DashboardController extends Controller
      */
     public function clientOrders(): View
     {
-        $pesanans = Pesanan::with('detailPesanans.produk')
+        $orders = Order::with(['product.jurusan', 'department'])
             ->where('user_id', auth()->id())
-            ->orderBy('created_at', 'desc')
+            ->latest()
             ->get();
 
-        return view('client.orders', compact('pesanans'));
+        $pesanans = Pesanan::with('detailPesanans.produk')
+            ->where('user_id', auth()->id())
+            ->latest()
+            ->get();
+
+        return view('client.orders', compact('orders', 'pesanans'));
+    }
+
+    /**
+     * Display status and pickup details for a specific order.
+     */
+    public function clientOrderDetail(Order $order): View
+    {
+        if ($order->user_id && $order->user_id !== auth()->id()) {
+            abort(403, 'Anda tidak memiliki akses ke pesanan ini.');
+        }
+
+        $order->load(['product.jurusan', 'department', 'orderLogs']);
+
+        return view('client.orders.show', compact('order'));
     }
 }

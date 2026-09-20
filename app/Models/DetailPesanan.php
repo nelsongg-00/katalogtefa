@@ -32,4 +32,20 @@ class DetailPesanan extends Model
     {
         return $this->belongsTo(Produk::class, 'produk_id');
     }
+
+    /**
+     * @return BelongsTo<Product, $this>
+     */
+    public function product(): BelongsTo
+    {
+        return $this->belongsTo(Product::class, 'produk_id');
+    }
+
+    /**
+     * Fallback accessor to return Product if Produk is null.
+     */
+    public function getItemAttribute(): mixed
+    {
+        return $this->produk ?? $this->product;
+    }
 }
