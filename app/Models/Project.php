@@ -58,4 +58,14 @@ class Project extends Model
     {
         return $this->hasMany(ProjectLog::class, 'project_id')->orderBy('created_at', 'desc');
     }
+
+    /**
+     * Alias for logs relationship.
+     *
+     * @return HasMany<ProjectLog, $this>
+     */
+    public function projectLogs(): HasMany
+    {
+        return $this->hasMany(ProjectLog::class, 'project_id')->orderBy('created_at', 'desc');
+    }
 }

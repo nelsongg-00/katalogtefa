@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Product;
+use App\Models\Service;
 
 class HomeController extends Controller
 {
@@ -25,8 +26,8 @@ class HomeController extends Controller
 
     public function jasa()
     {
-        $jasas = Produk::where('tipe', 'Layanan Jasa')->get();
+        $services = Service::with('department')->where('is_active', true)->latest()->get();
 
-        return view('public.jasa', compact('jasas'));
+        return view('public.jasa', compact('services'));
     }
 }

@@ -20,6 +20,23 @@ class Pesanan extends Model
     ];
 
     /**
+     * @return array<string, string>
+     */
+    protected function casts(): array
+    {
+        return [
+            'tanggal_pesan' => 'date',
+            'total_harga' => 'integer',
+            'is_service_via_wa' => 'boolean',
+        ];
+    }
+
+    public function getJurusanAttribute(): ?Jurusan
+    {
+        return $this->detailPesanans->first()?->produk?->jurusan;
+    }
+
+    /**
      * @return BelongsTo<User, $this>
      */
     public function user(): BelongsTo

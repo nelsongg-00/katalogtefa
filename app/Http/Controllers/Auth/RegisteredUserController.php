@@ -40,12 +40,30 @@ class RegisteredUserController extends Controller
             'name' => $request->name,
             'email' => $request->email,
             'password' => Hash::make($request->password),
+            'role' => 'pelanggan',
+            'is_active' => true,
         ]);
 
         event(new Registered($user));
 
         Auth::login($user);
 
-        return redirect(route('dashboard', absolute: false));
+        $request->session()->regenerate();
+
+        $welcomeMessage = 'Pendaftaran berhasil! Selamat datang, '.$user->name.'!';
+
+        // Tentukan fallback default jika BUKAN intended checkout
+        $defaultUrl = route('home');
+        if (in_array($user->role, ['super_admin', 'superadmin', 'admin_jurusan', 'worker'])) {
+            $roleRoute = match ($user->role) {
+                'super_admin', 'superadmin' => 'superadmin.dashboard',
+                'admin_jurusan' => 'admin.dashboard',
+                'worker' => 'worker.dashboard',
+                default => 'home',
+            };
+            $defaultUrl = route($roleRoute);
+        }
+
+        return redirect()->intended($defaultUrl)->with('toast_success', $welcomeMessage);
     }
 }

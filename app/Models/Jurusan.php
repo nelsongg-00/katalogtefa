@@ -12,8 +12,23 @@ class Jurusan extends Model
      */
     protected $fillable = [
         'nama_jurusan',
+        'slug',
+        'kode',
+        'deskripsi',
         'deskripsi_profil',
+        'kepala_jurusan',
+        'status_aktif',
     ];
+
+    /**
+     * @return array<string, string>
+     */
+    protected function casts(): array
+    {
+        return [
+            'status_aktif' => 'boolean',
+        ];
+    }
 
     /**
      * @return HasMany<Produk, $this>

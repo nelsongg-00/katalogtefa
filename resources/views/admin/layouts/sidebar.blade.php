@@ -8,6 +8,14 @@
     <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"/></svg>
     <span>Produk Fisik</span>
   </a>
+  <a href="{{ route('admin.services.index') }}" class="side-item {{ request()->routeIs('admin.services.*') ? 'active' : '' }}">
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.7 1.7 0 00.3 1.9l.1.1a2 2 0 11-2.8 2.8"/></svg>
+    <span>Layanan Jasa</span>
+  </a>
+  <a href="{{ route('admin.orders.index') }}" class="side-item {{ request()->routeIs('admin.orders.*') ? 'active' : '' }}">
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+    <span>Pesanan WA & Lacak</span>
+  </a>
   <a href="{{ route('admin.projects.index') }}" class="side-item {{ request()->routeIs('admin.projects.*') ? 'active' : '' }}">
     <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="9"/><rect x="14" y="3" width="7" height="5"/><rect x="14" y="12" width="7" height="9"/><rect x="3" y="16" width="7" height="5"/></svg>
     <span>Project</span>

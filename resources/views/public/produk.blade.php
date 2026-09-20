@@ -40,12 +40,12 @@
 
                         @auth
                             @if(auth()->user()->role == 'pelanggan')
-                                <button type="button" class="btn-blue" style="width: 100%; border-radius: 10px; cursor: pointer; border: none;">Pesan Sekarang</button>
+                                <a href="{{ route('checkout.show', $product->id) }}" class="btn-blue text-center" style="width: 100%; border-radius: 10px; display: block; text-decoration: none;">Pesan Sekarang</a>
                             @else
                                 <button disabled class="btn-blue" style="width: 100%; border-radius: 10px; background: #94a3b8; cursor: not-allowed; border: none;">Pesan Sekarang</button>
                             @endif
                         @else
-                            <a href="{{ route('login') }}" class="btn-blue text-center" style="width: 100%; border-radius: 10px; display: block;">Login untuk Pesan</a>
+                            <a href="{{ route('checkout.show', $product->id) }}" class="btn-blue text-center" style="width: 100%; border-radius: 10px; display: block; text-decoration: none;">Pesan Sekarang</a>
                         @endauth
                     </div>
                 </div>

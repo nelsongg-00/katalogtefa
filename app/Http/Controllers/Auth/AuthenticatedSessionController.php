@@ -28,7 +28,22 @@ class AuthenticatedSessionController extends Controller
 
         $request->session()->regenerate();
 
-        return redirect()->intended(route('dashboard', absolute: false));
+        $user = auth()->user();
+        $welcomeMessage = 'Selamat datang kembali, '.$user->name.'!';
+
+        // Tentukan fallback default jika BUKAN intended checkout
+        $defaultUrl = route('home');
+        if (in_array($user->role, ['super_admin', 'superadmin', 'admin_jurusan', 'worker'])) {
+            $roleRoute = match ($user->role) {
+                'super_admin', 'superadmin' => 'superadmin.dashboard',
+                'admin_jurusan' => 'admin.dashboard',
+                'worker' => 'worker.dashboard',
+                default => 'home',
+            };
+            $defaultUrl = route($roleRoute);
+        }
+
+        return redirect()->intended($defaultUrl)->with('toast_success', $welcomeMessage);
     }
 
     /**

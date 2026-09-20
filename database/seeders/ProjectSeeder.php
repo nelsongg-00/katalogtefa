@@ -2,6 +2,7 @@
 
 namespace Database\Seeders;
 
+use App\Models\Jurusan;
 use App\Models\Project;
 use App\Models\User;
 use Illuminate\Database\Seeder;
@@ -18,9 +19,10 @@ class ProjectSeeder extends Seeder
         $worker2 = $workers->skip(1)->first() ?? $worker1;
         $worker3 = $workers->skip(2)->first() ?? $worker1;
 
+        $defaultJurusanId = Jurusan::first()?->id ?? 1;
         $projects = [
             [
-                'jurusan_id' => $worker1?->jurusan_id ?? 1,
+                'jurusan_id' => $worker1?->jurusan_id ?? $defaultJurusanId,
                 'nama_projek' => 'Sistem Informasi Presensi Berbasis QR',
                 'deskripsi' => 'Pengembangan aplikasi absensi digital siswa dan guru berbasis scan QR code dan web dashboard.',
                 'status' => 'in_progress',
@@ -29,7 +31,7 @@ class ProjectSeeder extends Seeder
                 'tenggat_waktu' => now()->addDays(20),
             ],
             [
-                'jurusan_id' => $worker2?->jurusan_id ?? 1,
+                'jurusan_id' => $worker2?->jurusan_id ?? $defaultJurusanId,
                 'nama_projek' => 'Website Company Profile PT Bintan Kreatif',
                 'deskripsi' => 'Pembuatan landing page interaktif dengan integrasi formulir kontak dan katalog layanan jasa.',
                 'status' => 'in_progress',
@@ -38,7 +40,7 @@ class ProjectSeeder extends Seeder
                 'tenggat_waktu' => now()->addDays(10),
             ],
             [
-                'jurusan_id' => $worker3?->jurusan_id ?? 1,
+                'jurusan_id' => $worker3?->jurusan_id ?? $defaultJurusanId,
                 'nama_projek' => 'Aplikasi POS Kasir UMKM Kuliner',
                 'deskripsi' => 'Aplikasi kasir ringan pencatat transaksi harian dan cetak struk bluetooth thermal.',
                 'status' => 'in_progress',

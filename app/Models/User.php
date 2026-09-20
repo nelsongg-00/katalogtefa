@@ -22,7 +22,20 @@ class User extends Authenticatable
         'password',
         'role',
         'jurusan_id',
+        'is_active',
     ];
+
+    /**
+     * @return array<string, string>
+     */
+    protected function casts(): array
+    {
+        return [
+            'email_verified_at' => 'datetime',
+            'password' => 'hashed',
+            'is_active' => 'boolean',
+        ];
+    }
 
     /**
      * @var list<string>

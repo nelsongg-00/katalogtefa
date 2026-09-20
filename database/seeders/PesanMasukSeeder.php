@@ -2,6 +2,7 @@
 
 namespace Database\Seeders;
 
+use App\Models\Jurusan;
 use App\Models\PesanMasuk;
 use Illuminate\Database\Seeder;
 
@@ -12,9 +13,11 @@ class PesanMasukSeeder extends Seeder
      */
     public function run(): void
     {
+        $jurId = Jurusan::first()?->id ?? 1;
+
         $messages = [
             [
-                'jurusan_id' => 1,
+                'jurusan_id' => $jurId,
                 'nama_pengirim' => 'Rahmat Hidayat (CV Bintan Digital)',
                 'email' => 'rahmat@bintandigital.com',
                 'subjek' => 'Permintaan Penawaran Website Sistem Informasi',
@@ -23,7 +26,7 @@ class PesanMasukSeeder extends Seeder
                 'created_at' => now()->subMinutes(25),
             ],
             [
-                'jurusan_id' => 1,
+                'jurusan_id' => $jurId,
                 'nama_pengirim' => 'Dinas Koperasi & UMKM',
                 'email' => 'layanan@umkm-tanjungpinang.go.id',
                 'subjek' => 'Kolaborasi Aplikasi Kasir untuk Pelaku Usaha',
@@ -32,7 +35,7 @@ class PesanMasukSeeder extends Seeder
                 'created_at' => now()->subHours(2),
             ],
             [
-                'jurusan_id' => 1,
+                'jurusan_id' => $jurId,
                 'nama_pengirim' => 'Lestari Indah',
                 'email' => 'lestari.indah@gmail.com',
                 'subjek' => 'Tanya Ketersediaan Jasa Pembuatan Aplikasi Mobile',
@@ -41,7 +44,7 @@ class PesanMasukSeeder extends Seeder
                 'created_at' => now()->subHours(5),
             ],
             [
-                'jurusan_id' => 1,
+                'jurusan_id' => $jurId,
                 'nama_pengirim' => 'Hendra Setiawan',
                 'email' => 'hendra@setiakawan.co.id',
                 'subjek' => 'Konfirmasi Pembayaran dan Detail Lisensi',
@@ -50,7 +53,7 @@ class PesanMasukSeeder extends Seeder
                 'created_at' => now()->subDays(1),
             ],
             [
-                'jurusan_id' => 1,
+                'jurusan_id' => $jurId,
                 'nama_pengirim' => 'SMK Negeri 1 Bintan',
                 'email' => 'humas@smkn1bintan.sch.id',
                 'subjek' => 'Studi Banding Program Teaching Factory',
