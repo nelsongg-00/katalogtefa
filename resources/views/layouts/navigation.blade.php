@@ -31,10 +31,6 @@
                    class="px-3.5 py-1.5 rounded-full text-sm font-semibold transition duration-150 {{ request()->routeIs('jasa') ? 'bg-blue-600 text-white shadow-sm' : 'text-gray-700 hover:text-blue-600 hover:bg-gray-50' }}">
                     Layanan Jasa
                 </a>
-                <a href="{{ route('order.tracking.index') }}" 
-                   class="px-3.5 py-1.5 rounded-full text-sm font-semibold transition duration-150 {{ request()->routeIs('order.*') ? 'bg-blue-600 text-white shadow-sm' : 'text-gray-700 hover:text-blue-600 hover:bg-gray-50' }}">
-                    Lacak Pesanan
-                </a>
             </div>
 
             <!-- BAGIAN KANAN: Auth & Avatar Dropdown Menu -->
@@ -176,6 +172,15 @@
                                         <span>Pesanan Saya</span>
                                     </a>
                                 @endif
+
+                                <!-- Lacak Pesanan -->
+                                <a href="{{ route('order.tracking.index') }}" 
+                                   class="flex items-center gap-2.5 px-4 py-2 text-sm font-medium text-amber-600 hover:bg-amber-50 hover:text-amber-700 transition duration-150">
+                                    <svg class="w-4 h-4 text-amber-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01" />
+                                    </svg>
+                                    <span>Lacak Pesanan</span>
+                                </a>
                             </div>
 
                             <!-- Garis Pembatas (Divider) -->
@@ -231,10 +236,6 @@
                class="block px-3 py-2 rounded-md text-base font-semibold {{ request()->routeIs('jasa') ? 'bg-blue-50 text-blue-600' : 'text-gray-700 hover:bg-gray-50' }}">
                 Layanan Jasa
             </a>
-            <a href="{{ route('order.tracking.index') }}" 
-               class="block px-3 py-2 rounded-md text-base font-semibold {{ request()->routeIs('order.*') ? 'bg-blue-50 text-blue-600' : 'text-gray-700 hover:bg-gray-50' }}">
-                Lacak Pesanan
-            </a>
         </div>
 
         <!-- Auth / Profil Mobile -->
@@ -278,6 +279,10 @@
                             Pesanan Saya
                         </a>
                     @endif
+
+                    <a href="{{ route('order.tracking.index') }}" class="block px-3 py-2 rounded-md text-sm font-medium text-amber-600 hover:bg-amber-50">
+                        Lacak Pesanan
+                    </a>
 
                     <form method="POST" action="{{ route('logout') }}" class="pt-1">
                         @csrf

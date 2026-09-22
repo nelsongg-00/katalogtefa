@@ -1,10 +1,95 @@
 @extends('layouts.public')
 
+@section('title', 'Katalog TEFA — SMKN 4 Tanjungpinang')
+
 @section('content')
-    <!-- HERO SECTION DENGAN VIDEO BACKGROUND -->
+    <style>
+        /* Scoped Enhancements for Home Page */
+        .home-feature-card {
+            background: #ffffff;
+            border-radius: 20px;
+            border: 1px solid #e2e8f0;
+            padding: 30px 25px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.03);
+            transition: all 0.3s ease;
+            display: flex;
+            flex-direction: column;
+            text-align: left;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .home-feature-card:hover {
+            transform: translateY(-6px);
+            border-color: #93c5fd;
+            box-shadow: 0 16px 30px rgba(37, 99, 235, 0.1);
+        }
+
+        .home-feature-icon {
+            width: 52px;
+            height: 52px;
+            border-radius: 14px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 26px;
+            margin-bottom: 20px;
+        }
+
+        .home-feature-card h3 {
+            font-size: 1.2rem;
+            font-weight: 800;
+            color: #0f172a;
+            margin-bottom: 10px;
+        }
+
+        .home-feature-card p {
+            font-size: 14px;
+            color: #64748b;
+            line-height: 1.6;
+            margin-bottom: 20px;
+            flex-grow: 1;
+        }
+
+        .home-feature-link {
+            font-size: 13.5px;
+            font-weight: 700;
+            color: #2563eb;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            transition: gap 0.2s ease;
+        }
+
+        .home-feature-card:hover .home-feature-link {
+            gap: 10px;
+            color: #1d4ed8;
+        }
+
+        .hero-trust-bar {
+            display: flex;
+            gap: 20px;
+            flex-wrap: wrap;
+            margin-top: 30px;
+            padding-top: 20px;
+            border-top: 1px solid rgba(255, 255, 255, 0.15);
+        }
+
+        .hero-trust-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 13.5px;
+            color: #e2e8f0;
+            font-weight: 600;
+        }
+    </style>
+
+    <!-- 1. HERO SECTION DENGAN VIDEO BACKGROUND -->
     <section class="hero-section">
         <video autoplay loop muted playsinline class="hero-video">
-            <!-- SUMBER VIDEO KAMU -->
+            <!-- SUMBER VIDEO -->
             <source src="{{ asset('asset/vid/profil-smk.mp4') }}" type="video/mp4">
         </video>
         <div class="hero-overlay"></div>
@@ -16,81 +101,135 @@
                 Tanjungpinang
             </h1>
             <p class="hero-description">
-                Temukan berbagai karya, produk kreatif, teknologi, dan layanan<br>
-                jasa hasil Teaching Factory siswa SMKN 4 Tanjungpinang.
+                Temukan berbagai karya inovasi, produk fisik kreatif, teknologi terapan, dan layanan jasa kustom hasil unit Teaching Factory siswa SMKN 4 Tanjungpinang.
             </p>
             <div class="hero-buttons">
                 <a href="{{ route('produk') }}" class="btn btn-primary">Jelajahi Produk</a>
                 <a href="{{ route('jasa') }}" class="btn btn-outline">Lihat Layanan Jasa</a>
             </div>
+
+            <!-- Trust Badges -->
+            <div class="hero-trust-bar">
+                <div class="hero-trust-item">
+                    <span>✨</span> 6 Program Keahlian
+                </div>
+                <div class="hero-trust-item">
+                    <span>🏭</span> Standar Kualitas Industri
+                </div>
+                <div class="hero-trust-item">
+                    <span>⚡</span> Bimbingan Guru Ahli & Praktisi
+                </div>
+            </div>
         </div>
     </section>
 
-    <!-- SECTION TENTANG SEKOLAH -->
+    <!-- 2. SECTION TENTANG TEFA -->
     <div class="container about-layout">
         <div class="about-img-wrapper">
-            <!-- FOTO SEKOLAH KAMU -->
-            <img src="{{ asset('asset/img/foto-sekolahmu.jpg') }}" alt="Gedung SMKN 4 Tanjungpinang">
+            <!-- FOTO SEKOLAH / TEFA -->
+            <img src="{{ asset('asset/img/foto-sekolahmu.jpg') }}" alt="Teaching Factory SMKN 4 Tanjungpinang"
+                 onerror="this.onerror=null; this.src='https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?q=80&w=800&auto=format&fit=crop';">
         </div>
         <div class="about-text">
-            <span class="section-label">— Tentang Sekolah</span>
-            <h2 class="section-title">Tentang SMKN 4 Tanjungpinang</h2>
+            <span class="section-label">Tentang Teaching Factory</span>
+            <h2 class="section-title">TEFA SMKN 4 TANJUNGPINANG</h2>
             <p class="section-subtitle">
-                SMKN 4 Tanjungpinang adalah sekolah menengah kejuruan negeri yang berfokus pada pendidikan berbasis teknologi dan kreativitas, memadukan pembelajaran teori dengan praktik nyata melalui program Teaching Factory di enam bidang keahlian.
+                Teaching Factory (TEFA) SMKN 4 Tanjungpinang adalah ekosistem pembelajaran berbasis produksi riil yang dirancang sesuai standar industri modern. Kami menghasilkan produk bernilai jual tinggi dan layanan jasa profesional yang siap melayani masyarakat serta pelaku usaha.
             </p>
-            <a href="{{ route('profil') }}" class="btn-blue">Kenali TEFA</a>
-        </div>
-    </div>
-
-    <!-- SECTION CARA PEMESANAN -->
-    <div class="container text-center">
-        <span class="section-label">— Cara Pemesanan</span>
-        <h2 class="section-title">Pesan Produk & Layanan<br>Cuma 4 Langkah</h2>
-        <p class="section-subtitle">Mudah, cepat, dan terpercaya. Ikuti 4 langkah berikut untuk memesan produk atau layanan favoritmu.</p>
-
-        <div class="steps-grid">
-            <div class="step-card" style="border-color: #2563eb;">
-                <div class="step-number">01</div>
-                <h3>Pilih Produk / Layanan</h3>
-                <p>Jelajahi katalog, pilih produk atau layanan jasa yang kamu butuhkan.</p>
-            </div>
-            <div class="step-card" style="border-color: #f97316;">
-                <div class="step-number" style="background:#f97316">02</div>
-                <h3>Tambah ke Keranjang</h3>
-                <p>Klik pesan, item otomatis masuk ke keranjang kamu.</p>
-            </div>
-            <div class="step-card" style="border-color: #10b981;">
-                <div class="step-number" style="background:#10b981">03</div>
-                <h3>Pilih Pembayaran</h3>
-                <p>Di halaman keranjang, pilih metode pembayaran yang paling gampang.</p>
-            </div>
-            <div class="step-card" style="border-color: #8b5cf6;">
-                <div class="step-number" style="background:#8b5cf6">04</div>
-                <h3>Konfirmasi & Selesai</h3>
-                <p>Buat pesanan, tim TEFA akan segera menghubungi kamu.</p>
+            <div style="display: flex; gap: 12px; flex-wrap: wrap;">
+                <a href="{{ route('profil') }}" class="btn-blue" style="border-radius: 999px; padding: 12px 26px; font-weight: 700; text-decoration: none;">
+                    Kenali TEFA Lebih Dekat &rarr;
+                </a>
             </div>
         </div>
     </div>
 
-    <!-- SECTION BANNER BANTUAN -->
-    <div class="container">
+    <!-- 3. SECTION SOLUSI & BIDANG KEAHLIAN UNGGULAN (TASTEFUL & TIDAK OVER) -->
+    <div class="container" style="padding-top: 20px; padding-bottom: 60px;">
+        <div class="text-center" style="max-width: 650px; margin: 0 auto 40px;">
+            <span class="section-label">Solusi & Layanan</span>
+            <h2 class="section-title">Bidang Layanan Unggulan TEFA</h2>
+            <p class="section-subtitle" style="margin-bottom: 0;">Layanan produksi dan jasa profesional yang dikerjakan langsung oleh siswa berprestasi dengan standar industri.</p>
+        </div>
+
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 24px;">
+            
+            <!-- Card 1: Software & Web -->
+            <div class="home-feature-card">
+                <div class="home-feature-icon" style="background: #eff6ff; color: #2563eb;">
+                    💻
+                </div>
+                <h3>Software & Web Systems</h3>
+                <p>Pembuatan website profile, sistem informasi manajemen, aplikasi mobile Android/iOS, dan game edukasi interaktif.</p>
+                <a href="{{ route('jasa') }}" class="home-feature-link">
+                    <span>Lihat Layanan IT</span>
+                    <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M14 5l7 7m0 0l-7 7m7-7H3"/></svg>
+                </a>
+            </div>
+
+            <!-- Card 2: Networking & Hardware -->
+            <div class="home-feature-card">
+                <div class="home-feature-icon" style="background: #f0fdf4; color: #16a34a;">
+                    🌐
+                </div>
+                <h3>Jaringan & Maintenance PC</h3>
+                <p>Instalasi kabel LAN/Fiber Optic/WiFi, perakitan komputer PC, troubleshooting hardware, dan perawatan server instansi.</p>
+                <a href="{{ route('jasa') }}" class="home-feature-link" style="color: #16a34a;">
+                    <span>Lihat Layanan Jaringan</span>
+                    <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M14 5l7 7m0 0l-7 7m7-7H3"/></svg>
+                </a>
+            </div>
+
+            <!-- Card 3: Visual Design & Branding -->
+            <div class="home-feature-card">
+                <div class="home-feature-icon" style="background: #fdf2f8; color: #db2777;">
+                    🎨
+                </div>
+                <h3>Desain Grafis & Branding</h3>
+                <p>Pembuatan identitas merek, logo perusahaan, kemasan produk (packaging) UMKM, poster, banner, dan merchandise.</p>
+                <a href="{{ route('jasa') }}" class="home-feature-link" style="color: #db2777;">
+                    <span>Lihat Layanan Desain</span>
+                    <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M14 5l7 7m0 0l-7 7m7-7H3"/></svg>
+                </a>
+            </div>
+
+            <!-- Card 4: Video & Multimedia -->
+            <div class="home-feature-card">
+                <div class="home-feature-icon" style="background: #fff7ed; color: #ea580c;">
+                    📹
+                </div>
+                <h3>Videografi & Animasi 3D</h3>
+                <p>Dokumentasi liputan event, pembuatan video profile perusahaan, video iklan produk, dan animasi edukatif 2D/3D.</p>
+                <a href="{{ route('jasa') }}" class="home-feature-link" style="color: #ea580c;">
+                    <span>Lihat Layanan Media</span>
+                    <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M14 5l7 7m0 0l-7 7m7-7H3"/></svg>
+                </a>
+            </div>
+
+        </div>
+    </div>
+
+    <!-- 4. SECTION BANNER BANTUAN -->
+    <div class="container" style="padding-top: 0;">
         <div class="help-banner">
-            <span class="section-label" style="background: rgba(255,255,255,0.2); padding: 5px 15px; border-radius: 20px; color: white;">✨ Butuh Bantuan?</span>
-            <h2>Punya Kebutuhan? Kami Siap Membantu.</h2>
-            <p>Temukan produk atau layanan TEFA yang sesuai dengan kebutuhan Anda.</p>
+            <span class="section-label" style="background: rgba(255,255,255,0.2); padding: 5px 15px; border-radius: 20px; color: white;">✨ Konsultasi & Kolaborasi</span>
+            <h2>Punya Kebutuhan Project atau Pesanan Khusus?</h2>
+            <p style="max-width: 650px; margin: 0 auto 20px; color: #cbd5e1; line-height: 1.7;">
+                Tim Teaching Factory SMKN 4 Tanjungpinang siap berkolaborasi menghasilkan karya berkualitas sesuai kebutuhan bisnis dan lembaga Anda.
+            </p>
             <div class="help-buttons">
                 <a href="{{ route('produk') }}" class="help-card">
                     <div style="width: 15px; height: 15px; background: #2563eb; border-radius: 3px;"></div>
                     <div>
-                        <b style="color:white">Jelajahi Produk</b><br>
-                        <small style="color:#cbd5e1">Temukan produk TEFA</small>
+                        <b style="color:white">Katalog Produk Fisik</b><br>
+                        <small style="color:#cbd5e1">Beli karya siswa langsung</small>
                     </div>
                 </a>
                 <a href="{{ route('jasa') }}" class="help-card">
-                    <div style="width: 15px; height: 15px; background: #94a3b8; border-radius: 50%;"></div>
+                    <div style="width: 15px; height: 15px; background: #ffb703; border-radius: 50%;"></div>
                     <div>
-                        <b style="color:white">Konsultasi Layanan</b><br>
-                        <small style="color:#cbd5e1">Konsultasikan kebutuhanmu</small>
+                        <b style="color:white">Konsultasi Layanan Jasa</b><br>
+                        <small style="color:#cbd5e1">Diskusikan kebutuhan project</small>
                     </div>
                 </a>
             </div>
