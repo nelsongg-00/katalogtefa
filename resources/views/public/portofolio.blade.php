@@ -52,92 +52,88 @@
         margin: 0 auto;
     }
 
-    /* Filter & Search Bar Container */
+    /* Filter & Search Bar Container (Centered - Sesuai Gambar 3) */
     .portfolio-controls-container {
         max-width: 1240px;
         margin: 0 auto 35px;
         padding: 0 24px;
         display: flex;
         flex-direction: column;
-        gap: 20px;
-    }
-
-    /* Top Search & Filter Bar (Matching Image 1) */
-    .portfolio-top-bar {
-        display: flex;
-        justify-content: flex-end;
         align-items: center;
-        gap: 12px;
-        flex-wrap: wrap;
+        gap: 16px;
     }
 
+    /* Centered Search Bar (Matching Image 3) */
     .search-box-wrapper {
         display: flex;
         align-items: center;
         background: #ffffff;
-        border: 1.5px solid #cbd5e1;
+        border: 1.5px solid #dbeafe;
         border-radius: 999px;
-        padding: 4px 6px 4px 16px;
-        box-shadow: 0 2px 6px rgba(0, 0, 0, 0.03);
-        transition: all 0.2s ease;
-        min-width: 320px;
+        padding: 5px 6px 5px 18px;
+        box-shadow: 0 10px 30px -5px rgba(37, 99, 235, 0.12), 0 2px 6px rgba(0, 0, 0, 0.03);
+        transition: all 0.25s ease;
+        width: 100%;
+        max-width: 600px;
     }
 
     .search-box-wrapper:focus-within {
         border-color: #2563eb;
-        box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.15);
+        box-shadow: 0 12px 35px -5px rgba(37, 99, 235, 0.22), 0 0 0 3px rgba(37, 99, 235, 0.15);
     }
 
-    .search-select-jurusan {
-        border: none;
-        background: transparent;
-        font-size: 13.5px;
-        font-weight: 600;
-        color: #334155;
-        outline: none;
-        padding-right: 12px;
-        border-right: 1px solid #e2e8f0;
-        cursor: pointer;
+    .search-icon-left {
+        color: #0284c7;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-shrink: 0;
+        margin-right: 8px;
     }
 
     .search-input-field {
         border: none;
         background: transparent;
-        padding: 8px 12px;
-        font-size: 13.5px;
+        padding: 8px 6px;
+        font-size: 14.5px;
         color: #0f172a;
         outline: none;
         width: 100%;
+        font-weight: 500;
     }
 
     .search-input-field::placeholder {
         color: #94a3b8;
     }
 
-    .search-btn-icon {
-        background: none;
+    .search-btn-action {
+        background: #2563eb;
+        color: #ffffff;
         border: none;
-        color: #64748b;
-        padding: 6px;
-        display: flex;
-        align-items: center;
-        justify-content: center;
+        padding: 9px 24px;
+        border-radius: 999px;
+        font-size: 14px;
+        font-weight: 700;
         cursor: pointer;
-        border-radius: 50%;
-        transition: color 0.15s;
+        transition: all 0.2s ease;
+        box-shadow: 0 4px 12px rgba(37, 99, 235, 0.3);
+        flex-shrink: 0;
     }
 
-    .search-btn-icon:hover {
-        color: #2563eb;
+    .search-btn-action:hover {
+        background: #1d4ed8;
+        transform: scale(1.02);
+        box-shadow: 0 6px 16px rgba(37, 99, 235, 0.4);
     }
 
-    /* Filter Pills (Semua, RPL, DKV, TKJ, Animasi, PSPT, Gim) */
+    /* Filter Pills (Semua, RPL, TKJ, DKV, PSPT, ANIMASI, GIM) - Sesuai Gambar 3 */
     .filter-pills-row {
         display: flex;
         align-items: center;
         justify-content: center;
         gap: 10px;
         flex-wrap: wrap;
+        width: 100%;
     }
 
     .filter-pill-btn {
@@ -642,62 +638,47 @@
         </p>
     </div>
 
-    <!-- Filter & Search Controls -->
+    <!-- Filter & Search Controls (Centered - Sesuai Gambar 3) -->
     <div class="portfolio-controls-container">
-        <!-- Top Search Bar (Sesuai Gambar 1) -->
-        <div class="portfolio-top-bar">
-            <div class="search-box-wrapper">
-                <select id="portfolio-jurusan-select" class="search-select-jurusan" onchange="handleSelectJurusan(this.value)">
-                    <option value="all">Semua Jurusan</option>
-                    <option value="RPL">RPL</option>
-                    <option value="DKV">DKV</option>
-                    <option value="TKJ">TKJ</option>
-                    <option value="Animasi">Animasi</option>
-                    <option value="PSPT">PSPT</option>
-                    <option value="Gim">Gim</option>
-                </select>
-                <input type="text" 
-                       id="portfolio-search-input" 
-                       class="search-input-field" 
-                       placeholder="Cari proyek karya..." 
-                       oninput="filterPortfolios()" />
-                <button type="button" class="search-btn-icon" aria-label="Cari" onclick="filterPortfolios()">
-                    <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/>
-                    </svg>
-                </button>
-            </div>
+        <!-- Centered Search Bar (Sesuai Gambar 3) -->
+        <div class="search-box-wrapper">
+            <span class="search-icon-left">
+                <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/>
+                </svg>
+            </span>
+            <input type="text" 
+                   id="portfolio-search-input" 
+                   class="search-input-field" 
+                   placeholder="Cari karya portofolio..." 
+                   oninput="filterPortfolios()" />
+            <button type="button" class="search-btn-action" onclick="filterPortfolios()">
+                Cari
+            </button>
         </div>
 
-        <!-- Filter Pills Row (Semua, RPL, DKV, TKJ, Animasi, PSPT, Gim) -->
+        <!-- Filter Pills Row (Semua, RPL, TKJ, DKV, PSPT, ANIMASI, GIM) - Sesuai Gambar 3 -->
         <div class="filter-pills-row">
             <button type="button" class="filter-pill-btn active" data-filter="all" onclick="setFilterCategory('all')">
-                <span>❖</span>
                 <span>Semua</span>
             </button>
             <button type="button" class="filter-pill-btn" data-filter="RPL" onclick="setFilterCategory('RPL')">
-                <span class="pill-dot" style="background: #2563eb;"></span>
                 <span>RPL</span>
             </button>
-            <button type="button" class="filter-pill-btn" data-filter="DKV" onclick="setFilterCategory('DKV')">
-                <span class="pill-dot" style="background: #9333ea;"></span>
-                <span>DKV</span>
-            </button>
             <button type="button" class="filter-pill-btn" data-filter="TKJ" onclick="setFilterCategory('TKJ')">
-                <span class="pill-dot" style="background: #0891b2;"></span>
                 <span>TKJ</span>
             </button>
-            <button type="button" class="filter-pill-btn" data-filter="Animasi" onclick="setFilterCategory('Animasi')">
-                <span class="pill-dot" style="background: #ea580c;"></span>
-                <span>Animasi</span>
+            <button type="button" class="filter-pill-btn" data-filter="DKV" onclick="setFilterCategory('DKV')">
+                <span>DKV</span>
             </button>
             <button type="button" class="filter-pill-btn" data-filter="PSPT" onclick="setFilterCategory('PSPT')">
-                <span class="pill-dot" style="background: #e11d48;"></span>
                 <span>PSPT</span>
             </button>
+            <button type="button" class="filter-pill-btn" data-filter="Animasi" onclick="setFilterCategory('Animasi')">
+                <span>ANIMASI</span>
+            </button>
             <button type="button" class="filter-pill-btn" data-filter="Gim" onclick="setFilterCategory('Gim')">
-                <span class="pill-dot" style="background: #16a34a;"></span>
-                <span>Gim</span>
+                <span>GIM</span>
             </button>
         </div>
     </div>
@@ -893,7 +874,7 @@
             const cardTitle = card.getAttribute('data-title') || '';
             const cardDesc = card.getAttribute('data-desc') || '';
 
-            const matchesCategory = (activeFilter === 'all' || cardJurusan === activeFilter);
+            const matchesCategory = (activeFilter === 'all' || cardJurusan.toUpperCase() === activeFilter.toUpperCase());
             const matchesQuery = (!query || cardTitle.includes(query) || cardDesc.includes(query));
 
             if (matchesCategory && matchesQuery) {
