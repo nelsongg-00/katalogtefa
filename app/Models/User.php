@@ -54,6 +54,14 @@ class User extends Authenticatable
     }
 
     /**
+     * Alias for jurusan_id for consistency across codebase.
+     */
+    public function getDepartmentIdAttribute(): ?int
+    {
+        return $this->jurusan_id;
+    }
+
+    /**
      * @return HasMany<Pesanan, $this>
      */
     public function pesanans(): HasMany

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\DetailPesanan;
+use App\Models\Jurusan;
 use App\Models\Penugasan;
 use App\Models\Pesanan;
 use App\Models\PesanMasuk;
@@ -22,14 +23,19 @@ class AdminJurusanController extends Controller
     public function index(): View
     {
         $user = auth()->user();
-        $jurusanId = $user->jurusan_id;
+        $jurusanId = $user->jurusan_id ?? $user->department_id;
         $jurusan = $user->jurusan;
+
+        $jurusanIds = $jurusanId ? [$jurusanId] : [];
+        if ($jurusan && $jurusan->kode) {
+            $jurusanIds = Jurusan::where('kode', $jurusan->kode)->pluck('id')->toArray();
+        }
 
         // 1. Pesanan yang terkait dengan produk jurusan ini
         $pesanans = Pesanan::with(['user', 'detailPesanans.produk', 'penugasans.worker'])
-            ->whereHas('detailPesanans.produk', function ($q) use ($jurusanId) {
-                if ($jurusanId) {
-                    $q->where('jurusan_id', $jurusanId);
+            ->whereHas('detailPesanans.produk', function ($q) use ($jurusanIds) {
+                if (! empty($jurusanIds)) {
+                    $q->whereIn('jurusan_id', $jurusanIds);
                 }
             })
             ->orderBy('created_at', 'desc')
@@ -37,31 +43,37 @@ class AdminJurusanController extends Controller
 
         // 2. Metrik Statistik
         $totalPesanan = $pesanans->count();
-        $pesananPending = $pesanans->where('status_pesanan', 'Pending')->count();
-        $pesananProses = $pesanans->whereIn('status_pesanan', ['Validated', 'In Progress'])->count();
-        $pesananSelesai = $pesanans->where('status_pesanan', 'Completed')->count();
+        $pesananPending = $pesanans->filter(function ($p) {
+            return in_array(strtolower($p->status_pesanan), ['pending', 'menunggu', 'menunggu konfirmasi', 'menunggu_konfirmasi']);
+        })->count();
+        $pesananProses = $pesanans->filter(function ($p) {
+            return in_array(strtolower($p->status_pesanan), ['validated', 'in progress', 'sedang_dikemas', 'bisa_diambil']);
+        })->count();
+        $pesananSelesai = $pesanans->filter(function ($p) {
+            return in_array(strtolower($p->status_pesanan), ['completed', 'selesai']);
+        })->count();
 
-        $totalPendapatan = (int) DetailPesanan::whereHas('produk', function ($q) use ($jurusanId) {
-            if ($jurusanId) {
-                $q->where('jurusan_id', $jurusanId);
+        $totalPendapatan = (int) DetailPesanan::whereHas('produk', function ($q) use ($jurusanIds) {
+            if (! empty($jurusanIds)) {
+                $q->whereIn('jurusan_id', $jurusanIds);
             }
         })
             ->whereHas('pesanan', function ($q) {
-                $q->where('status_pesanan', 'Completed');
+                $q->whereIn('status_pesanan', ['Completed', 'selesai', 'Selesai']);
             })
             ->sum('subtotal');
 
         // 3. Worker & Produk Jurusan
         $workersQuery = User::where('role', 'worker');
-        if ($jurusanId) {
-            $workersQuery->where('jurusan_id', $jurusanId);
+        if (! empty($jurusanIds)) {
+            $workersQuery->whereIn('jurusan_id', $jurusanIds);
         }
         $workers = $workersQuery->get();
         $workerAktif = $workers->count();
 
         $produksQuery = Produk::query();
-        if ($jurusanId) {
-            $produksQuery->where('jurusan_id', $jurusanId);
+        if (! empty($jurusanIds)) {
+            $produksQuery->whereIn('jurusan_id', $jurusanIds);
         }
         $produks = $produksQuery->get();
         $totalProduk = $produks->count();
@@ -78,7 +90,7 @@ class AdminJurusanController extends Controller
                 $bulanIndex = (int) $pesanan->created_at->format('n') - 1;
                 if ($bulanIndex >= 0 && $bulanIndex < 12) {
                     $pesananMasukPerBulan[$bulanIndex]++;
-                    if ($pesanan->status_pesanan === 'Completed') {
+                    if (in_array(strtolower($pesanan->status_pesanan), ['completed', 'selesai'])) {
                         $pesananSelesaiPerBulan[$bulanIndex]++;
                     }
                 }
@@ -93,16 +105,16 @@ class AdminJurusanController extends Controller
 
         // 5. Projek Sedang Berjalan
         $projectsQuery = Project::with('worker');
-        if ($jurusanId) {
-            $projectsQuery->where('jurusan_id', $jurusanId);
+        if (! empty($jurusanIds)) {
+            $projectsQuery->whereIn('jurusan_id', $jurusanIds);
         }
         $projects = $projectsQuery->orderBy('created_at', 'desc')->get();
 
         // 6. Notifikasi Pesan Masuk
-        $pesanMasuksQuery = PesanMasuk::where(function ($q) use ($jurusanId) {
+        $pesanMasuksQuery = PesanMasuk::where(function ($q) use ($jurusanIds) {
             $q->whereNull('jurusan_id');
-            if ($jurusanId) {
-                $q->orWhere('jurusan_id', $jurusanId);
+            if (! empty($jurusanIds)) {
+                $q->orWhereIn('jurusan_id', $jurusanIds);
             }
         });
 

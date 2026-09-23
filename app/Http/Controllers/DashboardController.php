@@ -47,7 +47,7 @@ class DashboardController extends Controller
      */
     public function clientOrders(): View
     {
-        $orders = Order::with(['product.jurusan', 'department'])
+        $orders = Order::with(['product.jurusan', 'service.department', 'department'])
             ->where('user_id', auth()->id())
             ->latest()
             ->get();

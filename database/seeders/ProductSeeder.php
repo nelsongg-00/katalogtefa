@@ -13,7 +13,9 @@ class ProductSeeder extends Seeder
      */
     public function run(): void
     {
-        $jurusan = Jurusan::first();
+        $jurusan = Jurusan::where('kode', 'RPL')->whereNotNull('slug')->first()
+            ?? Jurusan::where('kode', 'RPL')->first()
+            ?? Jurusan::first();
 
         Product::updateOrCreate(
             ['nama_produk' => 'Buku Jurnal Desain Tefa'],

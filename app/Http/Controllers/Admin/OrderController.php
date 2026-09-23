@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Models\Jurusan;
 use App\Models\Order;
 use App\Models\OrderLog;
 use App\Models\Project;
@@ -20,15 +21,20 @@ class OrderController extends Controller
      */
     public function index(Request $request): View
     {
-        $jurusanId = auth()->user()->jurusan_id;
+        $user = auth()->user();
+        $jurusanId = $user->jurusan_id ?? $user->department_id;
+        $jurusanIds = $jurusanId ? [$jurusanId] : [];
+        if ($user && $user->jurusan && $user->jurusan->kode) {
+            $jurusanIds = Jurusan::where('kode', $user->jurusan->kode)->pluck('id')->toArray();
+        }
 
         $ordersQuery = Order::with(['service', 'worker', 'project', 'product.jurusan', 'department', 'orderLogs']);
 
-        if ($jurusanId) {
-            $ordersQuery->where(function ($q) use ($jurusanId) {
-                $q->where('department_id', $jurusanId)
-                    ->orWhereHas('service', fn ($s) => $s->where('department_id', $jurusanId))
-                    ->orWhereHas('product', fn ($p) => $p->where('jurusan_id', $jurusanId));
+        if (! empty($jurusanIds)) {
+            $ordersQuery->where(function ($q) use ($jurusanIds) {
+                $q->whereIn('department_id', $jurusanIds)
+                    ->orWhereHas('service', fn ($s) => $s->whereIn('department_id', $jurusanIds))
+                    ->orWhereHas('product', fn ($p) => $p->whereIn('jurusan_id', $jurusanIds));
             });
         }
 
@@ -64,17 +70,22 @@ class OrderController extends Controller
      */
     public function create(): View
     {
-        $jurusanId = auth()->user()->jurusan_id;
+        $user = auth()->user();
+        $jurusanId = $user->jurusan_id ?? $user->department_id;
+        $jurusanIds = $jurusanId ? [$jurusanId] : [];
+        if ($user && $user->jurusan && $user->jurusan->kode) {
+            $jurusanIds = Jurusan::where('kode', $user->jurusan->kode)->pluck('id')->toArray();
+        }
 
         $servicesQuery = Service::where('is_active', true);
-        if ($jurusanId) {
-            $servicesQuery->where('department_id', $jurusanId);
+        if (! empty($jurusanIds)) {
+            $servicesQuery->whereIn('department_id', $jurusanIds);
         }
         $services = $servicesQuery->orderBy('nama_layanan')->get();
 
         $workersQuery = User::where('role', 'worker');
-        if ($jurusanId) {
-            $workersQuery->where('jurusan_id', $jurusanId);
+        if (! empty($jurusanIds)) {
+            $workersQuery->whereIn('jurusan_id', $jurusanIds);
         }
         $workers = $workersQuery->orderBy('name')->get();
 
@@ -86,7 +97,12 @@ class OrderController extends Controller
      */
     public function store(Request $request): RedirectResponse
     {
-        $jurusanId = auth()->user()->jurusan_id;
+        $user = auth()->user();
+        $jurusanId = $user->jurusan_id ?? $user->department_id;
+        $allowedJurusanIds = $jurusanId ? [$jurusanId] : [];
+        if ($user && $user->jurusan && $user->jurusan->kode) {
+            $allowedJurusanIds = Jurusan::where('kode', $user->jurusan->kode)->pluck('id')->toArray();
+        }
 
         $request->validate([
             'customer_name' => 'required|string|max:255',
@@ -99,7 +115,7 @@ class OrderController extends Controller
         ]);
 
         $service = Service::findOrFail($request->service_id);
-        if ($jurusanId && $service->department_id !== $jurusanId) {
+        if ($jurusanId && ! in_array($service->department_id, $allowedJurusanIds)) {
             abort(403, 'Anda tidak memiliki akses ke layanan jurusan lain.');
         }
 
@@ -260,13 +276,19 @@ class OrderController extends Controller
      */
     protected function authorizeOrder(Order $order): void
     {
-        $jurusanId = auth()->user()->jurusan_id;
+        $user = auth()->user();
+        $jurusanId = $user->jurusan_id ?? $user->department_id;
         if ($jurusanId) {
+            $allowedJurusanIds = [$jurusanId];
+            if ($user && $user->jurusan && $user->jurusan->kode) {
+                $allowedJurusanIds = Jurusan::where('kode', $user->jurusan->kode)->pluck('id')->toArray();
+            }
+
             $orderDeptId = $order->department_id
                 ?? $order->service?->department_id
                 ?? $order->product?->jurusan_id;
 
-            if ($orderDeptId && $orderDeptId !== $jurusanId) {
+            if ($orderDeptId && ! in_array($orderDeptId, $allowedJurusanIds)) {
                 abort(403, 'Aksi ini tidak diizinkan untuk jurusan Anda.');
             }
         }

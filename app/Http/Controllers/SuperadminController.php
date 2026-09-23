@@ -2,9 +2,8 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
-use App\Models\Pesanan;
 use App\Models\Jurusan;
+use App\Models\Pesanan;
 use App\Models\User;
 
 class SuperadminController extends Controller

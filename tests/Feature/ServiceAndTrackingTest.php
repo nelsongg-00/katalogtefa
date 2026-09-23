@@ -4,14 +4,18 @@ namespace Tests\Feature;
 
 use App\Models\Jurusan;
 use App\Models\Order;
+use App\Models\Product;
 use App\Models\Project;
 use App\Models\ProjectLog;
 use App\Models\Service;
 use App\Models\User;
+use Illuminate\Foundation\Testing\DatabaseTransactions;
 use Tests\TestCase;
 
 class ServiceAndTrackingTest extends TestCase
 {
+    use DatabaseTransactions;
+
     protected Jurusan $jurusan;
 
     protected Jurusan $otherJurusan;
@@ -27,6 +31,8 @@ class ServiceAndTrackingTest extends TestCase
     protected function setUp(): void
     {
         parent::setUp();
+
+        Order::whereIn('order_code', ['TEFA-FISIK-1234', 'TEFA-9990'])->delete();
 
         $this->jurusan = Jurusan::firstOrCreate(
             ['nama_jurusan' => 'Rekayasa Perangkat Lunak'],
@@ -194,5 +200,91 @@ class ServiceAndTrackingTest extends TestCase
 
         $response = $this->actingAs($this->adminJurusan)->get(route('admin.services.edit', $otherService));
         $response->assertStatus(403);
+    }
+
+    public function test_worker_log_update_is_reflected_dynamically_in_public_tracking(): void
+    {
+        // 1. Worker menambahkan progress log baru melalui dashboard worker
+        $newLogMessage = 'Menerapkan integrasi backend payment gateway API v2.';
+        $response = $this->actingAs($this->worker)->post(route('worker.projects.log', $this->order->project_id), [
+            'catatan' => $newLogMessage,
+            'progress' => 80,
+            'link_eksternal' => 'https://github.com/tefa-smkn4/test-project',
+        ]);
+        $response->assertRedirect();
+
+        // 2. Publik membuka halaman lacak dengan order code
+        $trackResponse = $this->get(route('order.track', $this->order->order_code));
+        $trackResponse->assertStatus(200);
+        $trackResponse->assertSee($newLogMessage);
+        $trackResponse->assertSee($this->worker->name);
+        $trackResponse->assertSee('80%');
+        $trackResponse->assertSee('https://github.com/tefa-smkn4/test-project');
+        $trackResponse->assertSee('Lini Masa Progres Pengerjaan');
+    }
+
+    public function test_physical_product_tracking_shows_physical_stepper_and_client_orders_shortcut_without_worker_logs(): void
+    {
+        $product = Product::firstOrCreate(
+            ['nama_produk' => 'Buku Cetak Eksklusif TeFa'],
+            [
+                'jurusan_id' => $this->jurusan->id,
+                'harga' => 50000,
+                'stok' => 10,
+                'deskripsi' => 'Produk buku fisik.',
+            ]
+        );
+
+        $physicalOrder = Order::create([
+            'order_code' => 'TEFA-FISIK-1234',
+            'customer_name' => 'Budi Pelanggan Fisik',
+            'customer_phone' => '081234567890',
+            'product_id' => $product->id,
+            'department_id' => $this->jurusan->id,
+            'jumlah' => 1,
+            'total_biaya' => 50000,
+            'total_harga' => 50000,
+            'metode_pembayaran' => 'cod',
+            'metode_pengiriman' => 'pickup',
+            'lokasi_pengambilan' => 'Lab Komputer RPL',
+            'status' => 'sedang_dikemas',
+        ]);
+
+        $response = $this->get(route('order.track', $physicalOrder->order_code));
+
+        $response->assertStatus(200);
+        $response->assertSee('TEFA-FISIK-1234');
+        $response->assertSee('Buku Cetak Eksklusif TeFa');
+        $response->assertSee('Sedang Dikemas');
+        $response->assertSee('Siap Diambil di Lab');
+        $response->assertSee('Untuk produk fisik, Anda juga dapat memantau status pesanan dan rincian pengambilan langsung melalui menu');
+        $response->assertSee('Pesanan Saya');
+        $response->assertSee(route('client.orders'));
+        // Pastikan tidak menampilkan log teknis worker jasa
+        $response->assertDontSee('Lini Masa Progres Pengerjaan');
+        $response->assertDontSee('Talenta Siswa (Worker PJ)');
+    }
+
+    public function test_tracking_order_without_worker_or_logs_renders_fallbacks_safely(): void
+    {
+        $emptyServiceOrder = Order::create([
+            'order_code' => 'TEFA-9990',
+            'customer_name' => 'Klien Baru Tanpa Worker',
+            'customer_phone' => '081211112222',
+            'service_id' => $this->service->id,
+            'worker_id' => null,
+            'project_id' => null,
+            'status' => 'pending',
+            'total_biaya' => 1000000,
+            'total_harga' => 1000000,
+        ]);
+
+        $response = $this->get(route('order.track', $emptyServiceOrder->order_code));
+
+        $response->assertStatus(200);
+        $response->assertSee('TEFA-9990');
+        $response->assertSee('Klien Baru Tanpa Worker');
+        $response->assertSee('Tim Produksi Jurusan');
+        $response->assertSee('Belum Ada Catatan Log Terbaru');
     }
 }

@@ -2,8 +2,8 @@
 
 namespace Database\Seeders;
 
-use Illuminate\Database\Seeder;
-use App\Models\Produk; // Memanggil Model Produk
+use App\Models\Produk;
+use Illuminate\Database\Seeder; // Memanggil Model Produk
 
 class ProdukSeeder extends Seeder
 {

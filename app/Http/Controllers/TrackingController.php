@@ -26,9 +26,22 @@ class TrackingController extends Controller
 
         $order = Order::with([
             'service.department',
+            'product.jurusan',
+            'department',
             'worker',
-            'project.projectLogs.worker',
+            'project',
         ])->where('order_code', $orderCodeClean)->first();
+
+        if ($order) {
+            $order->load([
+                'worker',
+                'service.department',
+                'progressLogs' => function ($query) {
+                    $query->with('worker')->latest();
+                },
+                'orderLogs',
+            ]);
+        }
 
         return view('public.tracking', [
             'order' => $order,

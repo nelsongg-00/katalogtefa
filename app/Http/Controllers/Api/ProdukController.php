@@ -15,7 +15,7 @@ class ProdukController extends Controller
         return response()->json([
             'status' => 'success',
             'message' => 'Berhasil mengambil data produk TeFa',
-            'data' => $produk
+            'data' => $produk,
         ], 200);
     }
 }

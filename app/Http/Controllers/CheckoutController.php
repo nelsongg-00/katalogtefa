@@ -6,6 +6,7 @@ use App\Models\DetailPesanan;
 use App\Models\Order;
 use App\Models\OrderLog;
 use App\Models\Pesanan;
+use App\Models\PesanMasuk;
 use App\Models\Product;
 use App\Models\Produk;
 use Illuminate\Http\RedirectResponse;
@@ -51,6 +52,7 @@ class CheckoutController extends Controller
         }
 
         $product->load('jurusan');
+        $departmentId = $product->jurusan_id ?? $product->department_id;
         $lokasiPengambilan = $product->jurusan?->lokasi_pengambilan ?? 'Lab Teaching Factory SMKN 4 Tanjungpinang';
         $totalHarga = $product->harga * $jumlah;
 
@@ -62,12 +64,12 @@ class CheckoutController extends Controller
         // 3. Potong stok produk fisik secara otomatis
         $product->decrement('stok', $jumlah);
 
-        // 4. Simpan ke tabel orders
+        // 4. Simpan ke tabel orders dengan mengaitkan department_id produk secara eksplisit
         $order = Order::create([
             'order_code' => $orderCode,
             'user_id' => auth()->id(),
             'product_id' => $product->id,
-            'department_id' => $product->jurusan_id,
+            'department_id' => $departmentId,
             'customer_name' => auth()->user()->name,
             'customer_phone' => $request->customer_phone ?? auth()->user()->phone ?? '081234567890',
             'jumlah' => $jumlah,
@@ -89,10 +91,20 @@ class CheckoutController extends Controller
             'keterangan_log' => "Pesanan fisik COD dibuat oleh {$order->customer_name}. Menunggu konfirmasi dari Admin Jurusan.",
         ]);
 
-        // 6. Sinkronisasi ke tabel Pesanan agar tercatat di rekapitulasi Super Admin
+        // 6. Trigger notifikasi ke tabel pesan_masuks untuk Admin Jurusan terkait
+        PesanMasuk::create([
+            'jurusan_id' => $departmentId,
+            'nama_pengirim' => auth()->user()->name,
+            'email' => auth()->user()->email,
+            'subjek' => 'Pesanan Produk Fisik Baru',
+            'pesan' => 'Pesanan #'.$order->order_code.' ('.$product->nama_produk.') menunggu konfirmasi Anda.',
+            'is_read' => false,
+        ]);
+
+        // 7. Sinkronisasi ke tabel Pesanan agar tercatat di rekapitulasi Super Admin & Ringkasan Dashboard Admin Jurusan
         $pesanan = Pesanan::create([
             'user_id' => auth()->id(),
-            'status_pesanan' => 'Menunggu',
+            'status_pesanan' => 'Pending',
             'total_harga' => $totalHarga,
             'tanggal_pesan' => now(),
             'is_service_via_wa' => false,
@@ -101,13 +113,17 @@ class CheckoutController extends Controller
         $legacyProduk = Produk::firstOrCreate(
             ['nama_produk' => $product->nama_produk],
             [
-                'jurusan_id' => $product->department_id,
+                'jurusan_id' => $departmentId,
                 'tipe' => 'Produk Fisik',
                 'harga' => $product->harga,
                 'deskripsi' => $product->deskripsi,
                 'stok' => $product->stok,
             ]
         );
+
+        if (! $legacyProduk->jurusan_id && $departmentId) {
+            $legacyProduk->update(['jurusan_id' => $departmentId]);
+        }
 
         DetailPesanan::create([
             'pesanan_id' => $pesanan->id,

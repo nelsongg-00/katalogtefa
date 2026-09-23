@@ -28,6 +28,14 @@ class Product extends Model
     ];
 
     /**
+     * Alias for jurusan_id for consistency across codebase.
+     */
+    public function getDepartmentIdAttribute(): ?int
+    {
+        return $this->jurusan_id;
+    }
+
+    /**
      * Get the department that owns the product.
      *
      * @return BelongsTo<Jurusan, $this>

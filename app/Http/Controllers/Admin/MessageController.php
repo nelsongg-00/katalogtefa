@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Models\Jurusan;
 use App\Models\PesanMasuk;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -15,13 +16,19 @@ class MessageController extends Controller
      */
     public function index(Request $request): View
     {
-        $jurusanId = auth()->user()->jurusan_id;
+        $user = auth()->user();
+        $jurusanId = $user->jurusan_id ?? $user->department_id;
         $filter = $request->query('filter', 'all');
 
-        $pesanMasuksQuery = PesanMasuk::where(function ($q) use ($jurusanId) {
+        $jurusanIds = $jurusanId ? [$jurusanId] : [];
+        if ($user && $user->jurusan && $user->jurusan->kode) {
+            $jurusanIds = Jurusan::where('kode', $user->jurusan->kode)->pluck('id')->toArray();
+        }
+
+        $pesanMasuksQuery = PesanMasuk::where(function ($q) use ($jurusanIds) {
             $q->whereNull('jurusan_id');
-            if ($jurusanId) {
-                $q->orWhere('jurusan_id', $jurusanId);
+            if (! empty($jurusanIds)) {
+                $q->orWhereIn('jurusan_id', $jurusanIds);
             }
         });
 
