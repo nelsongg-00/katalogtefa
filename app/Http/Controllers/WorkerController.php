@@ -6,12 +6,15 @@ use App\Models\Penugasan;
 use App\Models\Progres;
 use App\Models\Project;
 use App\Models\ProjectLog;
+use App\Traits\HandlesUploads;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
 
 class WorkerController extends Controller
 {
+    use HandlesUploads;
+
     /**
      * Display worker dashboard overview with assigned projects and stats.
      */
@@ -79,7 +82,7 @@ class WorkerController extends Controller
 
         $lampiranPath = null;
         if ($request->hasFile('lampiran_file')) {
-            $lampiranPath = $request->file('lampiran_file')->store('worker_logs', 'public');
+            $lampiranPath = $this->storeUploadedFile($request->file('lampiran_file'), 'worker_logs');
         }
 
         ProjectLog::create([
@@ -109,7 +112,7 @@ class WorkerController extends Controller
             'catatan_worker' => 'nullable|string|max:1000',
         ]);
 
-        $filePath = $request->file('file_hasil')->store('submissions', 'public');
+        $filePath = $this->storeUploadedFile($request->file('file_hasil'), 'submissions');
 
         $project->update([
             'file_hasil' => $filePath,

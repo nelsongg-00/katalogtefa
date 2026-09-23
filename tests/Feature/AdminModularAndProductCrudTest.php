@@ -115,12 +115,14 @@ class AdminModularAndProductCrudTest extends TestCase
         $editPage->assertStatus(200);
         $editPage->assertSee('Kaus Merchandise RPL SMKN 4');
 
-        // 4. Update
+        // 4. Update with new photo
+        $newFile = UploadedFile::fake()->image('updated_product.png');
         $updateResponse = $this->put(route('admin.products.update', $createdProduct->id), [
             'nama_produk' => 'Kaus Merchandise RPL SMKN 4 - Edisi Khusus',
             'deskripsi' => 'Kaus katun combed edisi khusus TEFA.',
             'harga' => 95000,
             'stok' => 25,
+            'foto' => $newFile,
         ]);
 
         $updateResponse->assertRedirect(route('admin.products.index'));
@@ -131,11 +133,56 @@ class AdminModularAndProductCrudTest extends TestCase
             'stok' => 25,
         ]);
 
+        $updatedProduct = Product::find($createdProduct->id);
+        $this->assertNotNull($updatedProduct->foto);
+        Storage::disk('public')->assertExists($updatedProduct->foto);
+
         // 5. Delete
         $deleteResponse = $this->delete(route('admin.products.destroy', $createdProduct->id));
         $deleteResponse->assertRedirect(route('admin.products.index'));
         $this->assertDatabaseMissing('products', [
             'id' => $createdProduct->id,
         ]);
+    }
+
+    public function test_admin_can_update_product_when_real_path_is_false_on_windows(): void
+    {
+        Storage::fake('public');
+        $this->actingAs($this->admin);
+
+        $product = Product::create([
+            'jurusan_id' => $this->jurusan->id,
+            'nama_produk' => 'Produk Uji Windows Path',
+            'harga' => 10000,
+            'stok' => 5,
+        ]);
+
+        $realImage = UploadedFile::fake()->image('photo.jpg');
+        $tempFile = $realImage->getPathname();
+
+        // Create mock UploadedFile where getRealPath() returns false (Windows temp quirk)
+        $mockFile = new class($tempFile, 'photo.jpg', 'image/jpeg', null, true) extends UploadedFile
+        {
+            public function getRealPath(): string|false
+            {
+                return false;
+            }
+        };
+
+        $response = $this->put(route('admin.products.update', $product->id), [
+            'nama_produk' => 'Produk Uji Windows Path Updated',
+            'harga' => 12000,
+            'stok' => 4,
+            'foto' => $mockFile,
+        ]);
+
+        $response->assertRedirect(route('admin.products.index'));
+        $product->refresh();
+        $this->assertNotNull($product->foto);
+        Storage::disk('public')->assertExists($product->foto);
+
+        if (file_exists($tempFile)) {
+            @unlink($tempFile);
+        }
     }
 }

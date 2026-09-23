@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\Service;
+use App\Traits\HandlesUploads;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -12,6 +13,8 @@ use Illuminate\Support\Str;
 
 class ServiceController extends Controller
 {
+    use HandlesUploads;
+
     /**
      * Tampilkan daftar layanan jasa milik jurusan yang sedang login.
      */
@@ -58,7 +61,7 @@ class ServiceController extends Controller
 
         $fotoPath = null;
         if ($request->hasFile('foto')) {
-            $fotoPath = $request->file('foto')->store('services', 'public');
+            $fotoPath = $this->storeUploadedFile($request->file('foto'), 'services');
         }
 
         Service::create([
@@ -111,7 +114,7 @@ class ServiceController extends Controller
             if ($service->foto && Storage::disk('public')->exists($service->foto)) {
                 Storage::disk('public')->delete($service->foto);
             }
-            $updateData['foto'] = $request->file('foto')->store('services', 'public');
+            $updateData['foto'] = $this->storeUploadedFile($request->file('foto'), 'services');
         }
 
         $service->update($updateData);

@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\Product;
+use App\Traits\HandlesUploads;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
@@ -11,6 +12,8 @@ use Illuminate\View\View;
 
 class ProductController extends Controller
 {
+    use HandlesUploads;
+
     /**
      * Display a listing of the physical products.
      */
@@ -54,7 +57,7 @@ class ProductController extends Controller
 
         $fotoPath = null;
         if ($request->hasFile('foto')) {
-            $fotoPath = $request->file('foto')->store('products', 'public');
+            $fotoPath = $this->storeUploadedFile($request->file('foto'), 'products');
         }
 
         Product::create([
@@ -95,7 +98,7 @@ class ProductController extends Controller
             if ($product->foto && Storage::disk('public')->exists($product->foto)) {
                 Storage::disk('public')->delete($product->foto);
             }
-            $fotoPath = $request->file('foto')->store('products', 'public');
+            $fotoPath = $this->storeUploadedFile($request->file('foto'), 'products');
         }
 
         $product->update([
