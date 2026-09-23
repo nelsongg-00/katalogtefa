@@ -29,4 +29,7 @@
 
   <!-- 2. Grafik Tren Aktivitas Bulanan -->
   @include('admin.partials.charts')
+
+  <!-- 3. Tabel Daftar Pesanan Masuk -->
+  @include('admin.partials.table')
 @endsection

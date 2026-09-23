@@ -18,9 +18,9 @@ class ServiceSeeder extends Seeder
     public function run(): void
     {
         // Temukan jurusan terkait
-        $rpl = Jurusan::where('kode', 'RPL')->orWhere('slug', 'like', '%rekayasa%')->first() ?? Jurusan::first();
-        $dkv = Jurusan::where('kode', 'DKV')->orWhere('slug', 'like', '%desain%')->first() ?? $rpl;
-        $animasi = Jurusan::where('kode', 'ANI')->orWhere('kode', 'PSPT')->orWhere('slug', 'like', '%animasi%')->first() ?? $rpl;
+        $rpl = Jurusan::where('kode', 'RPL')->whereNotNull('slug')->first() ?? Jurusan::where('kode', 'RPL')->first() ?? Jurusan::first();
+        $dkv = Jurusan::where('kode', 'DKV')->whereNotNull('slug')->first() ?? Jurusan::where('kode', 'DKV')->first() ?? $rpl;
+        $animasi = Jurusan::where('kode', 'ANI')->whereNotNull('slug')->first() ?? Jurusan::where('kode', 'PSPT')->whereNotNull('slug')->first() ?? $rpl;
 
         $servicesData = [
             [

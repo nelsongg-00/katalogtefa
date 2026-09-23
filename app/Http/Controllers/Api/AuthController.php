@@ -3,8 +3,8 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
-use Illuminate\Http\Request;
 use App\Models\User;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 
 class AuthController extends Controller
@@ -13,7 +13,7 @@ class AuthController extends Controller
     {
         // 1. Validasi input
         $request->validate([
-            'email'    => 'required|email',
+            'email' => 'required|email',
             'password' => 'required',
         ]);
 
@@ -21,10 +21,10 @@ class AuthController extends Controller
         $user = User::where('email', $request->email)->first();
 
         // 3. Cek ketersediaan user dan kecocokan password
-        if (!$user || !Hash::check($request->password, $user->password)) {
+        if (! $user || ! Hash::check($request->password, $user->password)) {
             return response()->json([
-                'status'  => 'error',
-                'message' => 'Email atau password salah'
+                'status' => 'error',
+                'message' => 'Email atau password salah',
             ], 401);
         }
 
@@ -33,17 +33,17 @@ class AuthController extends Controller
 
         // 5. Kembalikan respon JSON beserta data role user
         return response()->json([
-            'status'  => 'success',
+            'status' => 'success',
             'message' => 'Login berhasil',
-            'data'    => [
-                'user'  => [
-                    'id'    => $user->id,
-                    'name'  => $user->name,
+            'data' => [
+                'user' => [
+                    'id' => $user->id,
+                    'name' => $user->name,
                     'email' => $user->email,
-                    'role'  => $user->role, // Menampilkan role user
+                    'role' => $user->role, // Menampilkan role user
                 ],
-                'token' => $token
-            ]
+                'token' => $token,
+            ],
         ], 200);
     }
 }

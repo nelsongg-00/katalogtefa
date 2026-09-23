@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\HasManyThrough;
 
 class Order extends Model
 {
@@ -69,6 +70,14 @@ class Order extends Model
     }
 
     /**
+     * Alias for department_id for consistency across codebase.
+     */
+    public function getJurusanIdAttribute(): ?int
+    {
+        return $this->department_id;
+    }
+
+    /**
      * Relasi ke jurusan / department asal produk atau pesanan.
      *
      * @return BelongsTo<Jurusan, $this>
@@ -127,14 +136,35 @@ class Order extends Model
     }
 
     /**
+     * Relasi ke log progres pengerjaan project dari worker.
+     *
+     * @return HasManyThrough<ProjectLog, Project, $this>
+     */
+    public function progressLogs(): HasManyThrough
+    {
+        return $this->hasManyThrough(
+            ProjectLog::class,
+            Project::class,
+            'id',          // Foreign key on Project table
+            'project_id',  // Foreign key on ProjectLog table
+            'project_id',  // Local key on Order table
+            'id'           // Local key on Project table
+        )->latest();
+    }
+
+    /**
      * Accessor untuk mengambil progress logs dari project terkait.
      *
      * @return Collection<int, ProjectLog>
      */
     public function getProgressLogsAttribute(): Collection
     {
+        if ($this->relationLoaded('progressLogs')) {
+            return $this->getRelation('progressLogs');
+        }
+
         if ($this->project) {
-            return $this->project->projectLogs()->latest()->get();
+            return $this->project->projectLogs()->with('worker')->latest()->get();
         }
 
         return new Collection;

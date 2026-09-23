@@ -98,12 +98,15 @@ Route::middleware(['auth', 'verified'])->group(function () {
         Route::post('/worker/update-progress/{penugasan}', [WorkerController::class, 'updateProgress'])->name('worker.updateProgress');
     });
 
+    // Orders & Checkout (Wajib Login / Auth Protected)
+    Route::get('/checkout/{product}', [CheckoutController::class, 'show'])->name('checkout.show');
+    Route::post('/checkout/{product}', [CheckoutController::class, 'store'])->name('checkout.store');
+    Route::get('/layanan-jasa/{service}/pesan', [HomeController::class, 'orderService'])->name('services.order');
+
     // Clients
     Route::middleware('role:pelanggan')->group(function () {
         Route::get('/my-orders', [DashboardController::class, 'clientOrders'])->name('client.orders');
         Route::get('/my-orders/{order}', [DashboardController::class, 'clientOrderDetail'])->name('client.orders.show');
-        Route::get('/checkout/{product}', [CheckoutController::class, 'show'])->name('checkout.show');
-        Route::post('/checkout/{product}', [CheckoutController::class, 'store'])->name('checkout.store');
     });
 
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');

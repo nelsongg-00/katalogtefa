@@ -2,8 +2,8 @@
 
 namespace Database\Seeders;
 
-use Illuminate\Database\Seeder;
 use App\Models\User;
+use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\Hash;
 
 class UserSeeder extends Seeder
@@ -12,34 +12,34 @@ class UserSeeder extends Seeder
     {
         // 1. Super Admin
         User::create([
-            'name'     => 'Super Admin TeFa',
-            'email'    => 'superadmin@tefa.com',
+            'name' => 'Super Admin TeFa',
+            'email' => 'superadmin@tefa.com',
             'password' => Hash::make('password123'),
-            'role'     => 'super_admin',
+            'role' => 'super_admin',
         ]);
 
         // 2. Admin Jurusan
         User::create([
-            'name'     => 'Admin Jurusan RPL',
-            'email'    => 'admin.rpl@tefa.com',
+            'name' => 'Admin Jurusan RPL',
+            'email' => 'admin.rpl@tefa.com',
             'password' => Hash::make('password123'),
-            'role'     => 'admin_jurusan',
+            'role' => 'admin_jurusan',
         ]);
 
         // 3. Worker (Siswa/Pekerja TeFa)
         User::create([
-            'name'     => 'Worker Budi',
-            'email'    => 'worker@tefa.com',
+            'name' => 'Worker Budi',
+            'email' => 'worker@tefa.com',
             'password' => Hash::make('password123'),
-            'role'     => 'worker',
+            'role' => 'worker',
         ]);
 
         // 4. Pelanggan
         User::create([
-            'name'     => 'Pelanggan Umum',
-            'email'    => 'pelanggan@gmail.com',
+            'name' => 'Pelanggan Umum',
+            'email' => 'pelanggan@gmail.com',
             'password' => Hash::make('password123'),
-            'role'     => 'pelanggan',
+            'role' => 'pelanggan',
         ]);
     }
 }

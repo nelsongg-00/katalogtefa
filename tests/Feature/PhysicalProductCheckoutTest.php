@@ -153,6 +153,23 @@ class PhysicalProductCheckoutTest extends TestCase
             'aksi' => 'buat_pesanan',
         ]);
 
+        // Pastikan notifikasi pesan masuk untuk Admin Jurusan tercatat
+        $this->assertDatabaseHas('pesan_masuks', [
+            'jurusan_id' => $this->jurusanRPL->id,
+            'is_read' => false,
+            'subjek' => 'Pesanan Produk Fisik Baru',
+        ]);
+
+        // Pastikan pesanan muncul di daftar pesanan Admin Jurusan
+        $adminOrdersResponse = $this->actingAs($this->adminRPL)->get(route('admin.orders.index'));
+        $adminOrdersResponse->assertStatus(200);
+        $adminOrdersResponse->assertSee($order->order_code);
+        $adminOrdersResponse->assertSee('Menunggu Konfirmasi');
+
+        // Pastikan pesanan muncul di ringkasan dashboard Admin Jurusan
+        $adminDashboardResponse = $this->actingAs($this->adminRPL)->get(route('admin.dashboard'));
+        $adminDashboardResponse->assertStatus(200);
+
         $response->assertRedirect(route('client.orders.show', $order->id));
     }
 

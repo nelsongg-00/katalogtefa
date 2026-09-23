@@ -189,13 +189,13 @@
       <tbody>
         @forelse($pesanans as $pesanan)
           @php
-            $statusRaw = $pesanan->status_pesanan;
+            $statusRaw = strtolower($pesanan->status_pesanan);
             $groupFilter = 'all';
-            if ($statusRaw === 'Pending') {
+            if (in_array($statusRaw, ['pending', 'menunggu', 'menunggu konfirmasi', 'menunggu_konfirmasi'])) {
                 $groupFilter = 'Pending';
-            } elseif (in_array($statusRaw, ['Validated', 'In Progress'])) {
+            } elseif (in_array($statusRaw, ['validated', 'in progress', 'sedang_dikemas', 'bisa_diambil'])) {
                 $groupFilter = 'proses';
-            } elseif ($statusRaw === 'Completed') {
+            } elseif (in_array($statusRaw, ['completed', 'selesai'])) {
                 $groupFilter = 'Completed';
             }
           @endphp
@@ -240,13 +240,13 @@
 
             <!-- 5. Status Badge -->
             <td>
-              @if($pesanan->status_pesanan === 'Pending')
+              @if(in_array(strtolower($pesanan->status_pesanan), ['pending', 'menunggu', 'menunggu konfirmasi', 'menunggu_konfirmasi']))
                 <span class="badge badge-wait">⏳ Menunggu</span>
-              @elseif($pesanan->status_pesanan === 'Validated')
+              @elseif(strtolower($pesanan->status_pesanan) === 'validated')
                 <span class="badge badge-review">✓ Tervalidasi</span>
-              @elseif($pesanan->status_pesanan === 'In Progress')
+              @elseif(in_array(strtolower($pesanan->status_pesanan), ['in progress', 'sedang_dikemas', 'bisa_diambil']))
                 <span class="badge badge-progress">⚙ Diproses</span>
-              @elseif($pesanan->status_pesanan === 'Completed')
+              @elseif(in_array(strtolower($pesanan->status_pesanan), ['completed', 'selesai']))
                 <span class="badge badge-done">★ Selesai</span>
               @else
                 <span class="badge badge-cancel">{{ $pesanan->status_pesanan }}</span>
@@ -255,7 +255,7 @@
 
             <!-- 6. Aksi Operasional Admin Jurusan -->
             <td>
-              @if($pesanan->status_pesanan === 'Pending')
+              @if(in_array(strtolower($pesanan->status_pesanan), ['pending', 'menunggu', 'menunggu konfirmasi', 'menunggu_konfirmasi']))
                 <form method="POST" action="{{ route('admin.validateOrder', $pesanan->id) }}" style="display:inline;">
                   @csrf
                   <button type="submit" class="btn-action-validate">Validasi Pesanan</button>
