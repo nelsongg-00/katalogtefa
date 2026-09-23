@@ -434,6 +434,7 @@
                 <a href="{{ route('profil') }}" class="{{ request()->routeIs('profil') ? 'active' : '' }}">Profil Tefa</a>
                 <a href="{{ route('produk') }}" class="{{ request()->routeIs('produk') ? 'active' : '' }}">Produk</a>
                 <a href="{{ route('jasa') }}" class="{{ request()->routeIs('jasa') ? 'active' : '' }}">Layanan Jasa</a>
+                <a href="{{ route('portofolio') }}" class="{{ request()->routeIs('portofolio') ? 'active' : '' }}">Portofolio</a>
             </div>
         </div>
 
@@ -582,6 +583,7 @@
                     <li><a href="{{ route('profil') }}">> Profil Sekolah</a></li>
                     <li><a href="{{ route('produk') }}">> Produk</a></li>
                     <li><a href="{{ route('jasa') }}">> Layanan Jasa</a></li>
+                    <li><a href="{{ route('portofolio') }}">> Portofolio</a></li>
                     <li><a href="{{ route('order.tracking.index') }}">> Lacak Pesanan</a></li>
                 </ul>
             </div>

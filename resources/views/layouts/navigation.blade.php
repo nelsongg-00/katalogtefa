@@ -31,6 +31,10 @@
                    class="px-3.5 py-1.5 rounded-full text-sm font-semibold transition duration-150 {{ request()->routeIs('jasa') ? 'bg-blue-600 text-white shadow-sm' : 'text-gray-700 hover:text-blue-600 hover:bg-gray-50' }}">
                     Layanan Jasa
                 </a>
+                <a href="{{ route('portofolio') }}" 
+                   class="px-3.5 py-1.5 rounded-full text-sm font-semibold transition duration-150 {{ request()->routeIs('portofolio') ? 'bg-blue-600 text-white shadow-sm' : 'text-gray-700 hover:text-blue-600 hover:bg-gray-50' }}">
+                    Portofolio
+                </a>
             </div>
 
             <!-- BAGIAN KANAN: Auth & Avatar Dropdown Menu -->
@@ -235,6 +239,10 @@
             <a href="{{ route('jasa') }}" 
                class="block px-3 py-2 rounded-md text-base font-semibold {{ request()->routeIs('jasa') ? 'bg-blue-50 text-blue-600' : 'text-gray-700 hover:bg-gray-50' }}">
                 Layanan Jasa
+            </a>
+            <a href="{{ route('portofolio') }}" 
+               class="block px-3 py-2 rounded-md text-base font-semibold {{ request()->routeIs('portofolio') ? 'bg-blue-50 text-blue-600' : 'text-gray-700 hover:bg-gray-50' }}">
+                Portofolio
             </a>
         </div>
 

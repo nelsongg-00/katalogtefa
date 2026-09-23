@@ -23,6 +23,7 @@ Route::get('/', [HomeController::class, 'index'])->name('home');
 Route::get('/profil-sekolah', [HomeController::class, 'profil'])->name('profil');
 Route::get('/produk', [HomeController::class, 'produk'])->name('produk');
 Route::get('/layanan-jasa', [HomeController::class, 'jasa'])->name('jasa');
+Route::get('/portofolio', [HomeController::class, 'portofolio'])->name('portofolio');
 Route::get('/lacak', [TrackingController::class, 'index'])->name('order.tracking.index');
 Route::get('/lacak/{order_code}', [TrackingController::class, 'show'])->name('order.track');
 Route::post('/lacak/search', [TrackingController::class, 'search'])->name('order.search');
