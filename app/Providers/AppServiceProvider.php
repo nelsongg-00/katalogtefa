@@ -4,6 +4,7 @@ namespace App\Providers;
 
 use App\Models\Jurusan;
 use App\Models\PesanMasuk;
+use Illuminate\Pagination\Paginator;
 use Illuminate\Support\Facades\View;
 use Illuminate\Support\ServiceProvider;
 
@@ -22,6 +23,8 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
+        Paginator::defaultView('vendor.pagination.custom');
+        Paginator::defaultSimpleView('vendor.pagination.custom');
         View::composer('layouts.admin', function ($view) {
             if (auth()->check()) {
                 $user = auth()->user();

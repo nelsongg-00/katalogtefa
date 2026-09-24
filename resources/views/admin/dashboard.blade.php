@@ -18,6 +18,9 @@
       <a href="{{ route('admin.products.index') }}" class="btn-gold" style="border-radius: 20px;">
         <span>📦 Kelola Produk Fisik</span>
       </a>
+      <a href="{{ route('admin.services.index') }}" class="btn-gold" style="background: #2563eb; color: #fff; border-radius: 20px; box-shadow: 0 3px 10px rgba(37, 99, 235, 0.35);">
+        <span>🤝 Kelola Layanan Jasa</span>
+      </a>
       <a href="{{ route('produk') }}" target="_blank" class="btn-outline" style="background:#fff; border:1px solid var(--border); padding: 8px 16px; border-radius: 20px; font-weight:700; font-size:13px; color:var(--text); display:inline-flex; align-items:center; gap:6px;">
         <span>Lihat Katalog Publik &rarr;</span>
       </a>

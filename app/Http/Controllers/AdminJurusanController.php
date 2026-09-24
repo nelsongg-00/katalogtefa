@@ -7,8 +7,10 @@ use App\Models\Jurusan;
 use App\Models\Penugasan;
 use App\Models\Pesanan;
 use App\Models\PesanMasuk;
+use App\Models\Product;
 use App\Models\Produk;
 use App\Models\Project;
+use App\Models\Service;
 use App\Models\User;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -32,24 +34,26 @@ class AdminJurusanController extends Controller
         }
 
         // 1. Pesanan yang terkait dengan produk jurusan ini
-        $pesanans = Pesanan::with(['user', 'detailPesanans.produk', 'penugasans.worker'])
+        $pesanansQuery = Pesanan::with(['user', 'detailPesanans.produk', 'penugasans.worker'])
             ->whereHas('detailPesanans.produk', function ($q) use ($jurusanIds) {
                 if (! empty($jurusanIds)) {
                     $q->whereIn('jurusan_id', $jurusanIds);
                 }
             })
-            ->orderBy('created_at', 'desc')
-            ->get();
+            ->orderBy('created_at', 'desc');
+
+        $allPesanans = (clone $pesanansQuery)->get();
+        $pesanans = $pesanansQuery->paginate(8)->withQueryString();
 
         // 2. Metrik Statistik
-        $totalPesanan = $pesanans->count();
-        $pesananPending = $pesanans->filter(function ($p) {
+        $totalPesanan = $allPesanans->count();
+        $pesananPending = $allPesanans->filter(function ($p) {
             return in_array(strtolower($p->status_pesanan), ['pending', 'menunggu', 'menunggu konfirmasi', 'menunggu_konfirmasi']);
         })->count();
-        $pesananProses = $pesanans->filter(function ($p) {
+        $pesananProses = $allPesanans->filter(function ($p) {
             return in_array(strtolower($p->status_pesanan), ['validated', 'in progress', 'sedang_dikemas', 'bisa_diambil']);
         })->count();
-        $pesananSelesai = $pesanans->filter(function ($p) {
+        $pesananSelesai = $allPesanans->filter(function ($p) {
             return in_array(strtolower($p->status_pesanan), ['completed', 'selesai']);
         })->count();
 
@@ -71,21 +75,36 @@ class AdminJurusanController extends Controller
         $workers = $workersQuery->get();
         $workerAktif = $workers->count();
 
-        $produksQuery = Produk::query();
-        if (! empty($jurusanIds)) {
-            $produksQuery->whereIn('jurusan_id', $jurusanIds);
-        }
-        $produks = $produksQuery->get();
-        $totalProduk = $produks->count();
-        $totalFisik = $produks->where('tipe', 'Produk Fisik')->count();
-        $totalJasa = $produks->where('tipe', 'Layanan Jasa')->count();
+        // Hitung Produk Fisik (Model Product baru + legacy Produk)
+        $newProductsCount = Product::query()
+            ->when(! empty($jurusanIds), function ($q) use ($jurusanIds) {
+                $q->where(function ($sub) use ($jurusanIds) {
+                    $sub->whereIn('jurusan_id', $jurusanIds)->orWhereNull('jurusan_id');
+                });
+            })
+            ->count();
+        $legacyFisikCount = Produk::where('tipe', 'Produk Fisik')
+            ->when(! empty($jurusanIds), fn ($q) => $q->whereIn('jurusan_id', $jurusanIds))
+            ->count();
+        $totalFisik = $newProductsCount + $legacyFisikCount;
+
+        // Hitung Layanan Jasa (Model Service baru + legacy Produk)
+        $newServicesCount = Service::query()
+            ->when(! empty($jurusanIds), fn ($q) => $q->whereIn('department_id', $jurusanIds))
+            ->count();
+        $legacyJasaCount = Produk::where('tipe', 'Layanan Jasa')
+            ->when(! empty($jurusanIds), fn ($q) => $q->whereIn('jurusan_id', $jurusanIds))
+            ->count();
+        $totalJasa = $newServicesCount + $legacyJasaCount;
+
+        $totalProduk = $totalFisik + $totalJasa;
 
         // 4. Data Agregat Bulanan untuk Chart.js (Jan - Des)
         $bulanLabels = ['Jan', 'Feb', 'Mar', 'Apr', 'Mei', 'Jun', 'Jul', 'Agu', 'Sep', 'Okt', 'Nov', 'Des'];
         $pesananMasukPerBulan = array_fill(0, 12, 0);
         $pesananSelesaiPerBulan = array_fill(0, 12, 0);
 
-        foreach ($pesanans as $pesanan) {
+        foreach ($allPesanans as $pesanan) {
             if ($pesanan->created_at) {
                 $bulanIndex = (int) $pesanan->created_at->format('n') - 1;
                 if ($bulanIndex >= 0 && $bulanIndex < 12) {

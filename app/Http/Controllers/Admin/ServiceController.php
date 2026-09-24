@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Models\Jurusan;
 use App\Models\Service;
 use App\Traits\HandlesUploads;
 use Illuminate\Contracts\View\View;
@@ -20,11 +21,21 @@ class ServiceController extends Controller
      */
     public function index(): View
     {
-        $jurusanId = auth()->user()->jurusan_id;
+        $user = auth()->user();
+        $jurusanId = $user->jurusan_id ?? $user->department_id;
+        $jurusan = $user->jurusan;
 
-        $services = Service::where('department_id', $jurusanId)
-            ->latest()
-            ->paginate(10);
+        $jurusanIds = $jurusanId ? [$jurusanId] : [];
+        if ($jurusan && $jurusan->kode) {
+            $jurusanIds = Jurusan::where('kode', $jurusan->kode)->pluck('id')->toArray();
+        }
+
+        $servicesQuery = Service::with('department')->latest();
+        if (! empty($jurusanIds)) {
+            $servicesQuery->whereIn('department_id', $jurusanIds);
+        }
+
+        $services = $servicesQuery->paginate(10);
 
         return view('admin.services.index', compact('services'));
     }
@@ -37,12 +48,10 @@ class ServiceController extends Controller
         return view('admin.services.create');
     }
 
-    /**
-     * Simpan layanan jasa baru.
-     */
     public function store(Request $request): RedirectResponse
     {
-        $jurusanId = auth()->user()->jurusan_id;
+        $user = auth()->user();
+        $jurusanId = $user->jurusan_id ?? $user->department_id ?? $user->jurusan?->id;
 
         $validated = $request->validate([
             'nama_layanan' => ['required', 'string', 'max:255'],
@@ -145,7 +154,40 @@ class ServiceController extends Controller
      */
     private function authorizeService(Service $service): void
     {
-        if ($service->department_id !== auth()->user()->jurusan_id) {
+        $user = auth()->user();
+        if (! $user) {
+            abort(403, 'Silakan login terlebih dahulu.');
+        }
+
+        if ($user->role === 'super_admin') {
+            return;
+        }
+
+        $userJurusanId = $user->jurusan_id ?? $user->department_id;
+        $userJurusan = $user->jurusan;
+
+        $allowedIds = [];
+        if ($userJurusanId) {
+            $allowedIds[] = (int) $userJurusanId;
+        }
+
+        if ($userJurusan && $userJurusan->kode) {
+            $matchingIds = Jurusan::where('kode', $userJurusan->kode)->pluck('id')->map(fn ($id) => (int) $id)->toArray();
+            $allowedIds = array_merge($allowedIds, $matchingIds);
+        }
+
+        if ($service->department && $userJurusan) {
+            if (strtoupper($service->department->kode ?? '') === strtoupper($userJurusan->kode ?? '')) {
+                return;
+            }
+            if (! empty($service->department->slug) && $service->department->slug === $userJurusan->slug) {
+                return;
+            }
+        }
+
+        $allowedIds = array_unique(array_filter($allowedIds));
+
+        if (! in_array((int) $service->department_id, $allowedIds, true)) {
             abort(403, 'Anda tidak memiliki akses untuk mengelola layanan jurusan lain.');
         }
     }

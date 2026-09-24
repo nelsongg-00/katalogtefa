@@ -452,6 +452,137 @@
       box-shadow: 0 4px 14px rgba(245, 180, 49, 0.45);
     }
 
+    /* ---------- PAGINATION STYLING ---------- */
+    .pagination-wrapper {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 14px;
+      padding: 6px 0;
+      font-size: 13px;
+      color: var(--muted);
+      width: 100%;
+    }
+
+    .pagination-info {
+      display: flex;
+      align-items: center;
+      gap: 5px;
+      color: #64748b;
+      font-size: 12.5px;
+    }
+
+    .pagination-info strong {
+      color: #0f172a;
+      font-weight: 700;
+    }
+
+    .pagination-links {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      flex-wrap: wrap;
+    }
+
+    .page-numbers {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+    }
+
+    .page-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 7px 14px;
+      background: #ffffff;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      color: #334155;
+      font-size: 12.5px;
+      font-weight: 700;
+      text-decoration: none;
+      cursor: pointer;
+      transition: all .15s ease;
+      box-shadow: 0 1px 2px rgba(0,0,0,0.04);
+      user-select: none;
+    }
+
+    .page-btn:hover:not(.disabled) {
+      background: #f8fafd;
+      border-color: var(--blue);
+      color: var(--blue);
+      transform: translateY(-1px);
+    }
+
+    .page-btn.disabled {
+      background: #f8fafc;
+      color: #94a3b8;
+      border-color: #e2e8f0;
+      cursor: not-allowed;
+      opacity: 0.65;
+      box-shadow: none;
+    }
+
+    .page-num {
+      min-width: 34px;
+      height: 34px;
+      padding: 0 8px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 8px;
+      font-size: 13px;
+      font-weight: 700;
+      color: #475569;
+      text-decoration: none;
+      border: 1px solid var(--border);
+      background: #fff;
+      transition: all .15s ease;
+      user-select: none;
+    }
+
+    .page-num:hover:not(.active):not(.dots) {
+      border-color: var(--blue);
+      color: var(--blue);
+      background: #eff6ff;
+    }
+
+    .page-num.active {
+      background: #2563eb;
+      border-color: #2563eb;
+      color: #fff;
+      box-shadow: 0 2px 6px rgba(37,99,235,0.3);
+    }
+
+    .page-num.dots {
+      border: none;
+      background: transparent;
+      color: #94a3b8;
+      cursor: default;
+    }
+
+    /* Fallback and sizing for standard Laravel pagination elements */
+    nav[role="navigation"] {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 12px;
+      width: 100%;
+    }
+
+    nav[role="navigation"] svg {
+      width: 16px !important;
+      height: 16px !important;
+      max-width: 16px !important;
+      max-height: 16px !important;
+      display: inline-block;
+      vertical-align: middle;
+      flex-shrink: 0;
+    }
+
     @keyframes fadeIn { from { opacity: 0; transform: translateY(-6px); } to { opacity: 1; transform: translateY(0); } }
     @keyframes modalSlideUp { from { opacity: 0; transform: translateY(12px); } to { opacity: 1; transform: translateY(0); } }
 

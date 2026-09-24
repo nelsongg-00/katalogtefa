@@ -295,6 +295,12 @@
       </tbody>
     </table>
   </div>
+
+  @if(method_exists($pesanans, 'hasPages') && $pesanans->hasPages())
+    <div style="padding: 14px 22px; border-top: 1px solid var(--border); background: #fafbfd;">
+      {{ $pesanans->links() }}
+    </div>
+  @endif
 </div>
 
 @push('scripts')
