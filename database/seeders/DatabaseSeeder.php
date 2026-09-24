@@ -24,6 +24,7 @@ class DatabaseSeeder extends Seeder
             PesanMasukSeeder::class,
             WorkerTaskSeeder::class,
             ServiceSeeder::class,
+            TefaCatalogSeeder::class,
         ]);
     }
 }
