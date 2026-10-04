@@ -1,238 +1,349 @@
 @extends('layouts.public')
 
-@section('title', 'Katalog TEFA — SMKN 4 Tanjungpinang')
+@section('title', 'Katalog TEFA SMKN 4 Tanjungpinang')
 
 @section('content')
+    {{-- CSS halaman ini di-scope (Tailwind v3 tanpa CSS layer — spesifisitas yang menentukan). --}}
     <style>
-        /* Scoped Enhancements for Home Page */
-        .home-feature-card {
-            background: #ffffff;
-            border-radius: 20px;
-            border: 1px solid #e2e8f0;
-            padding: 30px 25px;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.03);
-            transition: all 0.3s ease;
-            display: flex;
-            flex-direction: column;
-            text-align: left;
-            position: relative;
-            overflow: hidden;
+        /* Scroll reveal: hanya aktif jika JavaScript berjalan (gerbang .js). */
+        .js [data-scroll-reveal] {
+            opacity: 0;
+            transform: translateY(20px);
+            transition: opacity 0.6s ease, transform 0.6s ease;
         }
 
-        .home-feature-card:hover {
-            transform: translateY(-6px);
-            border-color: #93c5fd;
-            box-shadow: 0 16px 30px rgba(37, 99, 235, 0.1);
+        .js [data-scroll-reveal].is-visible {
+            opacity: 1;
+            transform: none;
         }
 
-        .home-feature-icon {
-            width: 52px;
-            height: 52px;
-            border-radius: 14px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 26px;
-            margin-bottom: 20px;
+        /* Stagger: hanya anak berulang di dalam section (grid nilai, kartu slider).
+            --stagger-index diisi script di bawah, jarak 80ms per sibling. */
+        .js [data-stagger-item] {
+            opacity: 0;
+            transform: translateY(20px);
+            transition: opacity 0.6s ease, transform 0.6s ease;
+            transition-delay: calc(var(--stagger-index, 0) * 80ms);
         }
 
-        .home-feature-card h3 {
-            font-size: 1.2rem;
-            font-weight: 800;
-            color: #0f172a;
-            margin-bottom: 10px;
+        .js [data-stagger-item].is-visible {
+            opacity: 1;
+            transform: none;
         }
 
-        .home-feature-card p {
-            font-size: 14px;
-            color: #64748b;
-            line-height: 1.6;
-            margin-bottom: 20px;
-            flex-grow: 1;
+        /* Fokus keyboard mengikuti aksen kuning dari desain. */
+        main a:focus-visible,
+        main button:focus-visible {
+            outline: 3px solid #f2b630;
+            outline-offset: 2px;
         }
 
-        .home-feature-link {
-            font-size: 13.5px;
-            font-weight: 700;
-            color: #2563eb;
-            text-decoration: none;
-            display: inline-flex;
-            align-items: center;
-            gap: 6px;
-            transition: gap 0.2s ease;
-        }
-
-        .home-feature-card:hover .home-feature-link {
-            gap: 10px;
-            color: #1d4ed8;
-        }
-
-        .hero-trust-bar {
-            display: flex;
-            gap: 20px;
-            flex-wrap: wrap;
-            margin-top: 30px;
-            padding-top: 20px;
-            border-top: 1px solid rgba(255, 255, 255, 0.15);
-        }
-
-        .hero-trust-item {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            font-size: 13.5px;
-            color: #e2e8f0;
-            font-weight: 600;
+        @media (prefers-reduced-motion: reduce) {
+            .js [data-scroll-reveal],
+            .js [data-stagger-item] {
+                opacity: 1;
+                transform: none;
+                transition: none;
+                transition-delay: 0s;
+            }
         }
     </style>
 
-    <!-- 1. HERO SECTION DENGAN VIDEO BACKGROUND -->
-    <section class="hero-section">
-        <video autoplay loop muted playsinline class="hero-video">
-            <!-- SUMBER VIDEO -->
-            <source src="{{ asset('asset/vid/profil-smk.mp4') }}" type="video/mp4">
-        </video>
-        <div class="hero-overlay"></div>
-        <div class="hero-content">
-            <p class="hero-subtitle">SEKOLAH MENENGAH KEJURUAN NEGERI</p>
-            <h1 class="hero-title">
-                Selamat Datang di <span class="text-highlight">KATALOG</span><br>
-                <span class="text-highlight">TEFA</span> SMKN 4<br>
-                Tanjungpinang
-            </h1>
-            <p class="hero-description">
-                Temukan berbagai karya inovasi, produk fisik kreatif, teknologi terapan, dan layanan jasa kustom hasil unit Teaching Factory siswa SMKN 4 Tanjungpinang.
-            </p>
-            <div class="hero-buttons">
-                <a href="{{ route('produk') }}" class="btn btn-primary">Jelajahi Produk</a>
-                <a href="{{ route('jasa') }}" class="btn btn-outline">Lihat Layanan Jasa</a>
-            </div>
-
-            <!-- Trust Badges -->
-            <div class="hero-trust-bar">
-                <div class="hero-trust-item">
-                    <span>✨</span> 6 Program Keahlian
-                </div>
-                <div class="hero-trust-item">
-                    <span>🏭</span> Standar Kualitas Industri
-                </div>
-                <div class="hero-trust-item">
-                    <span>⚡</span> Bimbingan Guru Ahli & Praktisi
+    <main class="bg-surface font-body">
+        {{-- ================= HERO ================= --}}
+        <section class="min-h-[420px] bg-brand py-12 text-white sm:min-h-[520px] sm:pb-12 sm:pt-20" data-scroll-reveal>
+            <div class="mx-auto w-full max-w-shell px-4 sm:px-8">
+                <h1 class="max-w-[14em] text-[clamp(1.75rem,5vw,3.25rem)] font-bold uppercase leading-[1.15]">
+                    Selamat Datang di Katalog TEFA SMKN 4 Tanjungpinang
+                </h1>
+                <div class="mt-6 flex flex-wrap gap-3">
+                    <a href="{{ route('produk') }}" class="inline-block rounded-pill border border-white bg-white px-4 py-2 text-sm font-semibold text-ink transition-colors hover:bg-slate-100">Jelajahi Produk</a>
+                    <a href="{{ route('jasa') }}" class="inline-block rounded-pill border border-white px-4 py-2 text-sm font-semibold text-white transition-colors hover:bg-white hover:text-ink">Lihat Layanan Jasa</a>
                 </div>
             </div>
-        </div>
-    </section>
+        </section>
 
-    <!-- 2. SECTION TENTANG TEFA -->
-    <div class="container about-layout">
-        <div class="about-img-wrapper">
-            <!-- FOTO SEKOLAH / TEFA -->
-            <img src="{{ asset('asset/img/foto-sekolahmu.jpg') }}" alt="Teaching Factory SMKN 4 Tanjungpinang"
-                 onerror="this.onerror=null; this.src='https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?q=80&w=800&auto=format&fit=crop';">
-        </div>
-        <div class="about-text">
-            <span class="section-label">Tentang Teaching Factory</span>
-            <h2 class="section-title">TEFA SMKN 4 TANJUNGPINANG</h2>
-            <p class="section-subtitle">
-                Teaching Factory (TEFA) SMKN 4 Tanjungpinang adalah ekosistem pembelajaran berbasis produksi riil yang dirancang sesuai standar industri modern. Kami menghasilkan produk bernilai jual tinggi dan layanan jasa profesional yang siap melayani masyarakat serta pelaku usaha.
-            </p>
-            <div style="display: flex; gap: 12px; flex-wrap: wrap;">
-                <a href="{{ route('profil') }}" class="btn-blue" style="border-radius: 999px; padding: 12px 26px; font-weight: 700; text-decoration: none;">
-                    Kenali TEFA Lebih Dekat &rarr;
-                </a>
-            </div>
-        </div>
-    </div>
-
-    <!-- 3. SECTION SOLUSI & BIDANG KEAHLIAN UNGGULAN (TASTEFUL & TIDAK OVER) -->
-    <div class="container" style="padding-top: 20px; padding-bottom: 60px;">
-        <div class="text-center" style="max-width: 650px; margin: 0 auto 40px;">
-            <span class="section-label">Solusi & Layanan</span>
-            <h2 class="section-title">Bidang Layanan Unggulan TEFA</h2>
-            <p class="section-subtitle" style="margin-bottom: 0;">Layanan produksi dan jasa profesional yang dikerjakan langsung oleh siswa berprestasi dengan standar industri.</p>
-        </div>
-
-        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 24px;">
-            
-            <!-- Card 1: Software & Web -->
-            <div class="home-feature-card">
-                <div class="home-feature-icon" style="background: #eff6ff; color: #2563eb;">
-                    💻
+        {{-- ================= ABOUT ================= --}}
+        <section class="py-20" data-scroll-reveal>
+            <div class="mx-auto grid w-full max-w-shell items-center gap-8 px-4 sm:px-8 lg:grid-cols-2 lg:gap-20">
+                <div>
+                    <h2 class="text-lg font-extrabold">Kreatif Inovatif Bersama</h2>
+                    <p class="mb-3 text-base font-extrabold text-brand-blue">TEFA SMKN 4 TANJUNGPINANG</p>
+                    <p class="text-sm text-ink-muted lg:max-w-[26rem]">
+                        Teaching Factory (TEFA) SMKN 4 Tanjungpinang adalah ekosistem pembelajaran berbasis produksi
+                        nyata dengan standar industri. Kami menghadirkan produk unggulan dan layanan profesional yang
+                        siap menjawab kebutuhan masyarakat serta dunia usaha.
+                    </p>
                 </div>
-                <h3>Software & Web Systems</h3>
-                <p>Pembuatan website profile, sistem informasi manajemen, aplikasi mobile Android/iOS, dan game edukasi interaktif.</p>
-                <a href="{{ route('jasa') }}" class="home-feature-link">
-                    <span>Lihat Layanan IT</span>
-                    <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M14 5l7 7m0 0l-7 7m7-7H3"/></svg>
-                </a>
+                <img class="aspect-[7/5] w-full rounded-card bg-[#ddd] object-cover"
+                     src="{{ asset('asset/img/about-school.jpg') }}"
+                     alt="Siswa SMKN 4 Tanjungpinang berkumpul di halaman sekolah">
+                <!-- TODO: add image -->
             </div>
+        </section>
 
-            <!-- Card 2: Networking & Hardware -->
-            <div class="home-feature-card">
-                <div class="home-feature-icon" style="background: #f0fdf4; color: #16a34a;">
-                    🌐
-                </div>
-                <h3>Jaringan & Maintenance PC</h3>
-                <p>Instalasi kabel LAN/Fiber Optic/WiFi, perakitan komputer PC, troubleshooting hardware, dan perawatan server instansi.</p>
-                <a href="{{ route('jasa') }}" class="home-feature-link" style="color: #16a34a;">
-                    <span>Lihat Layanan Jaringan</span>
-                    <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M14 5l7 7m0 0l-7 7m7-7H3"/></svg>
-                </a>
+        {{-- ================= WHY TEFA ================= --}}
+        <section class="py-20 text-center" data-scroll-reveal>
+            <div class="mx-auto w-full max-w-shell px-4 sm:px-8">
+                <h2 class="mb-4 text-[clamp(1.5rem,3vw,2rem)] font-bold">
+                    <span class="text-brand-blue">Mengapa</span> TEFA SMKN 4 Tanjungpinang?
+                </h2>
+                <p class="mx-auto max-w-[44rem] font-medium">
+                    Hadir untuk mendukung kebutuhan masyarakat dan dunia usaha dengan produk bernilai jual tinggi serta
+                    layanan jasa profesional yang inovatif, andal, dan berstandar industri modern.
+                </p>
             </div>
+        </section>
 
-            <!-- Card 3: Visual Design & Branding -->
-            <div class="home-feature-card">
-                <div class="home-feature-icon" style="background: #fdf2f8; color: #db2777;">
-                    🎨
-                </div>
-                <h3>Desain Grafis & Branding</h3>
-                <p>Pembuatan identitas merek, logo perusahaan, kemasan produk (packaging) UMKM, poster, banner, dan merchandise.</p>
-                <a href="{{ route('jasa') }}" class="home-feature-link" style="color: #db2777;">
-                    <span>Lihat Layanan Desain</span>
-                    <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M14 5l7 7m0 0l-7 7m7-7H3"/></svg>
-                </a>
+        {{-- ================= PROGRAM KEAHLIAN (SLIDER) ================= --}}
+        <section class="py-20" data-scroll-reveal aria-labelledby="programs-title">
+            <div class="mx-auto w-full max-w-shell px-4 sm:px-8">
+                <h2 id="programs-title" class="mb-8 text-center text-[clamp(1.5rem,3vw,2rem)] font-bold">
+                    Program Keahlian TEFA SMKN 4 Tanjungpinang
+                </h2>
+
+                @include('partials.home.slider')
             </div>
+        </section>
 
-            <!-- Card 4: Video & Multimedia -->
-            <div class="home-feature-card">
-                <div class="home-feature-icon" style="background: #fff7ed; color: #ea580c;">
-                    📹
-                </div>
-                <h3>Videografi & Animasi 3D</h3>
-                <p>Dokumentasi liputan event, pembuatan video profile perusahaan, video iklan produk, dan animasi edukatif 2D/3D.</p>
-                <a href="{{ route('jasa') }}" class="home-feature-link" style="color: #ea580c;">
-                    <span>Lihat Layanan Media</span>
-                    <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M14 5l7 7m0 0l-7 7m7-7H3"/></svg>
-                </a>
+        {{-- ================= SIAP MENJADI MITRA ================= --}}
+        <section class="py-20" data-scroll-reveal>
+            <div class="mx-auto w-full max-w-shell px-4 sm:px-8">
+                <h2 class="mb-8 text-center text-[clamp(1.5rem,3vw,2rem)] font-extrabold">
+                    TEFA SMKN 4 TANJUNGPINANG <span class="block text-brand-blue">SIAP MENJADI MITRA YANG</span>
+                </h2>
+
+                <ul class="mx-auto grid max-w-[760px] gap-6 sm:grid-cols-2 lg:grid-cols-4" data-stagger-group>
+                    @include('partials.home.value-card', [
+                        'icon' => 'icon-kreatif.png',
+                        'title' => 'Kreatif',
+                        'tag' => 'Ide dari siswa',
+                        'tagClass' => 'text-brand-blue',
+                        'text' => 'Karya dibuat berdasarkan kreativitas dan inovasi siswa sendiri.',
+                    ])
+                    @include('partials.home.value-card', [
+                        'icon' => 'icon-kompeten.png',
+                        'title' => 'Kompeten',
+                        'tag' => 'Proses terarah',
+                        'tagClass' => 'text-brand-orange',
+                        'text' => 'Dikerjakan melalui proses pembelajaran kejuruan yang terstruktur.',
+                    ])
+                    @include('partials.home.value-card', [
+                        'icon' => 'icon-kolaboratif.png',
+                        'title' => 'Kolaboratif',
+                        'tag' => 'Lintas bidang',
+                        'tagClass' => 'text-brand-green',
+                        'text' => 'Melibatkan berbagai bidang keahlian dalam satu proses produksi.',
+                    ])
+                    @include('partials.home.value-card', [
+                        'icon' => 'icon-siap-industri.png',
+                        'title' => 'Siap Industri',
+                        'tag' => 'Standar kerja',
+                        'tagClass' => 'text-brand-purple',
+                        'text' => 'Mengenalkan siswa pada proses kerja yang mendekati dunia industri.',
+                    ])
+                </ul>
             </div>
+        </section>
+    </main>
 
-        </div>
-    </div>
+    <script>
+        /* ===== Slider Program Keahlian (komponen Alpine) =====
+         * 1 kartu (mobile) / 2 (tablet) / 3 (desktop) per tampilan, langkah satu kartu,
+         * 6 kartu + 3 klon untuk loop tak hingga, autoplay 4 detik,
+         * pause saat hover/focus, hormati prefers-reduced-motion.
+         */
+        function homeSlider() {
+            var reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+            var DURATION = 450;   /* samakan dengan transition di [data-slider-track] */
+            var INTERVAL = 4000;
+            var CLONES = 3;       /* jumlah kartu per tampilan maksimum (desktop) */
 
-    <!-- 4. SECTION BANNER BANTUAN -->
-    <div class="container" style="padding-top: 0;">
-        <div class="help-banner">
-            <span class="section-label" style="background: rgba(255,255,255,0.2); padding: 5px 15px; border-radius: 20px; color: white;">✨ Konsultasi & Kolaborasi</span>
-            <h2>Punya Kebutuhan Project atau Pesanan Khusus?</h2>
-            <p style="max-width: 650px; margin: 0 auto 20px; color: #cbd5e1; line-height: 1.7;">
-                Tim Teaching Factory SMKN 4 Tanjungpinang siap berkolaborasi menghasilkan karya berkualitas sesuai kebutuhan bisnis dan lembaga Anda.
-            </p>
-            <div class="help-buttons">
-                <a href="{{ route('produk') }}" class="help-card">
-                    <div style="width: 15px; height: 15px; background: #2563eb; border-radius: 3px;"></div>
-                    <div>
-                        <b style="color:white">Katalog Produk Fisik</b><br>
-                        <small style="color:#cbd5e1">Beli karya siswa langsung</small>
-                    </div>
-                </a>
-                <a href="{{ route('jasa') }}" class="help-card">
-                    <div style="width: 15px; height: 15px; background: #ffb703; border-radius: 50%;"></div>
-                    <div>
-                        <b style="color:white">Konsultasi Layanan Jasa</b><br>
-                        <small style="color:#cbd5e1">Diskusikan kebutuhan project</small>
-                    </div>
-                </a>
-            </div>
-        </div>
-    </div>
+            return {
+                index: 0,          /* kartu paling kiri; boleh > total karena memakai klon */
+                total: 6,
+                moving: false,
+                timer: null,
+
+                init: function () {
+                    this.addClones();
+
+                    if (!reduceMotion) {
+                        this.start();
+                    }
+                },
+
+                /* Klon 3 kartu pertama supaya loop tidak pernah menyisakan celah kosong. */
+                addClones: function () {
+                    var track = this.$refs.track;
+                    var head = Array.prototype.slice.call(track.children).slice(0, CLONES);
+
+                    head.forEach(function (slide) {
+                        var clone = slide.cloneNode(true);
+                        clone.setAttribute('aria-hidden', 'true');
+
+                        var link = clone.querySelector('a');
+
+                        if (link) {
+                            link.setAttribute('tabindex', '-1');
+                        }
+
+                        track.appendChild(clone);
+                    });
+                },
+
+                /* Tulis --index dan is-instant langsung ke DOM (bukan lewat :style/:class
+                   Alpine) supaya reflow paksa di prev() benar-benar melakukan commit state
+                   sebelum transisi berikutnya dimulai. */
+                render: function (i, animate) {
+                    this.index = i;
+                    this.$refs.track.classList.toggle('is-instant', !animate);
+                    this.$refs.track.style.setProperty('--index', i);
+                },
+
+                start: function () {
+                    if (!this.timer) {
+                        var self = this;
+                        this.timer = setInterval(function () { self.next(); }, INTERVAL);
+                    }
+                },
+
+                stop: function () {
+                    clearInterval(this.timer);
+                    this.timer = null;
+                },
+
+                /* Klik kontrol: hentikan timer lalu mulai ulang. */
+                restart: function () {
+                    this.stop();
+                    if (!reduceMotion) {
+                        this.start();
+                    }
+                },
+
+                pause: function () {
+                    this.stop();
+                },
+
+                resume: function () {
+                    if (!reduceMotion) {
+                        this.start();
+                    }
+                },
+
+                next: function () {
+                    if (this.moving) {
+                        return;
+                    }
+
+                    this.moving = true;
+                    this.render(this.index + 1, true);
+
+                    var self = this;
+                    setTimeout(function () {
+                        if (self.index >= self.total) {
+                            self.render(0, false);
+                        }
+                        self.moving = false;
+                    }, reduceMotion ? 0 : DURATION + 20);
+                },
+
+                prev: function () {
+                    if (this.moving) {
+                        return;
+                    }
+
+                    this.moving = true;
+
+                    if (this.index === 0) {
+                        this.render(this.total, false);    /* lompat ke klon kartu 1 */
+                        void this.$refs.track.offsetWidth; /* paksa reflow tanpa transisi */
+                    }
+
+                    this.render(this.index - 1, true);
+
+                    var self = this;
+                    setTimeout(function () {
+                        self.moving = false;
+                    }, reduceMotion ? 0 : DURATION + 20);
+                },
+
+                goTo: function (i) {
+                    if (this.moving) {
+                        return;
+                    }
+
+                    this.moving = true;
+                    this.render(i, true);
+
+                    var self = this;
+                    setTimeout(function () {
+                        self.moving = false;
+                    }, reduceMotion ? 0 : DURATION + 20);
+                }
+            };
+        }
+
+        /* ===== Scroll reveal + stagger: IntersectionObserver, sekali per elemen ===== */
+        (function () {
+            document.documentElement.classList.add('js');
+
+            var reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+            /* Tandai anak berulang di dalam section (grid nilai, kartu slider) supaya
+               muncul bertahap; klon slider dilewati karena bukan kartu asli. */
+            function markStagger(section) {
+                var groups = section.querySelectorAll('[data-stagger-group]');
+
+                Array.prototype.forEach.call(groups, function (group) {
+                    Array.prototype.forEach.call(group.children, function (child, i) {
+                        if (child.getAttribute('aria-hidden') === 'true') {
+                            return;
+                        }
+
+                        child.setAttribute('data-stagger-item', '');
+                        child.style.setProperty('--stagger-index', Math.min(i, 5));
+                    });
+                });
+            }
+
+            function reveal(section) {
+                section.classList.add('is-visible');
+
+                Array.prototype.forEach.call(section.querySelectorAll('[data-stagger-item]'), function (item) {
+                    item.classList.add('is-visible');
+                });
+            }
+
+            function init() {
+                var sections = document.querySelectorAll('[data-scroll-reveal]');
+
+                Array.prototype.forEach.call(sections, markStagger);
+
+                if (reduceMotion || !('IntersectionObserver' in window)) {
+                    Array.prototype.forEach.call(sections, reveal);
+                    return;
+                }
+
+                var io = new IntersectionObserver(function (entries) {
+                    entries.forEach(function (entry) {
+                        if (entry.isIntersecting) {
+                            reveal(entry.target);
+                            io.unobserve(entry.target);
+                        }
+                    });
+                }, { threshold: 0.15 });
+
+                Array.prototype.forEach.call(sections, function (section) { io.observe(section); });
+            }
+
+            /* Ditunda sampai DOMContentLoaded supaya Alpine selesai menyalin kartu slider
+               lebih dulu (script Alpine dimuat sebagai modul yang ditunda). */
+            if (document.readyState === 'loading') {
+                document.addEventListener('DOMContentLoaded', init);
+            } else {
+                init();
+            }
+        })();
+    </script>
 @endsection

@@ -1,283 +1,283 @@
-<x-guest-layout>
-    <style>
-        .auth-header-box {
-            margin-bottom: 26px;
-            text-align: left;
-        }
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Masuk ke Akun - Katalog TEFA SMKN 4 Tanjungpinang</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@400;500;600&family=Inter:wght@700&display=swap" rel="stylesheet">
 
-        .auth-welcome-pill {
-            display: inline-flex;
-            align-items: center;
-            gap: 6px;
-            background: #eff6ff;
-            color: #2563eb;
-            border: 1px solid #bfdbfe;
-            padding: 4px 12px;
-            border-radius: 999px;
-            font-size: 11.5px;
-            font-weight: 700;
-            margin-bottom: 10px;
-        }
+  <style>
+    /* ==========================================================
+       1. DESIGN TOKENS
+       ========================================================== */
+    :root {
+      --color-bg: #0048ab;
+      --color-card: #ffffff;
+      --color-heading: #000000;
+      --color-text: #111111;
+      --color-muted: #666666;
+      --color-link: #5468ff;
+      --color-button: #00a3ff;
+      --color-button-text: #ffffff;
+      --color-input-bg: #f1f1f1;
+      --color-input-border: #000000;
+      --color-icon: #555555;
 
-        .auth-title {
-            font-size: 24px;
-            font-weight: 900;
-            color: #0a215e;
-            margin-bottom: 6px;
-            letter-spacing: -0.3px;
-        }
+      --font-heading: "Inter", "Helvetica Neue", Arial, sans-serif;
+      --font-body: "Hanken Grotesk", "Helvetica Neue", Arial, sans-serif;
 
-        .auth-subtitle {
-            font-size: 13.5px;
-            color: #64748b;
-            line-height: 1.5;
-        }
+      --radius-card: 48px;
+      --radius-pill: 999px;
+      --card-width: 418px;
+      --field-height: 44px;
+    }
 
-        .auth-form-group {
-            margin-bottom: 20px;
-        }
+    /* ==========================================================
+       2. RESET & BASE
+       ========================================================== */
+    *, *::before, *::after { box-sizing: border-box; }
+    body {
+      margin: 0;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      background: var(--color-bg);
+      font-family: var(--font-body);
+      font-size: 17px;
+      color: var(--color-text);
+    }
+    /* Area kartu mengisi sisa tinggi di bawah navbar; kartu tetap di tengah. */
+    .login-shell {
+      flex: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 24px 16px;
+    }
+    h1, p { margin: 0; }
+    a { color: var(--color-link); text-decoration: none; }
+    button, input { font: inherit; }
 
-        .auth-label {
-            display: block;
-            font-size: 12px;
-            font-weight: 700;
-            color: #334155;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-            margin-bottom: 6px;
-        }
+    /* ==========================================================
+       3. CARD
+       ========================================================== */
+    .login-card {
+      width: 100%;
+      max-width: var(--card-width);
+      padding: 40px 53px 38px;
+      background: var(--color-card);
+      border-radius: var(--radius-card);
+    }
+    .login-card__header { text-align: center; }
+    .login-card__title {
+      font-family: var(--font-heading);
+      font-size: 34px;
+      font-weight: 700;
+      line-height: 1.2;
+      color: var(--color-heading);
+    }
+    .login-card__subtitle {
+      margin: 6px auto 0;
+      max-width: 22em;
+      font-size: 18px;
+      line-height: 1.35;
+      color: var(--color-muted);
+    }
 
-        .auth-input-wrapper {
-            position: relative;
-            display: flex;
-            align-items: center;
-        }
+    /* ==========================================================
+       4. FORM FIELDS
+       ========================================================== */
+    .login-form { margin-top: 32px; }
+    .field { margin-bottom: 36px; }
+    .field--last { margin-bottom: 0; }
+    .field__label {
+      display: block;
+      margin: 0 0 4px 10px;
+      font-size: 18px;
+      color: var(--color-text);
+    }
+    .field__control { position: relative; }
+    .field__input {
+      width: 100%;
+      height: var(--field-height);
+      padding: 0 46px;
+      border: 1px solid var(--color-input-border);
+      border-radius: var(--radius-pill);
+      background: var(--color-input-bg);
+      font-size: 17px;
+      color: var(--color-text);
+    }
+    .field__input:focus-visible { outline: 3px solid var(--color-button); outline-offset: 2px; }
+    .field__icon {
+      position: absolute;
+      top: 50%;
+      left: 16px;
+      transform: translateY(-50%);
+      display: block;
+      pointer-events: none;
+    }
+    .field__toggle {
+      position: absolute;
+      top: 50%;
+      right: 14px;
+      transform: translateY(-50%);
+      display: grid;
+      place-items: center;
+      padding: 2px;
+      border: 0;
+      background: transparent;
+      cursor: pointer;
+    }
+    .field__toggle:focus-visible { outline: 3px solid var(--color-button); border-radius: 4px; }
 
-        .auth-input-icon {
-            position: absolute;
-            left: 14px;
-            color: #94a3b8;
-            pointer-events: none;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            transition: color 0.2s;
-        }
+    .login-form__forgot { display: block; margin-top: 8px; text-align: right; font-size: 17px; }
 
-        .auth-input {
-            width: 100%;
-            padding: 12px 42px 12px 42px;
-            font-size: 14px;
-            font-weight: 500;
-            color: #0f172a;
-            background-color: #f8fafc;
-            border: 1.5px solid #cbd5e1;
-            border-radius: 12px;
-            outline: none;
-            transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
-        }
+    /* Error & status (komponen Blade x-input-error / x-auth-session-status;
+       class utility Tailwind di komponen tidak dimuat di halaman mandiri ini). */
+    .login-form__error {
+      margin: 6px 0 0 10px;
+      padding: 0;
+      list-style: none;
+      font-size: 15px;
+      line-height: 1.35;
+      color: #d92d20;
+    }
+    .login-form__error li + li { margin-top: 2px; }
+    .login-form__status {
+      margin: 0 0 18px;
+      font-size: 15px;
+      line-height: 1.4;
+      color: #067647;
+    }
 
-        .auth-input:focus {
-            background-color: #ffffff;
-            border-color: #2563eb;
-            box-shadow: 0 0 0 3.5px rgba(37, 99, 235, 0.15);
-        }
+    /* ==========================================================
+       5. REMEMBER ME
+       ========================================================== */
+    .remember { display: flex; align-items: center; gap: 10px; margin-top: 28px; color: var(--color-muted); cursor: pointer; }
+    .remember__input {
+      appearance: none;
+      -webkit-appearance: none;
+      flex: none;
+      width: 22px;
+      height: 22px;
+      margin: 0;
+      border: 2px solid #222222;
+      border-radius: 50%;
+      background: var(--color-card);
+      cursor: pointer;
+    }
+    .remember__input:checked { background: radial-gradient(circle, #222222 0 45%, transparent 50%); }
+    .remember__input:focus-visible { outline: 3px solid var(--color-button); outline-offset: 2px; }
 
-        .auth-input:focus + .auth-input-icon,
-        .auth-input-wrapper:focus-within .auth-input-icon {
-            color: #2563eb;
-        }
+    /* ==========================================================
+       6. SUBMIT & FOOTER LINK
+       ========================================================== */
+    .login-form__submit {
+      display: block;
+      width: 100%;
+      height: var(--field-height);
+      margin-top: 34px;
+      border: 0;
+      border-radius: var(--radius-pill);
+      background: var(--color-button);
+      color: var(--color-button-text);
+      font-size: 20px;
+      cursor: pointer;
+    }
+    .login-form__submit:focus-visible { outline: 3px solid var(--color-bg); outline-offset: 3px; }
 
-        .auth-input::placeholder {
-            color: #94a3b8;
-        }
+    .login-card__footer { margin-top: 24px; text-align: center; color: var(--color-text); }
+    .login-card__footer a { margin-left: 4px; }
 
-        .auth-toggle-pwd {
-            position: absolute;
-            right: 12px;
-            background: none;
-            border: none;
-            color: #94a3b8;
-            cursor: pointer;
-            padding: 6px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            border-radius: 8px;
-            transition: color 0.2s;
-        }
+    /* ==========================================================
+       7. SMALL SCREENS
+       ========================================================== */
+    @media (max-width: 560px) {
+      :root { --radius-card: 32px; }
+      .login-card { padding: 32px 24px 30px; }
+      .login-card__title { font-size: 28px; }
+      .login-card__subtitle { font-size: 16px; }
+    }
+  </style>
+</head>
+<body>
+  @include('partials.navbar')
 
-        .auth-toggle-pwd:hover {
-            color: #2563eb;
-        }
+  <div class="login-shell">
+    <main class="login-card">
+    <header class="login-card__header">
+      <h1 class="login-card__title">Masuk ke Akun</h1>
+      <p class="login-card__subtitle">Masukkan email dan kata sandi Anda untuk melanjutkan</p>
+    </header>
 
-        .auth-btn-primary {
-            width: 100%;
-            background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%);
-            color: #ffffff;
-            padding: 14px;
-            font-size: 15px;
-            font-weight: 800;
-            border: none;
-            border-radius: 12px;
-            cursor: pointer;
-            transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
-            box-shadow: 0 4px 16px rgba(37, 99, 235, 0.35);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 10px;
-            margin-top: 10px;
-        }
+    <x-auth-session-status class="login-form__status" :status="session('status')" />
 
-        .auth-btn-primary:hover {
-            background: linear-gradient(135deg, #1d4ed8 0%, #1e40af 100%);
-            transform: translateY(-2px);
-            box-shadow: 0 8px 24px rgba(37, 99, 235, 0.45);
-        }
+    <form class="login-form" action="{{ route('login') }}" method="post">
+      @csrf
 
-        .auth-btn-primary:active {
-            transform: translateY(0);
-        }
-
-        .auth-switch-link {
-            text-align: center;
-            margin-top: 24px;
-            padding-top: 20px;
-            border-top: 1px solid #f1f5f9;
-            font-size: 13.5px;
-            color: #64748b;
-        }
-
-        .auth-switch-link a {
-            color: #2563eb;
-            font-weight: 800;
-            text-decoration: none;
-            margin-left: 4px;
-            transition: color 0.15s;
-        }
-
-        .auth-switch-link a:hover {
-            color: #1d4ed8;
-            text-decoration: underline;
-        }
-    </style>
-
-    <div class="auth-header-box">
-        <span class="auth-welcome-pill">👋 Akses Portal Siswa & Mitra</span>
-        <h2 class="auth-title">Masuk ke Akun</h2>
-        <p class="auth-subtitle">Masukkan alamat email dan kata sandi untuk melanjutkan.</p>
-    </div>
-
-    <!-- Session Status -->
-    <x-auth-session-status class="mb-4" :status="session('status')" />
-
-    <form method="POST" action="{{ route('login') }}">
-        @csrf
-
-        <!-- Email Address -->
-        <div class="auth-form-group">
-            <label for="email" class="auth-label">Alamat Email</label>
-            <div class="auth-input-wrapper">
-                <span class="auth-input-icon">
-                    <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/>
-                    </svg>
-                </span>
-                <input id="email" 
-                       class="auth-input" 
-                       type="email" 
-                       name="email" 
-                       value="{{ old('email') }}" 
-                       required 
-                       autofocus 
-                       autocomplete="username" 
-                       placeholder="nama@email.com" />
-            </div>
-            <x-input-error :messages="$errors->get('email')" class="mt-1" />
+      <div class="field">
+        <label class="field__label" for="email">Email</label>
+        <div class="field__control">
+          <svg class="field__icon" width="24" height="18" viewBox="0 0 24 18" fill="none" stroke="#444444" stroke-width="1.4" stroke-linejoin="round" aria-hidden="true">
+            <rect x="1" y="1.5" width="22" height="15" rx="2"/>
+            <polyline points="1.5,2.5 12,10.5 22.5,2.5"/>
+          </svg>
+          <input class="field__input" id="email" name="email" type="email" value="{{ old('email') }}" autocomplete="email" autofocus required>
         </div>
+        <x-input-error :messages="$errors->get('email')" class="login-form__error" />
+      </div>
 
-        <!-- Password -->
-        <div class="auth-form-group">
-            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px;">
-                <label for="password" class="auth-label" style="margin-bottom: 0;">Kata Sandi</label>
-                @if (Route::has('password.request'))
-                    <a href="{{ route('password.request') }}" style="font-size: 12px; color: #2563eb; text-decoration: none; font-weight: 700;">
-                        Lupa kata sandi?
-                    </a>
-                @endif
-            </div>
-            <div class="auth-input-wrapper">
-                <span class="auth-input-icon">
-                    <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/>
-                    </svg>
-                </span>
-                <input id="password" 
-                       class="auth-input" 
-                       type="password" 
-                       name="password" 
-                       required 
-                       autocomplete="current-password" 
-                       placeholder="••••••••" />
-                <button type="button" 
-                        class="auth-toggle-pwd" 
-                        onclick="togglePwdVisibility('password', this)" 
-                        title="Tampilkan / Sembunyikan Kata Sandi">
-                    <svg class="eye-show" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/>
-                        <path stroke-linecap="round" stroke-linejoin="round" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/>
-                    </svg>
-                    <svg class="eye-hide" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" style="display: none;">
-                        <path stroke-linecap="round" stroke-linejoin="round" d="M13.875 18.825A10.05 10.05 0 0112 19c-4.478 0-8.268-2.943-9.543-7a9.97 9.97 0 011.563-3.029m5.858.908a3 3 0 114.243 4.243M9.878 9.878l4.242 4.242M9.88 9.88l-3.29-3.29m7.532 7.532l3.29 3.29M3 3l18 18"/>
-                    </svg>
-                </button>
-            </div>
-            <x-input-error :messages="$errors->get('password')" class="mt-1" />
-        </div>
-
-        <!-- Remember Me -->
-        <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 22px; margin-top: 10px;">
-            <label for="remember_me" style="display: flex; align-items: center; gap: 8px; cursor: pointer; font-size: 13.5px; color: #475569; user-select: none;">
-                <input id="remember_me" type="checkbox" name="remember" style="width: 17px; height: 17px; accent-color: #2563eb; cursor: pointer; border-radius: 4px;">
-                <span style="font-weight: 500;">Ingat saya di perangkat ini</span>
-            </label>
-        </div>
-
-        <!-- Submit Button -->
-        <button type="submit" class="auth-btn-primary">
-            <span>Masuk Sekarang</span>
-            <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" d="M14 5l7 7m0 0l-7 7m7-7H3"/>
+      <div class="field field--last">
+        <label class="field__label" for="password">Password</label>
+        <div class="field__control">
+          <svg class="field__icon" width="18" height="20" viewBox="0 0 18 20" fill="none" aria-hidden="true">
+            <path d="M5 8V5.5a4 4 0 0 1 8 0V8" stroke="#555555" stroke-width="2"/>
+            <rect x="1.5" y="8" width="15" height="11" rx="2" fill="#555555"/>
+            <circle cx="9" cy="12.8" r="1.4" fill="#ffffff"/>
+            <rect x="8.3" y="13.5" width="1.4" height="2.6" fill="#ffffff"/>
+          </svg>
+          <input class="field__input" id="password" name="password" type="password" autocomplete="current-password" required>
+          <button class="field__toggle" type="button" data-toggle-password aria-label="Tampilkan kata sandi" aria-pressed="false">
+            <svg width="28" height="18" viewBox="0 0 28 18" fill="none" stroke="#555555" stroke-width="1.3" aria-hidden="true">
+              <path d="M1 9c3.5-5.5 8-7.5 13-7.5S23.500 3.500 27 9c-3.500 5.500-8 7.500-13 7.500S4.500 14.500 1 9Z"/>
+              <circle cx="14" cy="9" r="3.500"/>
             </svg>
-        </button>
-
-        <!-- Register Link -->
-        @if (Route::has('register'))
-            <div class="auth-switch-link">
-                Belum memiliki akun?
-                <a href="{{ route('register') }}">Daftar Akun Baru</a>
-            </div>
+          </button>
+        </div>
+        @if (Route::has('password.request'))
+          <a class="login-form__forgot" href="{{ route('password.request') }}">Lupa kata sandi?</a>
         @endif
+        <x-input-error :messages="$errors->get('password')" class="login-form__error" />
+      </div>
+
+      <label class="remember">
+        <input class="remember__input" type="checkbox" name="remember">
+        <span>Ingatkan saya di perangkat ini</span>
+      </label>
+
+      <button class="login-form__submit" type="submit">Masuk Sekarang</button>
     </form>
 
-    <script>
-        function togglePwdVisibility(inputId, btn) {
-            const input = document.getElementById(inputId);
-            if (!input) return;
+    @if (Route::has('register'))
+      <p class="login-card__footer">Belum memiliki akun? <a href="{{ route('register') }}">Daftar Akun</a></p>
+    @endif
+    </main>
+  </div>
 
-            const eyeShow = btn.querySelector('.eye-show');
-            const eyeHide = btn.querySelector('.eye-hide');
-
-            if (input.type === 'password') {
-                input.type = 'text';
-                if (eyeShow) eyeShow.style.display = 'none';
-                if (eyeHide) eyeHide.style.display = 'block';
-            } else {
-                input.type = 'password';
-                if (eyeShow) eyeShow.style.display = 'block';
-                if (eyeHide) eyeHide.style.display = 'none';
-            }
-        }
-    </script>
-</x-guest-layout>
+  <script>
+    (function () {
+      var btn = document.querySelector('[data-toggle-password]');
+      var input = document.getElementById('password');
+      if (!btn || !input) return;
+      btn.addEventListener('click', function () {
+        var show = input.type === 'password';
+        input.type = show ? 'text' : 'password';
+        btn.setAttribute('aria-pressed', String(show));
+        btn.setAttribute('aria-label', show ? 'Sembunyikan kata sandi' : 'Tampilkan kata sandi');
+      });
+    })();
+  </script>
+</body>
+</html>

@@ -1,0 +1,83 @@
+{
+  "$schema": "https://opencode.ai/config.json",
+  "providers": {
+    "bandelbanget": {
+      "name": "Bandel Banget",
+      "env": ["BANDELBANGET_API_KEY"],
+      "package": "@opencode/ai/providers/openai-compatible",
+      "settings": {
+        "baseURL": "https://bandelbanget.xyz/v1",
+        "apiKey": "{env:BANDELBANGET_API_KEY}",
+        "timeout": 60000
+      },
+      "models": {
+        "auto": {
+          "name": "Auto Router",
+          "capabilities": { "tools": true, "input": ["text"], "output": ["text"] }
+        },
+        "deepseek-v4-flash": {
+          "name": "DeepSeek V4 Flash",
+          "capabilities": { "tools": true, "input": ["text"], "output": ["text"] }
+        },
+        "deepseek-v4-flash-0731": {
+          "name": "DeepSeek V4 Flash 0731",
+          "capabilities": { "tools": true, "input": ["text"], "output": ["text"] }
+        },
+        "deepseek-v4-flash-vision-exp": {
+          "name": "DeepSeek V4 Flash Vision",
+          "capabilities": { "tools": true, "input": ["text", "image"], "output": ["text"] }
+        },
+        "deepseek-v4-pro-0813": {
+          "name": "DeepSeek V4 Pro 0813",
+          "capabilities": { "tools": true, "input": ["text"], "output": ["text"] }
+        },
+        "deepseek-v4.1-flash": {
+          "name": "DeepSeek V4.1 Flash",
+          "capabilities": { "tools": true, "input": ["text", "image"], "output": ["text"] }
+        },
+        "glm-5.3": {
+          "name": "GLM 5.3",
+          "capabilities": { "tools": true, "input": ["text"], "output": ["text"] }
+        },
+        "glm-5.3-flash": {
+          "name": "GLM 5.3 Flash",
+          "capabilities": { "tools": true, "input": ["text", "image"], "output": ["text"] }
+        },
+        "glm-5.3-flashx": {
+          "name": "GLM 5.3 FlashX",
+          "capabilities": { "tools": true, "input": ["text", "image"], "output": ["text"] }
+        },
+        "glm-5.3-mod": {
+          "name": "GLM 5.3 Mod",
+          "capabilities": { "tools": true, "input": ["text"], "output": ["text"] }
+        },
+        "gpt-5.6": {
+          "name": "GPT-5.6",
+          "capabilities": { "tools": true, "input": ["text", "image"], "output": ["text"] }
+        },
+        "gpt-5.6-luna": {
+          "name": "GPT-5.6 Luna",
+          "capabilities": { "tools": true, "input": ["text", "image"], "output": ["text"] }
+        },
+        "kimi-k3": {
+          "name": "Kimi K3",
+          "capabilities": { "tools": true, "input": ["text", "image"], "output": ["text"] }
+        },
+        "mimo-v2.5-pro": {
+          "name": "MiMo V2.5 Pro",
+          "capabilities": { "tools": true, "input": ["text"], "output": ["text"] }
+        },
+        "mimo-v2.6-flash": {
+          "name": "MiMo V2.6 Flash",
+          "capabilities": { "tools": true, "input": ["text"], "output": ["text"] }
+        },
+        "mimo-v2.6-pro": {
+          "name": "MiMo V2.6 Pro",
+          "capabilities": { "tools": true, "input": ["text", "image"], "output": ["text"] }
+        }
+      }
+    }
+  },
+  "model": "bandelbanget/glm-5.3",
+  "small_model": "bandelbanget/mimo-v2.6-flash"
+}

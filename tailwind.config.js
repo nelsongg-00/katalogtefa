@@ -13,6 +13,44 @@ export default {
         extend: {
             fontFamily: {
                 sans: ['Figtree', ...defaultTheme.fontFamily.sans],
+                // Design tokens from docs/design/homepage.html
+                body: ['"Plus Jakarta Sans"', ...defaultTheme.fontFamily.sans],
+                display: ['Anton', 'Impact', 'Arial Narrow', 'sans-serif'],
+            },
+            colors: {
+                ink: {
+                    DEFAULT: '#111111',
+                    muted: '#444444',
+                },
+                surface: '#fafafa',
+                line: '#c9c9c9',
+                brand: {
+                    DEFAULT: '#0a4aa6',
+                    dark: '#00357f',
+                    blue: '#1414c8',
+                    navy: '#0b1a6b',
+                    yellow: '#f2b630',
+                    orange: '#f26a1b',
+                    green: '#1fb15a',
+                    purple: '#8a4de0',
+                },
+                card: {
+                    blue: '#5db8f5',
+                    orange: '#ff7a45',
+                    red: '#f84545',
+                },
+            },
+            borderRadius: {
+                chip: '8px',
+                card: '20px',
+                pill: '999px',
+            },
+            boxShadow: {
+                header: '0 2px 8px rgba(0, 0, 0, 0.08)',
+                arrow: '0 2px 6px rgba(0, 0, 0, 0.15)',
+            },
+            maxWidth: {
+                shell: '1120px',
             },
         },
     },
