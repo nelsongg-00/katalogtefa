@@ -1,0 +1,973 @@
+<!DOCTYPE html>
+<html lang="id">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Katalog TEFA SMKN 4 Tanjungpinang</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Anton&display=swap"
+        rel="stylesheet">
+
+    <style>
+        /* ==========================================================
+       1. DESIGN TOKENS
+       ========================================================== */
+        :root {
+            /* Colors (estimated from the PDF) */
+            --color-primary: #0a4aa6;
+            --color-primary-dark: #00357f;
+            --color-accent-blue: #1414c8;
+            --color-text: #111111;
+            --color-text-muted: #444444;
+            --color-bg: #fafafa;
+            --color-white: #ffffff;
+            --color-navy: #0b1a6b;
+            --color-yellow: #f2b630;
+            --color-orange: #f26a1b;
+            --color-green: #1fb15a;
+            --color-purple: #8a4de0;
+            --color-border: #c9c9c9;
+
+            /* Program card placeholder colors */
+            --card-blue: #5db8f5;
+            --card-orange: #ff7a45;
+            --card-red: #f84545;
+
+            /* Typography */
+            --font-body: "Plus Jakarta Sans", system-ui, -apple-system, "Segoe UI", Arial, sans-serif;
+            --font-label: "Anton", "Impact", "Arial Narrow", sans-serif;
+            --fs-xs: 0.75rem;
+            --fs-sm: 0.875rem;
+            --fs-base: 1rem;
+            --fs-lg: 1.25rem;
+            --fs-xl: clamp(1.5rem, 3vw, 2rem);
+            --fs-hero: clamp(1.75rem, 5vw, 3.25rem);
+
+            /* Spacing scale */
+            --space-1: 0.25rem;
+            --space-2: 0.5rem;
+            --space-3: 0.75rem;
+            --space-4: 1rem;
+            --space-5: 1.5rem;
+            --space-6: 2rem;
+            --space-7: 3rem;
+            --space-8: 5rem;
+
+            /* Radius & shadow */
+            --radius-sm: 8px;
+            --radius-md: 20px;
+            --radius-pill: 999px;
+            --shadow-header: 0 2px 8px rgba(0, 0, 0, 0.08);
+            --shadow-arrow: 0 2px 6px rgba(0, 0, 0, 0.15);
+
+            /* Layout */
+            --container: 1120px;
+            --slider-gap: 1.5rem;
+            --slider-visible: 1;
+            --slider-speed: 600ms;
+        }
+
+        /* ==========================================================
+       2. RESET & BASE
+       ========================================================== */
+        *,
+        *::before,
+        *::after {
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            margin: 0;
+            font-family: var(--font-body);
+            font-size: var(--fs-base);
+            line-height: 1.5;
+            color: var(--color-text);
+            background: var(--color-bg);
+        }
+
+        img {
+            max-width: 100%;
+            display: block;
+        }
+
+        a {
+            color: inherit;
+            text-decoration: none;
+        }
+
+        ul {
+            margin: 0;
+            padding: 0;
+            list-style: none;
+        }
+
+        h1,
+        h2,
+        h3,
+        p {
+            margin: 0;
+        }
+
+        button {
+            font: inherit;
+            cursor: pointer;
+        }
+
+        .container {
+            width: 100%;
+            max-width: var(--container);
+            margin: 0 auto;
+            padding: 0 var(--space-4);
+        }
+
+        .visually-hidden {
+            position: absolute;
+            width: 1px;
+            height: 1px;
+            overflow: hidden;
+            clip: rect(0 0 0 0);
+            white-space: nowrap;
+        }
+
+        :focus-visible {
+            outline: 3px solid var(--color-yellow);
+            outline-offset: 2px;
+        }
+
+        /* ==========================================================
+       3. BUTTONS
+       ========================================================== */
+        .btn {
+            display: inline-block;
+            padding: var(--space-2) var(--space-4);
+            border: 1px solid var(--color-primary);
+            border-radius: var(--radius-pill);
+            font-size: var(--fs-sm);
+            font-weight: 600;
+            background: transparent;
+            color: var(--color-primary);
+        }
+
+        .btn--light {
+            background: var(--color-white);
+            border-color: var(--color-white);
+            color: var(--color-text);
+        }
+
+        .btn--outline-light {
+            border-color: var(--color-white);
+            color: var(--color-white);
+        }
+
+        /* ==========================================================
+       4. HEADER
+       ========================================================== */
+        .header {
+            background: var(--color-white);
+            border-top: 12px solid var(--color-primary);
+            box-shadow: var(--shadow-header);
+            position: relative;
+            z-index: 10;
+        }
+
+        .header__inner {
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            justify-content: space-between;
+            gap: var(--space-3) var(--space-5);
+            padding-top: var(--space-2);
+            padding-bottom: var(--space-2);
+        }
+
+        .brand {
+            display: flex;
+            align-items: center;
+            gap: var(--space-2);
+        }
+
+        .brand__logo {
+            width: 40px;
+            height: 40px;
+            object-fit: contain;
+        }
+
+        .brand__text {
+            display: flex;
+            flex-direction: column;
+            line-height: 1.2;
+            font-size: var(--fs-xs);
+            font-weight: 700;
+        }
+
+        .brand__sub {
+            color: var(--color-primary);
+        }
+
+        .header__actions {
+            display: flex;
+            align-items: center;
+            gap: var(--space-3);
+            font-size: var(--fs-xs);
+            font-weight: 700;
+        }
+
+        /* ==========================================================
+       5. HERO
+       ========================================================== */
+        .hero {
+            background: var(--color-primary);
+            color: var(--color-white);
+            min-height: 420px;
+            padding: var(--space-7) 0;
+        }
+
+        .hero__title {
+            font-size: var(--fs-hero);
+            font-weight: 700;
+            line-height: 1.15;
+            max-width: 14em;
+            text-transform: uppercase;
+        }
+
+        .hero__cta {
+            display: flex;
+            flex-wrap: wrap;
+            gap: var(--space-3);
+            margin-top: var(--space-5);
+        }
+
+        /* ==========================================================
+       6. ABOUT
+       ========================================================== */
+        .about {
+            padding: var(--space-8) 0;
+        }
+
+        .about__inner {
+            display: grid;
+            gap: var(--space-6);
+            align-items: center;
+        }
+
+        .about__title {
+            font-size: var(--fs-lg);
+            font-weight: 800;
+        }
+
+        .about__subtitle {
+            font-size: var(--fs-base);
+            font-weight: 800;
+            color: var(--color-accent-blue);
+            margin-bottom: var(--space-3);
+        }
+
+        .about__text {
+            font-size: var(--fs-sm);
+            color: var(--color-text-muted);
+        }
+
+        .about__image {
+            width: 100%;
+            aspect-ratio: 7 / 5;
+            object-fit: cover;
+            border-radius: var(--radius-md);
+            background: #ddd;
+        }
+
+        /* ==========================================================
+       7. WHY TEFA
+       ========================================================== */
+        .why {
+            padding: var(--space-8) 0;
+            text-align: center;
+        }
+
+        .why__title {
+            font-size: var(--fs-xl);
+            font-weight: 700;
+            margin-bottom: var(--space-4);
+        }
+
+        .why__title-accent {
+            color: var(--color-accent-blue);
+        }
+
+        .why__text {
+            max-width: 44rem;
+            margin: 0 auto;
+            font-weight: 500;
+        }
+
+        /* ==========================================================
+       8. PROGRAM SLIDER
+       ========================================================== */
+        .programs {
+            padding: var(--space-8) 0;
+        }
+
+        .programs__title {
+            font-size: var(--fs-xl);
+            font-weight: 700;
+            text-align: center;
+            margin-bottom: var(--space-6);
+        }
+
+        .slider {
+            position: relative;
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+
+        .slider__viewport {
+            overflow: hidden;
+        }
+
+        .slider__track {
+            display: flex;
+            transform: translateX(calc(var(--index, 0) * -100% / var(--slider-visible)));
+            transition: transform var(--slider-speed) ease;
+        }
+
+        .slider__track.is-instant {
+            transition: none;
+        }
+
+        .slider__slide {
+            flex: 0 0 calc(100% / var(--slider-visible));
+            padding: 0 calc(var(--slider-gap) / 2);
+        }
+
+        .program-card {
+            position: relative;
+            display: block;
+            aspect-ratio: 9 / 16;
+            border-radius: var(--radius-md);
+            overflow: hidden;
+            background: var(--card-blue);
+        }
+
+        .program-card--orange {
+            background: var(--card-orange);
+        }
+
+        .program-card--red {
+            background: var(--card-red);
+        }
+
+        .program-card__label {
+            position: absolute;
+            top: var(--space-3);
+            left: var(--space-4);
+            font-family: var(--font-label);
+            font-size: 3rem;
+            line-height: 1;
+            color: var(--color-white);
+        }
+
+        .program-card__image {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .slider__arrow {
+            position: absolute;
+            top: 50%;
+            z-index: 2;
+            width: 36px;
+            height: 36px;
+            transform: translateY(-50%);
+            display: grid;
+            place-items: center;
+            border: 1px solid var(--color-border);
+            border-radius: 50%;
+            background: var(--color-white);
+            color: var(--color-text);
+            box-shadow: var(--shadow-arrow);
+        }
+
+        .slider__arrow--prev {
+            left: var(--space-2);
+        }
+
+        .slider__arrow--next {
+            right: var(--space-2);
+        }
+
+        .slider__dots {
+            display: flex;
+            justify-content: center;
+            gap: var(--space-2);
+            margin-top: var(--space-5);
+        }
+
+        .slider__dot {
+            width: 10px;
+            height: 10px;
+            padding: 0;
+            border: 0;
+            border-radius: 50%;
+            background: var(--color-border);
+        }
+
+        .slider__dot.is-active {
+            background: var(--color-primary);
+        }
+
+        /* ==========================================================
+       9. PARTNER FEATURES
+       ========================================================== */
+        .partner {
+            padding: var(--space-8) 0;
+        }
+
+        .partner__title {
+            font-size: var(--fs-xl);
+            font-weight: 800;
+            text-align: center;
+            margin-bottom: var(--space-6);
+        }
+
+        .partner__title-accent {
+            display: block;
+            color: var(--color-accent-blue);
+        }
+
+        .partner__list {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: var(--space-5);
+            max-width: 760px;
+            margin: 0 auto;
+        }
+
+        .feature__icon {
+            width: 48px;
+            height: 48px;
+            object-fit: contain;
+            margin-bottom: var(--space-2);
+        }
+
+        .feature__title {
+            font-size: var(--fs-base);
+            font-weight: 800;
+            color: var(--color-navy);
+            line-height: 1.2;
+        }
+
+        .feature__tag {
+            font-size: var(--fs-xs);
+            font-weight: 600;
+            margin-bottom: var(--space-1);
+        }
+
+        .feature__tag--blue {
+            color: var(--color-accent-blue);
+        }
+
+        .feature__tag--orange {
+            color: var(--color-orange);
+        }
+
+        .feature__tag--green {
+            color: var(--color-green);
+        }
+
+        .feature__tag--purple {
+            color: var(--color-purple);
+        }
+
+        .feature__text {
+            font-size: var(--fs-xs);
+            color: var(--color-text-muted);
+        }
+
+        /* ==========================================================
+       10. FOOTER
+       ========================================================== */
+        .footer {
+            background: var(--color-primary-dark);
+            color: var(--color-white);
+            padding: var(--space-7) 0 var(--space-5);
+            font-size: var(--fs-xs);
+        }
+
+        .footer__grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: var(--space-6);
+        }
+
+        .footer__brand-name {
+            font-size: var(--fs-lg);
+            font-weight: 800;
+            color: var(--color-yellow);
+            line-height: 1.2;
+            margin-bottom: var(--space-3);
+        }
+
+        .footer__social {
+            display: flex;
+            gap: var(--space-3);
+            margin-top: var(--space-4);
+        }
+
+        .footer__social img {
+            width: 28px;
+            height: 28px;
+            border-radius: 50%;
+        }
+
+        .footer__heading {
+            font-size: var(--fs-xs);
+            font-weight: 600;
+            margin-bottom: var(--space-3);
+        }
+
+        .footer__list {
+            display: grid;
+            gap: var(--space-2);
+        }
+
+        .footer__contact-item {
+            display: flex;
+            gap: var(--space-2);
+            align-items: flex-start;
+        }
+
+        .footer__contact-item img {
+            width: 12px;
+            height: 12px;
+            margin-top: 3px;
+            flex: none;
+        }
+
+        .footer__copy {
+            margin-top: var(--space-7);
+            text-align: center;
+            color: var(--color-yellow);
+        }
+
+        /* ==========================================================
+       11. SCROLL REVEAL (only active when JS is running)
+       ========================================================== */
+        .js [data-scroll-reveal] {
+            opacity: 0;
+            transform: translateY(20px);
+            transition: opacity 0.6s ease, transform 0.6s ease;
+        }
+
+        .js [data-scroll-reveal].is-visible {
+            opacity: 1;
+            transform: none;
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+
+            .js [data-scroll-reveal],
+            .slider__track {
+                transition: none;
+            }
+
+            .js [data-scroll-reveal] {
+                opacity: 1;
+                transform: none;
+            }
+        }
+
+        /* ==========================================================
+       12. BREAKPOINT >= 640px (tablet): 3 cards visible
+       ========================================================== */
+        @media (min-width: 640px) {
+            :root {
+                --slider-visible: 3;
+            }
+
+            .container {
+                padding: 0 var(--space-6);
+            }
+
+            .hero {
+                min-height: 520px;
+                padding-top: var(--space-8);
+            }
+
+            .partner__list {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .footer__grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .slider {
+                padding: 0 var(--space-7);
+            }
+
+            .slider__arrow--prev {
+                left: 0;
+            }
+
+            .slider__arrow--next {
+                right: 0;
+            }
+        }
+
+        /* ==========================================================
+       13. BREAKPOINT >= 1024px (desktop)
+       ========================================================== */
+        @media (min-width: 1024px) {
+            .about__inner {
+                grid-template-columns: 1fr 1fr;
+                gap: var(--space-8);
+                padding: 0 var(--space-6);
+            }
+
+            .about__text {
+                max-width: 26rem;
+            }
+
+            .partner__list {
+                grid-template-columns: repeat(4, 1fr);
+            }
+
+            .footer__grid {
+                grid-template-columns: 1.4fr 1fr 1.4fr 1.2fr;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- ================= HEADER ================= -->
+    <header class="header">
+        <div class="container header__inner">
+            <a href="#" class="brand">
+                <img class="brand__logo" src="asset/img/logo-smkn4.png" alt="Logo SMKN 4 Tanjungpinang">
+                <span class="brand__text">
+                    <span>SMKN 4 TANJUNGPINANG</span>
+                    <span class="brand__sub">KATALOG TEFA</span>
+                </span>
+            </a>
+
+            <div class="header__actions">
+                <a href="#">Masuk</a>
+                <a href="#" class="btn">Daftar</a>
+            </div>
+        </div>
+    </header>
+
+    <main>
+        <!-- ================= HERO ================= -->
+        <section class="hero" data-scroll-reveal>
+            <div class="container">
+                <h1 class="hero__title">Selamat Datang di Katalog TEFA SMKN 4 Tanjungpinang</h1>
+                <div class="hero__cta">
+                    <a href="#" class="btn btn--light">Jelajahi Produk</a>
+                    <a href="#" class="btn btn--outline-light">Lihat Layanan Jasa</a>
+                </div>
+            </div>
+        </section>
+
+        <!-- ================= ABOUT ================= -->
+        <section class="about" data-scroll-reveal>
+            <div class="container about__inner">
+                <div class="about__content">
+                    <h2 class="about__title">Kreatif Inovatif Bersama</h2>
+                    <p class="about__subtitle">TEFA SMKN 4 TANJUNGPINANG</p>
+                    <p class="about__text">Teaching Factory (TEFA) SMKN 4 Tanjungpinang adalah ekosistem pembelajaran
+                        berbasis produksi nyata dengan standar industri. Kami menghadirkan produk unggulan dan layanan
+                        profesional yang siap menjawab kebutuhan masyarakat serta dunia usaha.</p>
+                </div>
+                <img class="about__image" src="asset/img/about-school.jpg"
+                    alt="Siswa SMKN 4 Tanjungpinang berkumpul di halaman sekolah">
+            </div>
+        </section>
+
+        <!-- ================= WHY TEFA ================= -->
+        <section class="why" data-scroll-reveal>
+            <div class="container">
+                <h2 class="why__title"><span class="why__title-accent">Mengapa</span> TEFA SMKN 4 Tanjungpinang?</h2>
+                <p class="why__text">Hadir untuk mendukung kebutuhan masyarakat dan dunia usaha dengan produk bernilai
+                    jual tinggi serta layanan jasa profesional yang inovatif, andal, dan berstandar industri modern.</p>
+            </div>
+        </section>
+
+        <!-- ================= PROGRAM KEAHLIAN (SLIDER) ================= -->
+        <section class="programs" data-scroll-reveal aria-labelledby="programs-title">
+            <div class="container">
+                <h2 class="programs__title" id="programs-title">Program Keahlian TEFA SMKN 4 Tanjungpinang</h2>
+
+                <div class="slider" data-slider aria-roledescription="carousel" aria-label="Program keahlian">
+                    <button class="slider__arrow slider__arrow--prev" type="button" data-slider-prev
+                        aria-label="Kartu sebelumnya">
+                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                            stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                            <polyline points="15 18 9 12 15 6" />
+                        </svg>
+                    </button>
+
+                    <div class="slider__viewport">
+                        <ul class="slider__track" data-slider-track>
+                            <!-- Replace the <span class="visually-hidden"> + empty box with an <img> when photos are ready. Keep href="ready" until real URLs exist. -->
+                            <li class="slider__slide">
+                                <a class="program-card" href="ready">
+                                    <span class="program-card__label">GIM</span>
+                                    <span class="visually-hidden">Program keahlian Pengembangan GIM</span>
+                                    <!-- <img class="program-card__image" src="asset/img/program-1.jpg" alt="Siswa program keahlian GIM"> -->
+                                </a>
+                            </li>
+                            <li class="slider__slide">
+                                <a class="program-card program-card--orange" href="ready">
+                                    <span class="program-card__label">RPL</span>
+                                    <span class="visually-hidden">Program keahlian Rekayasa Perangkat Lunak</span>
+                                    <!-- <img class="program-card__image" src="asset/img/program-2.jpg" alt="Siswa program keahlian RPL"> -->
+                                </a>
+                            </li>
+                            <li class="slider__slide">
+                                <a class="program-card program-card--red" href="ready">
+                                    <span class="program-card__label">DKV</span>
+                                    <span class="visually-hidden">Program keahlian Desain Komunikasi dan Visual</span>
+                                    <!-- <img class="program-card__image" src="asset/img/program-3.jpg" alt="Siswa program keahlian DKV"> -->
+                                </a>
+                            </li>
+                            <li class="slider__slide">
+                                <a class="program-card" href="ready">
+                                    <!-- TODO: verify from design (label for card 4; design only shows GIM, RPL, DKV) -->
+                                    <span class="visually-hidden">Program keahlian 4</span>
+                                    <!-- <img class="program-card__image" src="asset/img/program-4.jpg" alt=""> -->
+                                </a>
+                            </li>
+                            <li class="slider__slide">
+                                <a class="program-card program-card--orange" href="ready">
+                                    <!-- TODO: verify from design (label for card 5) -->
+                                    <span class="visually-hidden">Program keahlian 5</span>
+                                    <!-- <img class="program-card__image" src="asset/img/program-5.jpg" alt=""> -->
+                                </a>
+                            </li>
+                            <li class="slider__slide">
+                                <a class="program-card program-card--red" href="ready">
+                                    <!-- TODO: verify from design (label for card 6) -->
+                                    <span class="visually-hidden">Program keahlian 6</span>
+                                    <!-- <img class="program-card__image" src="asset/img/program-6.jpg" alt=""> -->
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+
+                    <button class="slider__arrow slider__arrow--next" type="button" data-slider-next
+                        aria-label="Kartu berikutnya">
+                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                            stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                            <polyline points="9 18 15 12 9 6" />
+                        </svg>
+                    </button>
+
+                    <div class="slider__dots" data-slider-dots>
+                        <button class="slider__dot is-active" type="button" aria-label="Ke kartu 1"></button>
+                        <button class="slider__dot" type="button" aria-label="Ke kartu 2"></button>
+                        <button class="slider__dot" type="button" aria-label="Ke kartu 3"></button>
+                        <button class="slider__dot" type="button" aria-label="Ke kartu 4"></button>
+                        <button class="slider__dot" type="button" aria-label="Ke kartu 5"></button>
+                        <button class="slider__dot" type="button" aria-label="Ke kartu 6"></button>
+                    </div>
+                </div>
+                <!-- TODO: verify from design ("Lihat Selengkapnya" exists in the PDF text but is not visible in the render) -->
+            </div>
+        </section>
+
+        <!-- ================= SIAP MENJADI MITRA ================= -->
+        <section class="partner" data-scroll-reveal>
+            <div class="container">
+                <h2 class="partner__title">TEFA SMKN 4 TANJUNGPINANG <span class="partner__title-accent">SIAP MENJADI
+                        MITRA YANG</span></h2>
+                <ul class="partner__list">
+                    <li class="feature">
+                        <img class="feature__icon" src="asset/img/icon-kreatif.png" alt="">
+                        <h3 class="feature__title">Kreatif</h3>
+                        <p class="feature__tag feature__tag--blue">Ide dari siswa</p>
+                        <p class="feature__text">Karya dibuat berdasarkan kreativitas dan inovasi siswa sendiri.</p>
+                    </li>
+                    <li class="feature">
+                        <img class="feature__icon" src="asset/img/icon-kompeten.png" alt="">
+                        <h3 class="feature__title">Kompeten</h3>
+                        <p class="feature__tag feature__tag--orange">Proses terarah</p>
+                        <p class="feature__text">Dikerjakan melalui proses pembelajaran kejuruan yang terstruktur.</p>
+                    </li>
+                    <li class="feature">
+                        <img class="feature__icon" src="asset/img/icon-kolaboratif.png" alt="">
+                        <h3 class="feature__title">Kolaboratif</h3>
+                        <p class="feature__tag feature__tag--green">Lintas bidang</p>
+                        <p class="feature__text">Melibatkan berbagai bidang keahlian dalam satu proses produksi.</p>
+                    </li>
+                    <li class="feature">
+                        <img class="feature__icon" src="asset/img/icon-siap-industri.png" alt="">
+                        <h3 class="feature__title">Siap Industri</h3>
+                        <p class="feature__tag feature__tag--purple">Standar kerja</p>
+                        <p class="feature__text">Mengenalkan siswa pada proses kerja yang mendekati dunia industri.</p>
+                    </li>
+                </ul>
+            </div>
+        </section>
+    </main>
+
+    <!-- ================= FOOTER ================= -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer__grid">
+                <div class="footer__about">
+                    <p class="footer__brand-name">SMKN 4 TANJUNGPINANG</p>
+                    <p>Etalase digital resmi yang menghubungkan karya nyata, inovasi, dan layanan jasa dari talenta
+                        vokasi SMKN 4 Tanjungpinang dengan kebutuhan industri masa kini.</p>
+                    <div class="footer__social">
+                        <a href="#" aria-label="TikTok"><img src="asset/img/icon-tiktok.png" alt=""></a>
+                        <a href="#" aria-label="Instagram"><img src="asset/img/icon-instagram.png" alt=""></a>
+                    </div>
+                </div>
+
+                <nav aria-label="Navigasi footer">
+                    <h2 class="footer__heading">Navigasi</h2>
+                    <ul class="footer__list">
+                        <li><a href="#">Beranda</a></li>
+                        <li><a href="#">Tentang Kami</a></li>
+                        <li><a href="#">Produk</a></li>
+                        <li><a href="#">Layanan Jasa</a></li>
+                        <li><a href="#">Portofolio</a></li>
+                    </ul>
+                </nav>
+
+                <nav aria-label="Program keahlian">
+                    <h2 class="footer__heading">Program Keahlian</h2>
+                    <ul class="footer__list">
+                        <li><a href="#">Pengembangan GIM</a></li>
+                        <li><a href="#">Animasi</a></li>
+                        <li><a href="#">Teknik Komputer dan Jaringan</a></li>
+                        <li><a href="#">Rekayasa Perangkat Lunak</a></li>
+                        <li><a href="#">Desain Komunikasi dan Visual</a></li>
+                        <li><a href="#">Produksi dan Siaran Program Televisi</a></li>
+                    </ul>
+                </nav>
+
+                <div>
+                    <h2 class="footer__heading">Hubungi Kami</h2>
+                    <ul class="footer__list">
+                        <li class="footer__contact-item"><img src="asset/img/icon-pin.png" alt=""><span>Jl. Nusantara
+                                No.KM.14 Batu IX, Kec. Tanjungpinang</span></li>
+                        <li class="footer__contact-item"><img src="asset/img/icon-phone.png" alt=""><a href="#">+62
+                                878-1948-317</a></li>
+                        <li class="footer__contact-item"><img src="asset/img/icon-mail.png" alt=""><a
+                                href="#">smkntpi4@gmail.com</a></li>
+                    </ul>
+                </div>
+            </div>
+            <p class="footer__copy">&copy; 2026 SMKN 4 Tanjungpinang Katalog TEFA. Semua hak cipta dilindungi.</p>
+        </div>
+    </footer>
+
+    <script>
+        (function () {
+            document.documentElement.classList.add('js');
+
+            /* ---------- Scroll reveal: fade + rise once per section ---------- */
+            var targets = document.querySelectorAll('[data-scroll-reveal]');
+            if ('IntersectionObserver' in window) {
+                var io = new IntersectionObserver(function (entries) {
+                    entries.forEach(function (entry) {
+                        if (entry.isIntersecting) {
+                            entry.target.classList.add('is-visible');
+                            io.unobserve(entry.target);
+                        }
+                    });
+                }, { threshold: 0.15 });
+                targets.forEach(function (el) { io.observe(el); });
+            } else {
+                targets.forEach(function (el) { el.classList.add('is-visible'); });
+            }
+
+            /* ---------- Program slider: one card per step, right-to-left, infinite loop ---------- */
+            var slider = document.querySelector('[data-slider]');
+            if (!slider) return;
+
+            var track = slider.querySelector('[data-slider-track]');
+            var dots = slider.querySelectorAll('[data-slider-dots] .slider__dot');
+            var prevBtn = slider.querySelector('[data-slider-prev]');
+            var nextBtn = slider.querySelector('[data-slider-next]');
+            var originals = Array.prototype.slice.call(track.children);
+            var total = originals.length;          // 6
+            var DURATION = 600;                    // keep in sync with --slider-speed
+            var INTERVAL = 4000;
+            var index = 0;
+            var locked = false;
+            var timer = null;
+            var reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+            // Clone the first 3 cards at the end so the loop never shows an empty gap.
+            originals.slice(0, 3).forEach(function (li) {
+                var clone = li.cloneNode(true);
+                clone.setAttribute('aria-hidden', 'true');
+                clone.querySelector('a').setAttribute('tabindex', '-1');
+                track.appendChild(clone);
+            });
+
+            function render(i, animate) {
+                track.classList.toggle('is-instant', !animate);
+                slider.style.setProperty('--index', i);
+                index = i;
+                dots.forEach(function (d, n) { d.classList.toggle('is-active', n === i % total); });
+            }
+
+            function next() {
+                if (locked) return;
+                locked = true;
+                render(index + 1, true);
+                setTimeout(function () {
+                    if (index >= total) render(0, false);   // jump back to the real first card
+                    locked = false;
+                }, reduceMotion ? 0 : DURATION + 20);
+            }
+
+            function prev() {
+                if (locked) return;
+                locked = true;
+                if (index === 0) {
+                    render(total, false);                    // jump to the clone of card 1
+                    void track.offsetWidth;                  // force reflow before animating
+                }
+                render(index - 1, true);
+                setTimeout(function () { locked = false; }, reduceMotion ? 0 : DURATION + 20);
+            }
+
+            function goTo(i) {
+                if (locked) return;
+                locked = true;
+                render(i, true);
+                setTimeout(function () { locked = false; }, reduceMotion ? 0 : DURATION + 20);
+            }
+
+            function start() { if (!reduceMotion && !timer) timer = setInterval(next, INTERVAL); }
+            function stop() { clearInterval(timer); timer = null; }
+
+            nextBtn.addEventListener('click', function () { stop(); next(); start(); });
+            prevBtn.addEventListener('click', function () { stop(); prev(); start(); });
+            dots.forEach(function (d, n) { d.addEventListener('click', function () { stop(); goTo(n); start(); }); });
+
+            slider.addEventListener('mouseenter', stop);
+            slider.addEventListener('mouseleave', start);
+            slider.addEventListener('focusin', stop);
+            slider.addEventListener('focusout', start);
+
+            start();
+        })();
+    </script>
+</body>
+
+</html>

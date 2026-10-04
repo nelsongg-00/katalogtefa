@@ -1,159 +1,100 @@
+# AGENTS.md
+
+Instructions for AI agents in `katalogtefa`: a single-app Laravel 13 repo (PHP 8.5, Breeze auth, Sanctum) — an Indonesian-language school catalog + order/production system ("TEFA"). All models, columns, and UI copy are Indonesian.
+
+Everything outside the `<laravel-boost-guidelines>` block is hand-maintained. `php artisan boost:update` rewrites only the inside of that block (`vendor/laravel/boost/src/Install/GuidelineWriter.php`) — never put repo notes in there.
+
+## Agent Skills (OpenCode)
+
+This project uses skills installed under `.opencode/skills/`. Before acting on any request, check if a skill applies and invoke it with the `skill` tool.
+
+### Core Rules
+
+- If a task matches a skill, invoke it with the `skill` tool before acting.
+- Skills are located in `.opencode/skills/<skill-name>/SKILL.md`.
+- Follow the skill workflow strictly; do not partially apply it.
+- Never skip required steps such as spec, plan, or test when a skill demands them.
+
+### Intent → Skill Mapping
+
+Map the user's intent to the matching skill automatically:
+
+- Feature / new functionality → `spec-driven-development`, then `incremental-implementation` + `test-driven-development`
+- Planning / breakdown → `planning-and-task-breakdown`
+- Bug / failure / unexpected behavior → `debugging-and-error-recovery`
+- Code review → `code-review-and-quality`
+- Refactoring / simplification → `code-simplification`
+- API or interface design → `api-and-interface-design`
+- UI work → `frontend-ui-engineering`
+- Deploy / release → `shipping-and-launch`
+
+### Execution Model
+
+For every request:
+
+1. Determine if any skill applies (even a small chance).
+2. Load the skill with `skill({ name: "<skill-name>" })`.
+3. Follow the skill workflow exactly.
+4. Only proceed to implementation once required steps are complete.
+
+## Standing constraints
+
+- No new top-level folders, no dependency changes, no documentation files — unless the user asks.
+
+## Commands
+
+- **Fresh setup:** `composer setup` — install, create `.env`, `key:generate`, `migrate --force`, `npm install --ignore-scripts`, `npm run build`. It does **not** seed.
+- **Dev:** `composer run dev` → `php artisan dev` (runs `artisan serve` + `queue:listen` + `npm run dev` concurrently; list with `php artisan dev:list`). Logs: `php artisan pail`.
+- **Frontend:** `npm run build` / `npm run dev` (Vite inputs: `resources/css/app.css`, `resources/js/app.js`).
+- **Tests:** `composer test` (= `config:clear` + `php artisan test`)
+  - one file: `php artisan test tests/Feature/ProfileTest.php`
+  - one test: `php artisan test --filter=testName`
+- **After any PHP edit:** `vendor/bin/pint --dirty --format agent` (no `pint.json` → default `laravel` preset; fix-all form in the Boost block below).
+- Run pint + tests yourself before finishing — no CI (`.github` confirmed absent) or pre-commit hook does it for you.
+
+## Architecture
+
+- Routing: all UI lives in `routes/web.php`; `routes/api.php` is tiny (`GET /api/produk` is public, `POST /api/login`, `GET /api/user` behind `auth:sanctum`).
+- Authorization: plain string on `users.role` — `super_admin`, `admin_jurusan`, `worker`, `pelanggan` — enforced by the `role` middleware alias (`app/Http/Middleware/CheckRole.php`); unauthorized users get redirected to `/`. Areas: `/superadmin/*`, `/admin/*`, `/worker/*`, `/my-orders` (pelanggan). Users in role areas normally need `jurusan_id` (department).
+- **Two parallel data families — the main trap:**
+  - New English models/tables: `Product`/`products`, `Order`/`orders`, `Service`/`services`, `OrderLog`.
+  - Legacy Indonesian: `Produk`/`produks`, `Pesanan`/`pesanans`, `DetailPesanan`, `Penugasan`, `Progres`, `Pembayaran`.
+  - They are synced **by hand**: checkout (`CheckoutController`, `HomeController::orderService`) writes the new `Order`, then mirrors into `Pesanan` + `Produk` + `DetailPesanan` (step commented "Sinkronisasi ke tabel Pesanan") because Super Admin reports and the Admin Jurusan dashboard read the legacy tables. When adding order/product logic, write both families — or first confirm which family the consuming view/query already uses. When in doubt about which family a view or query reads, grep the view name in `resources/views/` before writing code — do not guess.
+- File uploads: use `App\Traits\HandlesUploads::storeUploadedFile()` — it dodges a Windows/PHP 8.5 `UploadedFile` realpath bug; writes to the `public` disk.
+- Controllers are grouped `Admin\` (jurusan-admin modules), `SuperAdmin\`, and root (home/worker/client/checkout), but naming is inconsistent (`AdminJurusanController`, `SuperadminController`) — match the file you're editing.
+
+## Database & tests
+
+- Local dev DB is **MySQL `tefa_katalog`** (Laragon, root, empty password) per `.env`. `.env.example` says `sqlite` — stale; trust `.env`.
+- Tests are hard-pinned by `phpunit.xml` to **MySQL `tefa_katalog_testing`**. It must already exist *and be migrated* before the first run (some feature tests use no reset trait and query tables in `setUp()`). Migrate into it once from PowerShell:
+  ```powershell
+  $env:DB_DATABASE='tefa_katalog_testing'; php artisan migrate --force; Remove-Item Env:DB_DATABASE
+  ```
+  Never repoint tests at `tefa_katalog` — several tests delete/write rows.
+- Reset strategy is mixed per test file: `RefreshDatabase` (wipes schema), `DatabaseTransactions`, or no trait (rows persist across runs). Tests are written idempotently (`firstOrCreate`, explicit deletes in `setUp`), so don't assume a clean or pre-seeded DB. After schema changes run the whole suite, not one file.
+- Local data: `php artisan db:seed` (`DatabaseSeeder` calls `SuperAdminSeeder` first, then Product/Project/PesanMasuk/WorkerTask/Service/TefaCatalog).
+- The root file `tefa_katalog` is a 0-byte stray artifact — ignore it.
+
+## Frontend
+
+- **Tailwind v3 via PostCSS** (`postcss.config.js` + `tailwind.config.js`, `@tailwind` directives in `resources/css/app.css`). `package.json` also lists `@tailwindcss/vite` v4, but it is *not* registered in `vite.config.js` — don't switch pipelines or write v4 syntax.
+- `tailwind.config.js` content globs scan only `resources/views/**/*.blade.php` (+ pagination views): class names assembled in JS/Alpine strings won't be generated.
+- `ViteException: Unable to locate file in Vite manifest` → run `npm run build` (or `composer run dev`).
+
+## Other repo facts
+
+- `CLAUDE.md` is Laravel Boost's bootstrap stub telling agents to install Boost — it's already installed (`boost.json`, `laravel/boost` in require-dev); skip that. Boost MCP (`php artisan boost:mcp`, config in `.agents/mcp_config.json`) isn't available to OpenCode sessions — don't wait on Boost tools.
+- `.agents/skills/` holds 5 Boost skills (`laravel-best-practices`, `testing-best-practices`, `tailwindcss-development`, `infer-conventions`, `deploying-to-cloud`); load the matching one when working in that domain.
+
 <laravel-boost-guidelines>
-=== foundation rules ===
+=== laravel boost guidelines (generated by `php artisan boost:update` — edit outside this block) ===
 
-# Laravel Boost Guidelines
-
-The Laravel Boost guidelines are specifically curated by Laravel maintainers for this application. These guidelines should be followed closely to ensure the best experience when building Laravel applications.
-
-## Foundational Context
-
-This application is a Laravel application running on PHP 8.5. You are an expert with the Laravel ecosystem. Always use the APIs that match the installed major version of each package — do not assume a version.
-
-Before relying on a package's API, confirm its installed version:
-- PHP packages: run `composer show --direct` to list direct dependencies with versions, or `composer show <vendor/package>` for a single package.
-- JS packages: check `package.json` for the installed versions.
-
-## Skills Activation
-
-This project has domain-specific skills available in `**/skills/**`. You MUST activate the relevant skill whenever you work in that domain—don't wait until you're stuck.
-
-## Conventions
-
-- You must follow all existing code conventions used in this application. When creating or editing a file, check sibling files for the correct structure, approach, and naming.
-- Use descriptive names for variables and methods. For example, `isRegisteredForDiscounts`, not `discount()`.
-- Check for existing components to reuse before writing a new one.
-
-## Verification Scripts
-
-- Do not create verification scripts or tinker when tests cover that functionality and prove they work. Unit and feature tests are more important.
-
-## Application Structure & Architecture
-
-- Stick to existing directory structure; don't create new base folders without approval.
-- Do not change the application's dependencies without approval.
-
-## Frontend Bundling
-
-- If the user doesn't see a frontend change reflected in the UI, it could mean they need to run `npm run build`, `npm run dev`, or `composer run dev`. Ask them.
-
-## Documentation Files
-
-- You must only create documentation files if explicitly requested by the user.
-
-## Replies
-
-- Be concise in your explanations - focus on what's important rather than explaining obvious details.
-
-=== boost rules ===
-
-# Laravel Boost
-
-## Tools
-
-- Laravel Boost is an MCP server with tools designed specifically for this application. Prefer Boost tools over manual alternatives like shell commands or file reads.
-- Use `database-query` to run read-only queries against the database instead of writing raw SQL in tinker.
-- Use `database-schema` to inspect table structure before writing migrations or models.
-- Use `get-absolute-url` to resolve the correct scheme, domain, and port for project URLs. Always use this before sharing a URL with the user.
-- Use `browser-logs` to read browser logs, errors, and exceptions. Only recent logs are useful, ignore old entries.
-
-## Searching Documentation (IMPORTANT)
-
-- Use `search-docs` before changes that depend on Laravel ecosystem APIs, behavior, configuration, or version-specific syntax. Skip it for copy-only edits and other changes where package documentation is irrelevant. Reuse sufficient results already in context instead of searching again.
-- Pass a `packages` array to scope results when you know which packages are relevant.
-- Use multiple broad, topic-based queries: `['rate limiting', 'routing rate limiting', 'routing']`. Expect the most relevant results first.
-- Do not add package names to queries because package info is already shared. Use `test resource table`, not `filament 4 test resource table`.
-
-### Search Syntax
-
-1. Use words for auto-stemmed AND logic: `rate limit` matches both "rate" AND "limit".
-2. Use `"quoted phrases"` for exact position matching: `"infinite scroll"` requires adjacent words in order.
-3. Combine words and phrases for mixed queries: `middleware "rate limit"`.
-4. Use multiple queries for OR logic: `queries=["authentication", "middleware"]`.
-
-## Project Rules
-
-- This project contains committed, area-grouped rules in `.ai/rules` when that directory exists (settled decisions, non-obvious traps, standing constraints). Framework and package guidelines that only apply to specific paths (testing, frontend, components) also live there, under `.ai/rules/boost` — this is not just recorded decisions, it is load-bearing guidance you have not seen inline. Before you enter plan mode or create/edit any file, you MUST first: open @.ai/rules/index.md (it maps file globs to rule files), read every rule file whose globs cover the path(s) in scope, and run `grep -rin 'keyword' .ai/rules` to catch what a path match alone misses. Do not write code until you have read and are following every matching rule. If `.ai/rules` does not exist, continue without it.
-- Record durable rules with `record-rule` so the next agent or teammate inherits them instead of working them out again. Pass a `glob` (e.g. `app/Http/Controllers/**`), a short `title`, and a few-line `note`. Always use `record-rule`, never your native memory or notes tool — native memory is personal and session-scoped; only `.ai/rules` is shared with the team and persists in the repo.
-
-## Artisan
-
-- Run Artisan commands directly via the command line (e.g., `php artisan route:list`). Use `php artisan list` to discover available commands and `php artisan [command] --help` to check parameters.
-- Inspect routes with `php artisan route:list`. Filter with: `--method=GET`, `--name=users`, `--path=api`, `--except-vendor`, `--only-vendor`.
-- Read configuration values using dot notation: `php artisan config:show app.name`, `php artisan config:show database.default`. Or read config files directly from the `config/` directory.
-
-## Tinker
-
-- Execute PHP in app context for debugging and testing code. Do not create models without user approval, prefer tests with factories instead. Prefer existing Artisan commands over custom tinker code.
-- Always use single quotes to prevent shell expansion: `php artisan tinker --execute 'Your::code();'`
-  - Double quotes for PHP strings inside: `php artisan tinker --execute 'User::where("active", true)->count();'`
-
-=== php rules ===
-
-# PHP
-
-- Always use curly braces for control structures, even for single-line bodies.
-- Use PHP 8 constructor property promotion: `public function __construct(public GitHub $github) { }`. Do not leave empty zero-parameter `__construct()` methods unless the constructor is private.
-- Use explicit return type declarations and type hints for all method parameters: `function isAccessible(User $user, ?string $path = null): bool`
-- Use TitleCase for Enum keys: `FavoritePerson`, `BestLake`, `Monthly`.
-- Prefer PHPDoc blocks over inline comments. Only add inline comments for exceptionally complex logic.
-- Use array shape type definitions in PHPDoc blocks.
-
-=== deployments rules ===
-
-# Deployment
-
-- Laravel can be deployed using [Laravel Cloud](https://cloud.laravel.com/), which is the fastest way to deploy and scale production Laravel applications.
-- Activate the `deploying-to-cloud` skill whenever deploying to Laravel Cloud, configuring Cloud environments or resources, using the Cloud CLI, or troubleshooting Cloud deployments.
-
-=== laravel/core rules ===
-
-# Do Things the Laravel Way
-
-- Use `php artisan make:` commands to create new files (i.e. migrations, controllers, models, etc.). You can list available Artisan commands using `php artisan list` and check their parameters with `php artisan [command] --help`.
-- If you're creating a generic PHP class, use `php artisan make:class`.
-- Pass `--no-interaction` to all Artisan commands to ensure they work without user input. You should also pass the correct `--options` to ensure correct behavior.
-
-### Model Creation
-
-- When creating new models, create useful factories and seeders for them too. Ask the user if they need any other things, using `php artisan make:model --help` to check the available options.
-
-## APIs & Eloquent Resources
-
-- For APIs, default to using Eloquent API Resources and API versioning unless existing API routes do not, then you should follow existing application convention.
-
-## URL Generation
-
-- When generating links to other pages, prefer named routes and the `route()` function.
-
-## Testing
-
-- When creating models for tests, use the factories for the models. Check if the factory has custom states that can be used before manually setting up the model.
-- Faker: Use methods such as `$this->faker->word()` or `fake()->randomDigit()`. Follow existing conventions whether to use `$this->faker` or `fake()`.
-- When creating tests, make use of `php artisan make:test [options] {name}` to create a feature test, and pass `--unit` to create a unit test. Most tests should be feature tests.
-
-## Vite Error
-
-- If you receive an "Illuminate\Foundation\ViteException: Unable to locate file in Vite manifest" error, you can run `npm run build` or ask the user to run `npm run dev` or `composer run dev`.
-
-=== pint/core rules ===
-
-# Laravel Pint Code Formatter
-
-- If you have modified any PHP files, you must run `vendor/bin/pint --dirty --format agent` before finalizing changes to ensure your code matches the project's expected style.
-- Do not run `vendor/bin/pint --test --format agent`, simply run `vendor/bin/pint --format agent` to fix any formatting issues.
-
-=== phpunit/core rules ===
-
-# PHPUnit
-
-- This project uses PHPUnit. Create tests with `php artisan make:test --phpunit {name}`.
-- Do not include the test suite directory in `{name}`. Use `SomeFeatureTest`, not `Feature/SomeFeatureTest`.
-- Read the `testing-best-practices` skill for guidance on coverage, naming, structure, dependency isolation, and review.
-
-## Running Tests
-
-- Run the narrowest set of tests that covers the change. Pass a file path or `--filter=testName` to `php artisan test --compact`.
-- Rerun a test after each change to it.
-- Run `vendor/bin/phpunit` to call the test runner directly. It accepts the same file path and `--filter=testName` arguments.
-
+- Follow existing sibling-file conventions; check for existing components/classes to reuse before writing new ones.
+- Prefer tests over tinker or throwaway verification scripts when tests cover the behavior.
+- Create files with `php artisan make:*` (models → also create factories/seeders; tests → `php artisan make:test --phpunit Name`, no suite prefix in `{name}`). Pass `--no-interaction` to Artisan commands.
+- Run the narrowest test set that covers the change: `php artisan test --compact <path>` or `--filter=testName`; rerun a test after each change to it. `vendor/bin/phpunit` accepts the same arguments. In tests, build models with factories (check factory states first), not manual rows.
+- Tinker: `php artisan tinker --execute 'Code();'` — single quotes only (shell expansion), double quotes for PHP strings inside.
+- Prefer named routes + `route()` for links. For APIs, use Eloquent API Resources unless existing API routes don't.
+- After modifying PHP files: `vendor/bin/pint --dirty --format agent` before finishing (fix-all: `vendor/bin/pint --format agent`; don't run `pint --test`).
+- Deployment target is Laravel Cloud — activate the `deploying-to-cloud` skill when deploying or touching Cloud config.
 </laravel-boost-guidelines>
