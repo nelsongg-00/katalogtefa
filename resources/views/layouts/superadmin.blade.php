@@ -247,7 +247,7 @@
         <b>{{ auth()->user()->name ?? 'Super Admin' }}</b>
         <span>Superuser Sistem</span>
     </div>
-    <div class="avatar">SA</div>
+    <div class="avatar">@include('partials.avatar', ['user' => auth()->user(), 'initial' => 'SA'])</div>
     <form method="POST" action="{{ route('logout') }}" style="display:inline">
         @csrf
         <button type="submit" class="logout" onclick="return confirm('Apakah Anda yakin ingin logout dari sesi Super Admin?')">Logout</button>

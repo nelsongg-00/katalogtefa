@@ -339,7 +339,7 @@
           </div>
 
           <div class="top-avatar">
-            {{ strtoupper(substr(auth()->user()->name ?? 'WK', 0, 2)) }}
+            @include('partials.avatar', ['user' => auth()->user(), 'initial' => strtoupper(substr(auth()->user()->name ?? 'WK', 0, 2))])
           </div>
 
           <form method="POST" action="{{ route('logout') }}" style="margin: 0;">

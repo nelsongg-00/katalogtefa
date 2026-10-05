@@ -11,7 +11,9 @@ use App\Models\Product;
 use App\Models\Project;
 use App\Models\ProjectLog;
 use App\Models\Service;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\RedirectResponse;
+use Illuminate\Http\Request;
 use Illuminate\View\View;
 
 class HomeController extends Controller
@@ -26,16 +28,45 @@ class HomeController extends Controller
         return view('public.profil');
     }
 
-    public function produk(): View
+    public function produk(Request $request): View
     {
-        $products = Product::with('jurusan')->latest()->get();
+        $products = Product::with('jurusan')
+            ->when(
+                $request->filled('jurusan') && $request->string('jurusan')->toString() !== 'all',
+                fn (Builder $query) => $this->scopeByJurusanKode($query, $request->string('jurusan')->toString())
+            )
+            ->when($request->filled('q'), function (Builder $query) use ($request) {
+                $term = '%'.addcslashes($request->string('q')->toString(), '\\%_').'%';
+
+                $query->where(fn (Builder $q) => $q
+                    ->where('nama_produk', 'like', $term)
+                    ->orWhere('deskripsi', 'like', $term));
+            })
+            ->latest()
+            ->paginate(12)
+            ->withQueryString();
 
         return view('public.produk', compact('products'));
     }
 
-    public function jasa(): View
+    public function jasa(Request $request): View
     {
-        $services = Service::with('department')->where('is_active', true)->latest()->get();
+        $services = Service::with('department')
+            ->where('is_active', true)
+            ->when(
+                $request->filled('jurusan') && $request->string('jurusan')->toString() !== 'all',
+                fn (Builder $query) => $this->scopeByJurusanKode($query, $request->string('jurusan')->toString())
+            )
+            ->when($request->filled('q'), function (Builder $query) use ($request) {
+                $term = '%'.addcslashes($request->string('q')->toString(), '\\%_').'%';
+
+                $query->where(fn (Builder $q) => $q
+                    ->where('nama_layanan', 'like', $term)
+                    ->orWhere('deskripsi', 'like', $term));
+            })
+            ->latest()
+            ->paginate(12)
+            ->withQueryString();
 
         return view('public.jasa', compact('services'));
     }
@@ -409,5 +440,30 @@ class HomeController extends Controller
         $waUrl = 'https://wa.me/'.$waPhone.'?text='.rawurlencode($waMessage);
 
         return redirect()->away($waUrl);
+    }
+
+    /**
+     * Filter katalog berdasarkan tab program keahlian (?jurusan=ANIMASI).
+     *
+     * Pola LIKE mereplikasi pemetaan str_contains di view katalog:
+     * ANI → ANIMASI, PSPT/PSTV → PSPT, sisanya cocok sebagian dengan kode.
+     */
+    private function scopeByJurusanKode(Builder $query, string $tab): Builder
+    {
+        $tab = strtoupper($tab);
+
+        $patterns = match ($tab) {
+            'ANIMASI' => ['%ANI%'],
+            'PSPT' => ['%PSPT%', '%PSTV%'],
+            default => ['%'.$tab.'%'],
+        };
+
+        return $query->whereHas('jurusan', function (Builder $jurusanQuery) use ($patterns) {
+            $jurusanQuery->where(function (Builder $q) use ($patterns) {
+                foreach ($patterns as $pattern) {
+                    $q->orWhere('kode', 'like', $pattern);
+                }
+            });
+        });
     }
 }

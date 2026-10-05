@@ -75,7 +75,7 @@ class CatalogModalAndAuthTest extends TestCase
         $response->assertSee('product-detail-modal');
         $response->assertSee('openProductModal');
         $response->assertSee('Pesan Sekarang (Checkout)');
-        $response->assertSee('Silakan login terlebih dahulu untuk melakukan pemesanan');
+        $response->assertSee('Anda akan diarahkan ke halaman login terlebih dahulu untuk menyelesaikan pemesanan');
     }
 
     public function test_service_catalog_displays_services_and_interactive_modal(): void
@@ -86,8 +86,8 @@ class CatalogModalAndAuthTest extends TestCase
         $response->assertSee('Jasa Pembuatan Web Profil Perusahaan');
         $response->assertSee('service-detail-modal');
         $response->assertSee('openServiceModal');
-        $response->assertSee('Pesan / Konsultasi Layanan');
-        $response->assertSee('Silakan login terlebih dahulu untuk melakukan pemesanan');
+        $response->assertSee('Konsultasi via WhatsApp');
+        $response->assertSee('Lihat Detail & Konsultasi');
     }
 
     public function test_guest_cannot_access_checkout_directly_and_is_redirected_to_login_with_intended_url(): void

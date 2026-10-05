@@ -127,16 +127,8 @@
         .help-card { background: rgba(255,255,255,0.1); padding: 20px 30px; border-radius: 15px; display: flex; align-items: center; gap: 15px; cursor: pointer; transition: 0.3s; border: 1px solid rgba(255,255,255,0.1); text-decoration: none; }
         .help-card:hover { background: rgba(255,255,255,0.2); }
 
-        /* Footer */
-        footer { background-color: #020617; color: #94a3b8; padding: 60px 20px 20px 20px; font-size: 14px; }
-        .footer-grid { max-width: 1200px; margin: 0 auto; display: grid; grid-template-columns: 2fr 1fr 1fr 1fr; gap: 40px; margin-bottom: 40px; }
-        .footer-col h4 { color: white; font-size: 18px; margin-bottom: 20px; }
-        .footer-col ul { list-style: none; }
-        .footer-col ul li { margin-bottom: 10px; }
-        .footer-col ul li a { color: #94a3b8; text-decoration: none; transition: 0.3s; }
-        .footer-col ul li a:hover { color: white; }
-        .footer-bottom { text-align: center; border-top: 1px solid #1e293b; padding-top: 20px; margin-top: 20px; }
-        
+        /* Footer -> resources/views/partials/footer.blade.php (scoping & token milik partial) */
+
         /* Page Header Content */
         .page-header {
             background-color: #0a215e;
@@ -146,6 +138,119 @@
         }
         .page-header h1 { font-size: 40px; font-weight: 800; margin-bottom: 10px; }
         .page-header p { font-size: 18px; color: #cbd5e1; }
+
+        /* --- PAGINATION (ditulis global untuk view bersama vendor/pagination/custom;
+             hanya muncul di halaman yang memang paginate — katalog produk & layanan) --- */
+        .pagination-wrapper {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 14px;
+            margin-top: 40px;
+            padding: 6px 0;
+            width: 100%;
+            font-size: 13px;
+            color: #64748b;
+        }
+
+        .pagination-info {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            font-size: 12.5px;
+            color: #64748b;
+        }
+
+        .pagination-info strong {
+            color: #0f172a;
+            font-weight: 700;
+        }
+
+        .pagination-links {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            flex-wrap: wrap;
+        }
+
+        .page-numbers {
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+        }
+
+        .page-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 7px 14px;
+            background: #ffffff;
+            border: 1px solid #e6eaef;
+            border-radius: 8px;
+            color: #334155;
+            font-size: 12.5px;
+            font-weight: 700;
+            text-decoration: none;
+            cursor: pointer;
+            transition: all .15s ease;
+            box-shadow: 0 1px 2px rgba(0, 0, 0, 0.04);
+            user-select: none;
+        }
+
+        .page-btn:hover:not(.disabled) {
+            background: #f8fafd;
+            border-color: #0a4aa6;
+            color: #0a4aa6;
+            transform: translateY(-1px);
+        }
+
+        .page-btn.disabled {
+            background: #f8fafc;
+            color: #94a3b8;
+            border-color: #e2e8f0;
+            cursor: not-allowed;
+            opacity: 0.65;
+            box-shadow: none;
+        }
+
+        .page-num {
+            min-width: 34px;
+            height: 34px;
+            padding: 0 8px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 8px;
+            font-size: 13px;
+            font-weight: 700;
+            color: #475569;
+            text-decoration: none;
+            border: 1px solid #e6eaef;
+            background: #fff;
+            transition: all .15s ease;
+            user-select: none;
+        }
+
+        .page-num:hover:not(.active):not(.dots) {
+            border-color: #0a4aa6;
+            color: #0a4aa6;
+            background: #eff6ff;
+        }
+
+        .page-num.active {
+            background: #0a4aa6;
+            border-color: #0a4aa6;
+            color: #fff;
+            box-shadow: 0 2px 6px rgba(10, 74, 166, 0.3);
+        }
+
+        .page-num.dots {
+            border: none;
+            background: transparent;
+            color: #94a3b8;
+            cursor: default;
+        }
     </style>
 </head>
 <body>
@@ -155,52 +260,8 @@
 
     @yield('content')
 
-    <!-- FOOTER -->
-    <footer>
-        <div class="footer-grid">
-            <div class="footer-col">
-                <h4 style="display: flex; align-items: center; gap: 10px;">
-                    SMKN 4<br>TANJUNGPINANG
-                </h4>
-                <p style="color: #ffb703; font-weight: bold; margin-bottom: 10px;">Katalog TEFA</p>
-                <p>Katalog digital karya, produk, dan layanan jasa hasil Teaching Factory siswa dari enam program keahlian.</p>
-            </div>
-            <div class="footer-col">
-                <h4>🧭 Navigasi</h4>
-                <ul>
-                    <li><a href="{{ route('home') }}">> Beranda</a></li>
-                    <li><a href="{{ route('profil') }}">> Profil Sekolah</a></li>
-                    <li><a href="{{ route('produk') }}">> Produk</a></li>
-                    <li><a href="{{ route('jasa') }}">> Layanan Jasa</a></li>
-                    <li><a href="{{ route('portofolio') }}">> Portofolio</a></li>
-                    <li><a href="{{ route('order.tracking.index') }}">> Lacak Pesanan</a></li>
-                </ul>
-            </div>
-            <div class="footer-col">
-                <h4>💡 TEFA</h4>
-                <ul>
-                    <li><a href="#">• RPL</a></li>
-                    <li><a href="#">• TKJ</a></li>
-                    <li><a href="#">• DKV</a></li>
-                    <li><a href="#">• PSPT</a></li>
-                    <li><a href="#">• Animasi</a></li>
-                    <li><a href="#">• GIM</a></li>
-                </ul>
-            </div>
-            <div class="footer-col">
-                <h4>📞 Kontak</h4>
-                <ul>
-                    <li>📍 Jl. Nusantara No.KM.14 Batu IX, Kec. Tanjungpinang</li>
-                    <li>✉️ smkntpi4@gmail.com</li>
-                    <li>📞 +62 878-1948-317</li>
-                    <li>🌐 @smkn4tgpinang</li>
-                </ul>
-            </div>
-        </div>
-        <div class="footer-bottom">
-            <p>&copy; {{ date('Y') }} SMKN 4 Tanjungpinang — Katalog TEFA. Semua hak cipta dilindungi.</p>
-        </div>
-    </footer>
+    <!-- FOOTER (partial bersama untuk semua halaman publik) -->
+    @include('partials.footer')
 
     <!-- Toast Notification (Smart Redirect Feedback) -->
     @if(session('toast_success'))

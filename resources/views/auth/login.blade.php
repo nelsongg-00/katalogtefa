@@ -6,32 +6,47 @@
   <title>Masuk ke Akun - Katalog TEFA SMKN 4 Tanjungpinang</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@400;500;600&family=Inter:wght@700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
 
   <style>
     /* ==========================================================
        1. DESIGN TOKENS
+       All sizes = original mockup size x --scale.
+       0.79 = a further 11% smaller.
        ========================================================== */
     :root {
+      --scale: 0.79;
+
+      /* Colors (from design) */
       --color-bg: #0048ab;
       --color-card: #ffffff;
       --color-heading: #000000;
       --color-text: #111111;
       --color-muted: #666666;
-      --color-link: #5468ff;
-      --color-button: #00a3ff;
+      --color-link: #5470ff;
+      --color-button: #5470ff;
       --color-button-text: #ffffff;
       --color-input-bg: #f1f1f1;
       --color-input-border: #000000;
-      --color-icon: #555555;
+      --color-icon: #444444;
+      --color-error: #d92d20;
 
-      --font-heading: "Inter", "Helvetica Neue", Arial, sans-serif;
+      /* Typography */
       --font-body: "Hanken Grotesk", "Helvetica Neue", Arial, sans-serif;
+      --fs-title: calc(34px * var(--scale));
+      --fs-subtitle: calc(17px * var(--scale));
+      --fs-label: calc(18px * var(--scale));
+      --fs-input: calc(17px * var(--scale));
+      --fs-button: calc(20px * var(--scale));
+      --fs-footer: calc(17px * var(--scale));
 
-      --radius-card: 48px;
+      /* Shape & spacing */
+      --card-width: calc(526px * var(--scale));
+      --radius-card: calc(48px * var(--scale));
       --radius-pill: 999px;
-      --card-width: 418px;
-      --field-height: 44px;
+      --field-height: calc(44px * var(--scale));
+      --field-gap: calc(25px * var(--scale));
+      --card-pad-x: calc(53px * var(--scale));
     }
 
     /* ==========================================================
@@ -45,7 +60,7 @@
       flex-direction: column;
       background: var(--color-bg);
       font-family: var(--font-body);
-      font-size: 17px;
+      font-size: var(--fs-input);
       color: var(--color-text);
     }
     /* Area kartu mengisi sisa tinggi di bawah navbar; kartu tetap di tengah. */
@@ -66,22 +81,20 @@
     .login-card {
       width: 100%;
       max-width: var(--card-width);
-      padding: 40px 53px 38px;
+      padding: calc(32px * var(--scale)) var(--card-pad-x) calc(20px * var(--scale));
       background: var(--color-card);
       border-radius: var(--radius-card);
     }
     .login-card__header { text-align: center; }
     .login-card__title {
-      font-family: var(--font-heading);
-      font-size: 34px;
+      font-size: var(--fs-title);
       font-weight: 700;
       line-height: 1.2;
       color: var(--color-heading);
     }
     .login-card__subtitle {
-      margin: 6px auto 0;
-      max-width: 22em;
-      font-size: 18px;
+      margin-top: calc(3px * var(--scale));
+      font-size: var(--fs-subtitle);
       line-height: 1.35;
       color: var(--color-muted);
     }
@@ -89,39 +102,41 @@
     /* ==========================================================
        4. FORM FIELDS
        ========================================================== */
-    .login-form { margin-top: 32px; }
-    .field { margin-bottom: 36px; }
+    .login-form { margin-top: calc(36px * var(--scale)); }
+    .field { margin-bottom: var(--field-gap); }
     .field--last { margin-bottom: 0; }
     .field__label {
       display: block;
-      margin: 0 0 4px 10px;
-      font-size: 18px;
+      margin: 0 0 calc(2px * var(--scale)) calc(10px * var(--scale));
+      font-size: var(--fs-label);
+      line-height: calc(22px * var(--scale));
       color: var(--color-text);
     }
     .field__control { position: relative; }
     .field__input {
       width: 100%;
       height: var(--field-height);
-      padding: 0 46px;
+      padding: 0 calc(46px * var(--scale));
       border: 1px solid var(--color-input-border);
       border-radius: var(--radius-pill);
       background: var(--color-input-bg);
-      font-size: 17px;
+      font-size: var(--fs-input);
       color: var(--color-text);
     }
     .field__input:focus-visible { outline: 3px solid var(--color-button); outline-offset: 2px; }
     .field__icon {
       position: absolute;
       top: 50%;
-      left: 16px;
+      left: calc(16px * var(--scale));
+      width: calc(24px * var(--scale));
+      height: calc(20px * var(--scale));
       transform: translateY(-50%);
-      display: block;
       pointer-events: none;
     }
     .field__toggle {
       position: absolute;
       top: 50%;
-      right: 14px;
+      right: calc(14px * var(--scale));
       transform: translateY(-50%);
       display: grid;
       place-items: center;
@@ -132,22 +147,22 @@
     }
     .field__toggle:focus-visible { outline: 3px solid var(--color-button); border-radius: 4px; }
 
-    .login-form__forgot { display: block; margin-top: 8px; text-align: right; font-size: 17px; }
+    .login-form__forgot { display: block; margin-top: calc(8px * var(--scale)); text-align: right; font-size: var(--fs-footer); }
 
     /* Error & status (komponen Blade x-input-error / x-auth-session-status;
        class utility Tailwind di komponen tidak dimuat di halaman mandiri ini). */
     .login-form__error {
-      margin: 6px 0 0 10px;
+      margin: calc(6px * var(--scale)) 0 0 calc(10px * var(--scale));
       padding: 0;
       list-style: none;
-      font-size: 15px;
+      font-size: calc(15px * var(--scale));
       line-height: 1.35;
-      color: #d92d20;
+      color: var(--color-error);
     }
     .login-form__error li + li { margin-top: 2px; }
     .login-form__status {
-      margin: 0 0 18px;
-      font-size: 15px;
+      margin: 0 0 calc(18px * var(--scale));
+      font-size: calc(15px * var(--scale));
       line-height: 1.4;
       color: #067647;
     }
@@ -155,13 +170,13 @@
     /* ==========================================================
        5. REMEMBER ME
        ========================================================== */
-    .remember { display: flex; align-items: center; gap: 10px; margin-top: 28px; color: var(--color-muted); cursor: pointer; }
+    .remember { display: flex; align-items: center; gap: calc(10px * var(--scale)); margin-top: calc(28px * var(--scale)); color: var(--color-muted); font-size: var(--fs-footer); cursor: pointer; }
     .remember__input {
       appearance: none;
       -webkit-appearance: none;
       flex: none;
-      width: 22px;
-      height: 22px;
+      width: calc(22px * var(--scale));
+      height: calc(22px * var(--scale));
       margin: 0;
       border: 2px solid #222222;
       border-radius: 50%;
@@ -178,27 +193,31 @@
       display: block;
       width: 100%;
       height: var(--field-height);
-      margin-top: 34px;
+      margin-top: calc(35px * var(--scale));
       border: 0;
       border-radius: var(--radius-pill);
       background: var(--color-button);
       color: var(--color-button-text);
-      font-size: 20px;
+      font-size: var(--fs-button);
+      font-weight: 700;
       cursor: pointer;
     }
     .login-form__submit:focus-visible { outline: 3px solid var(--color-bg); outline-offset: 3px; }
 
-    .login-card__footer { margin-top: 24px; text-align: center; color: var(--color-text); }
+    .login-card__footer {
+      margin-top: calc(24px * var(--scale));
+      text-align: center;
+      font-size: var(--fs-footer);
+      color: var(--color-text);
+    }
     .login-card__footer a { margin-left: 4px; }
 
     /* ==========================================================
        7. SMALL SCREENS
        ========================================================== */
-    @media (max-width: 560px) {
-      :root { --radius-card: 32px; }
-      .login-card { padding: 32px 24px 30px; }
-      .login-card__title { font-size: 28px; }
-      .login-card__subtitle { font-size: 16px; }
+    @media (max-width: 520px) {
+      :root { --card-pad-x: 24px; --radius-card: 32px; }
+      .login-card { padding-top: 28px; padding-bottom: 22px; }
     }
   </style>
 </head>
@@ -220,9 +239,9 @@
       <div class="field">
         <label class="field__label" for="email">Email</label>
         <div class="field__control">
-          <svg class="field__icon" width="24" height="18" viewBox="0 0 24 18" fill="none" stroke="#444444" stroke-width="1.4" stroke-linejoin="round" aria-hidden="true">
-            <rect x="1" y="1.5" width="22" height="15" rx="2"/>
-            <polyline points="1.5,2.5 12,10.5 22.5,2.5"/>
+          <svg class="field__icon" viewBox="0 0 24 20" fill="none" stroke="#444444" stroke-width="1.400" stroke-linejoin="round" aria-hidden="true">
+            <rect x="1" y="3" width="22" height="15" rx="2"/>
+            <polyline points="1.500,4 12,12 22.500,4"/>
           </svg>
           <input class="field__input" id="email" name="email" type="email" value="{{ old('email') }}" autocomplete="email" autofocus required>
         </div>
@@ -232,11 +251,11 @@
       <div class="field field--last">
         <label class="field__label" for="password">Password</label>
         <div class="field__control">
-          <svg class="field__icon" width="18" height="20" viewBox="0 0 18 20" fill="none" aria-hidden="true">
-            <path d="M5 8V5.5a4 4 0 0 1 8 0V8" stroke="#555555" stroke-width="2"/>
-            <rect x="1.5" y="8" width="15" height="11" rx="2" fill="#555555"/>
-            <circle cx="9" cy="12.8" r="1.4" fill="#ffffff"/>
-            <rect x="8.3" y="13.5" width="1.4" height="2.6" fill="#ffffff"/>
+          <svg class="field__icon" viewBox="0 0 24 20" fill="none" aria-hidden="true">
+            <path d="M8 8.500V6a4 4 0 0 1 8 0v2.500" stroke="#444444" stroke-width="2"/>
+            <rect x="5" y="8.500" width="14" height="10.500" rx="2" fill="#444444"/>
+            <circle cx="12" cy="13" r="1.400" fill="#ffffff"/>
+            <rect x="11.300" y="13.700" width="1.400" height="2.600" fill="#ffffff"/>
           </svg>
           <input class="field__input" id="password" name="password" type="password" autocomplete="current-password" required>
           <button class="field__toggle" type="button" data-toggle-password aria-label="Tampilkan kata sandi" aria-pressed="false">

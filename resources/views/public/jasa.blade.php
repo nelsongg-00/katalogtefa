@@ -4,312 +4,334 @@
 
 @section('content')
 <style>
-    /* Scoped Styles for Layanan Jasa Page */
-    .jasa-page-wrapper {
-        background-color: #f8fafc;
-        min-height: 80vh;
+    /* ==========================================================
+       LAYANAN JASA PAGE — restyle mengikuti desain halaman Produk
+       (resources/views/public/produk.blade.php = source of truth).
+       Token di-scope ke .jasa-page (bukan :root) supaya tidak
+       bocor ke halaman lain. Semua selector di-prefix .jasa-page
+       agar menang spesifisitas atas aturan global di layouts/public.
+       ========================================================== */
+    .jasa-page {
+        --color-primary: #0a4aa6;
+        --color-primary-dark: #00357f;
+        --color-accent-blue: #1414c8;
+        --color-text: #111111;
+        --color-muted: #666666;
+        --color-bg: #fafafa;
+        --color-white: #ffffff;
+        --color-yellow: #f2b630;
+        --color-red: #e53935;
+        --color-placeholder: #cad2db;
+        --color-banner-from: #0a84e0;
+        --color-banner-to: #45affa;
+        --radius-banner: 40px;
+        --radius-card: 15px;
+        --radius-pill: 999px;
+        --font-display: 'Anton', 'Impact', 'Arial Narrow', sans-serif;
+
+        background-color: var(--color-bg);
+        color: var(--color-text);
         padding-bottom: 90px;
     }
 
-    /* Hero & Header Section */
-    .jasa-header {
-        text-align: center;
-        padding: 55px 20px 30px;
-        max-width: 850px;
-        margin: 0 auto;
+    .jasa-page .visually-hidden {
+        position: absolute;
+        width: 1px;
+        height: 1px;
+        overflow: hidden;
+        clip: rect(0 0 0 0);
+        white-space: nowrap;
     }
 
-    .jasa-badge-label {
-        display: inline-flex;
+    .jasa-page .jasa-main {
+        padding: 32px 16px 0;
+    }
+
+    /* ---------- BANNER ---------- */
+    .jasa-page .banner {
+        position: relative;
+        display: flex;
         align-items: center;
-        gap: 6px;
-        background: #eff6ff;
-        color: #2563eb;
-        border: 1px solid #bfdbfe;
-        padding: 5px 16px;
-        border-radius: 999px;
-        font-size: 12.5px;
-        font-weight: 700;
-        letter-spacing: 0.5px;
-        text-transform: uppercase;
-        margin-bottom: 14px;
-    }
-
-    .jasa-title {
-        font-size: 38px;
-        font-weight: 900;
-        color: #0a215e;
-        letter-spacing: -0.5px;
-        margin-bottom: 12px;
-        text-transform: uppercase;
-    }
-
-    .jasa-subtitle {
-        font-size: 16px;
-        color: #64748b;
-        line-height: 1.6;
-        max-width: 640px;
+        justify-content: center;
+        max-width: 966px;
+        min-height: 220px;
         margin: 0 auto;
+        overflow: hidden;
+        border-radius: var(--radius-banner);
+        background: linear-gradient(120deg, var(--color-banner-from) 0%, #1b94ee 50%, var(--color-banner-to) 100%);
+        color: var(--color-white);
     }
 
-    /* Filter & Search Bar Container (Centered - Sesuai Gambar 3) */
-    .jasa-controls-container {
-        max-width: 1240px;
-        margin: 0 auto 35px;
-        padding: 0 24px;
+    .jasa-page .banner__content {
+        position: relative;
         display: flex;
         flex-direction: column;
         align-items: center;
-        gap: 16px;
+        padding: 24px 16px;
+        text-align: center;
     }
 
-    /* Centered Search Bar (Matching Image 3) */
-    .search-box-wrapper {
-        display: flex;
-        align-items: center;
-        background: #ffffff;
-        border: 1.5px solid #dbeafe;
-        border-radius: 999px;
-        padding: 5px 6px 5px 18px;
-        box-shadow: 0 10px 30px -5px rgba(37, 99, 235, 0.12), 0 2px 6px rgba(0, 0, 0, 0.03);
-        transition: all 0.25s ease;
-        width: 100%;
-        max-width: 600px;
+    .jasa-page .banner__title {
+        font-family: var(--font-display);
+        font-size: clamp(2.25rem, 7vw, 4.25rem);
+        font-weight: 400;
+        line-height: 1.05;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
     }
 
-    .search-box-wrapper:focus-within {
-        border-color: #2563eb;
-        box-shadow: 0 12px 35px -5px rgba(37, 99, 235, 0.22), 0 0 0 3px rgba(37, 99, 235, 0.15);
-    }
-
-    .search-icon-left {
-        color: #0284c7;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        flex-shrink: 0;
-        margin-right: 8px;
-    }
-
-    .search-input-field {
-        border: none;
-        background: transparent;
-        padding: 8px 6px;
-        font-size: 14.5px;
-        color: #0f172a;
-        outline: none;
-        width: 100%;
-        font-weight: 500;
-    }
-
-    .search-input-field::placeholder {
-        color: #94a3b8;
-    }
-
-    .search-btn-action {
-        background: #2563eb;
-        color: #ffffff;
-        border: none;
-        padding: 9px 24px;
-        border-radius: 999px;
-        font-size: 14px;
-        font-weight: 700;
-        cursor: pointer;
-        transition: all 0.2s ease;
-        box-shadow: 0 4px 12px rgba(37, 99, 235, 0.3);
-        flex-shrink: 0;
-    }
-
-    .search-btn-action:hover {
-        background: #1d4ed8;
-        transform: scale(1.02);
-        box-shadow: 0 6px 16px rgba(37, 99, 235, 0.4);
-    }
-
-    /* Filter Pills (Semua, RPL, TKJ, DKV, PSPT, ANIMASI, GIM) - Sesuai Gambar 3 */
-    .filter-pills-row {
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        gap: 10px;
-        flex-wrap: wrap;
-        width: 100%;
-    }
-
-    .filter-pill-btn {
+    .jasa-page .banner__cta {
         display: inline-flex;
         align-items: center;
-        gap: 8px;
-        padding: 9px 20px;
-        border-radius: 999px;
+        height: 39px;
+        margin-top: 24px;
+        padding: 0 20px;
+        border: 1px solid var(--color-white);
+        border-radius: var(--radius-pill);
+        font-size: 13px;
+        font-weight: 500;
+        color: var(--color-white);
+        text-decoration: none;
+        transition: background-color 0.2s ease, color 0.2s ease;
+    }
+
+    .jasa-page .banner__cta:hover {
+        background-color: var(--color-white);
+        color: var(--color-primary);
+    }
+
+    /* ---------- FILTER BAR + SEARCH ---------- */
+    .jasa-page .filter {
+        display: flex;
+        flex-direction: column;
+        gap: 12px;
+        max-width: 966px;
+        margin: 35px auto 0;
+    }
+
+    .jasa-page .filter-tabs {
+        display: flex;
+        gap: 28px;
+        overflow-x: auto;
+        padding-left: 4px;
+        white-space: nowrap;
         font-size: 14px;
         font-weight: 700;
-        cursor: pointer;
-        transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
-        border: 1.5px solid #e2e8f0;
-        background: #ffffff;
-        color: #475569;
+    }
+
+    .jasa-page .filter-pill-btn {
+        background: none;
+        border: none;
+        padding: 2px 0;
+        font: inherit;
+        font-size: 14px;
+        font-weight: 700;
+        color: var(--color-text);
         text-decoration: none;
-        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
+        cursor: pointer;
+        transition: color 0.2s ease;
         user-select: none;
     }
 
-    .filter-pill-btn:hover {
-        border-color: #cbd5e1;
-        background: #f8fafc;
-        color: #0f172a;
+    .jasa-page .filter-pill-btn:hover {
+        color: var(--color-primary);
+    }
+
+    .jasa-page .filter-pill-btn.active {
+        color: var(--color-accent-blue);
+    }
+
+    .jasa-page .search {
+        position: relative;
+        width: 100%;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+    }
+
+    .jasa-page .search__icon {
+        position: absolute;
+        top: 50%;
+        left: 10px;
+        width: 14px;
+        height: 14px;
+        transform: translateY(-50%);
+        pointer-events: none;
+        z-index: 1;
+    }
+
+    .jasa-page .search__input {
+        flex: 1;
+        min-width: 0;
+        height: 38px;
+        padding: 0 10px 0 34px;
+        border: 1px solid #000000;
+        border-radius: 6px;
+        background: var(--color-white);
+        font-size: 13px;
+        font-weight: 700;
+        color: var(--color-text);
+        outline: none;
+        transition: border-color 0.2s ease, box-shadow 0.2s ease;
+    }
+
+    .jasa-page .search__input:focus {
+        border-color: var(--color-primary);
+        box-shadow: 0 0 0 3px rgba(10, 74, 166, 0.15);
+    }
+
+    .jasa-page .search__input::placeholder {
+        color: #777777;
+        opacity: 1;
+    }
+
+    /* Tombol "Cari" — dipertahankan dari desain lama, memakai token desain Produk */
+    .jasa-page .search__btn {
+        flex-shrink: 0;
+        height: 38px;
+        padding: 0 20px;
+        background: var(--color-primary);
+        color: var(--color-white);
+        border: none;
+        border-radius: var(--radius-pill);
+        font: inherit;
+        font-size: 13px;
+        font-weight: 700;
+        cursor: pointer;
+        transition: background-color 0.2s ease, transform 0.2s ease;
+    }
+
+    .jasa-page .search__btn:hover {
+        background: var(--color-primary-dark);
         transform: translateY(-1px);
     }
 
-    .filter-pill-btn.active {
-        background: #0f172a;
-        color: #ffffff;
-        border-color: #0f172a;
-        box-shadow: 0 4px 12px rgba(15, 23, 42, 0.25);
+    /* ---------- SERVICE GRID ---------- */
+    .jasa-page .jasa-services {
+        max-width: 1005px;
+        margin: 44px auto 0;
     }
 
-    /* Service Cards Grid */
-    .jasa-grid {
-        max-width: 1240px;
-        margin: 0 auto;
-        padding: 0 24px;
+    .jasa-page .jasa-grid {
         display: grid;
-        grid-template-columns: repeat(3, 1fr);
-        gap: 28px;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 32px 16px;
     }
 
-    @media (max-width: 1024px) {
-        .jasa-grid {
-            grid-template-columns: repeat(2, 1fr);
-            gap: 20px;
-        }
-    }
-
-    @media (max-width: 640px) {
-        .jasa-grid {
-            grid-template-columns: 1fr;
-            gap: 18px;
-        }
-        .search-box-wrapper {
-            max-width: 100%;
-        }
-    }
-
-    /* Single Service Card */
-    .jasa-card {
-        background: #ffffff;
-        border-radius: 18px;
-        border: 1px solid #e2e8f0;
-        overflow: hidden;
-        box-shadow: 0 4px 15px -2px rgba(15, 23, 42, 0.05);
+    .jasa-page .jasa-card {
         display: flex;
         flex-direction: column;
-        cursor: pointer;
-        transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
-        position: relative;
-    }
-
-    .jasa-card:hover {
-        transform: translateY(-6px);
-        box-shadow: 0 20px 30px -10px rgba(15, 23, 42, 0.12), 0 0 0 1.5px rgba(37, 99, 235, 0.2);
-    }
-
-    /* Thumbnail Container */
-    .jasa-thumb {
-        width: 100%;
-        height: 220px;
-        position: relative;
+        background: var(--color-white);
+        border: 1px solid #e6eaef;
+        border-radius: var(--radius-card);
         overflow: hidden;
-        background: #f1f5f9;
+        cursor: pointer;
+        text-align: left;
+        box-shadow: 0 2px 10px rgba(15, 23, 42, 0.05);
+        transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    .jasa-page .jasa-card:hover,
+    .jasa-page .jasa-card:focus-visible {
+        transform: translateY(-4px);
+        box-shadow: 0 18px 30px -12px rgba(15, 23, 42, 0.18);
+    }
+
+    .jasa-page .jasa-thumb {
+        position: relative;
+        width: 100%;
+        aspect-ratio: 7 / 8;
+        overflow: hidden;
+        background: var(--color-placeholder);
         display: flex;
         align-items: center;
         justify-content: center;
     }
 
-    .jasa-thumb-img {
+    .jasa-page .jasa-thumb-img {
         width: 100%;
         height: 100%;
         object-fit: cover;
         display: block;
-        transition: transform 0.5s ease;
+        transition: transform 0.45s ease;
     }
 
-    .jasa-card:hover .jasa-thumb-img {
-        transform: scale(1.06);
+    .jasa-page .jasa-card:hover .jasa-thumb-img {
+        transform: scale(1.05);
     }
 
-    .jasa-thumb-fallback {
+    .jasa-page .jasa-thumb-fallback {
         width: 100%;
         height: 100%;
         display: flex;
         align-items: center;
         justify-content: center;
-        font-size: 64px;
-        color: #ffffff;
+        font-size: 48px;
+        color: var(--color-white);
         position: relative;
     }
 
-    .thumb-pattern {
+    .jasa-page .thumb-pattern,
+    .modal-hero-thumb .thumb-pattern {
         position: absolute;
         inset: 0;
         background-image: radial-gradient(rgba(255, 255, 255, 0.15) 1px, transparent 1px);
         background-size: 16px 16px;
     }
 
-    .thumb-dept-badge {
+    .jasa-page .thumb-dept-badge {
         position: absolute;
-        top: 14px;
-        left: 14px;
-        font-size: 11.5px;
+        top: 12px;
+        left: 12px;
+        font-size: 10.5px;
         font-weight: 800;
-        padding: 5px 12px;
-        border-radius: 999px;
+        padding: 4px 10px;
+        border-radius: var(--radius-pill);
         letter-spacing: 0.5px;
         text-transform: uppercase;
-        box-shadow: 0 2px 8px rgba(0,0,0,0.12);
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.12);
         z-index: 2;
     }
 
-    .thumb-status-badge {
+    .jasa-page .thumb-status-badge {
         position: absolute;
-        top: 14px;
-        right: 14px;
-        font-size: 11px;
+        top: 12px;
+        right: 12px;
+        font-size: 10px;
         font-weight: 800;
-        padding: 4px 12px;
-        border-radius: 999px;
+        padding: 4px 10px;
+        border-radius: var(--radius-pill);
         background: rgba(16, 185, 129, 0.9);
-        color: #ffffff;
+        color: var(--color-white);
         backdrop-filter: blur(6px);
         z-index: 2;
     }
 
-    /* Card Content */
-    .jasa-content {
-        padding: 24px;
+    .jasa-page .jasa-content {
+        padding: 14px 14px 16px;
         display: flex;
         flex-direction: column;
         flex-grow: 1;
     }
 
-    .jasa-card-title {
-        font-size: 18px;
-        font-weight: 800;
-        color: #0f172a;
-        line-height: 1.35;
-        margin-bottom: 8px;
+    .jasa-page .jasa-card-title {
+        font-size: 14.5px;
+        font-weight: 700;
+        color: var(--color-text);
+        line-height: 1.4;
+        margin-bottom: 6px;
         transition: color 0.2s ease;
     }
 
-    .jasa-card:hover .jasa-card-title {
-        color: #2563eb;
+    .jasa-page .jasa-card:hover .jasa-card-title {
+        color: var(--color-primary);
     }
 
-    .jasa-card-desc {
-        font-size: 13.5px;
-        color: #64748b;
-        line-height: 1.55;
-        margin-bottom: 16px;
+    .jasa-page .jasa-card-desc {
+        font-size: 12.5px;
+        color: var(--color-muted);
+        line-height: 1.5;
+        margin-bottom: 10px;
         flex-grow: 1;
         display: -webkit-box;
         -webkit-line-clamp: 2;
@@ -317,50 +339,94 @@
         overflow: hidden;
     }
 
-    .jasa-price-box {
-        font-size: 20px;
-        font-weight: 900;
-        color: #2563eb;
-        margin-bottom: 16px;
+    .jasa-page .jasa-price-box {
+        font-size: 16px;
+        font-weight: 800;
+        color: var(--color-primary);
+        margin-bottom: 12px;
     }
 
-    .jasa-card-footer {
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-        padding-top: 14px;
+    .jasa-page .jasa-card-footer {
+        padding-top: 12px;
         border-top: 1px solid #f1f5f9;
-        font-size: 13px;
     }
 
-    .btn-card-consult {
+    .jasa-page .btn-card-consult {
         width: 100%;
-        background: #10b981;
-        color: #ffffff;
+        background: var(--color-primary);
+        color: var(--color-white);
         border: none;
-        padding: 10px 16px;
-        border-radius: 12px;
+        padding: 10px 14px;
+        border-radius: var(--radius-pill);
         font-weight: 700;
-        font-size: 13.5px;
+        font-size: 12.5px;
         display: inline-flex;
         align-items: center;
         justify-content: center;
         gap: 8px;
-        transition: all 0.2s ease;
-        box-shadow: 0 4px 12px rgba(16, 185, 129, 0.25);
+        cursor: pointer;
+        transition: background-color 0.2s ease, transform 0.2s ease;
     }
 
-    .btn-card-consult:hover {
-        background: #059669;
+    .jasa-page .btn-card-consult:hover {
+        background: var(--color-primary-dark);
         transform: translateY(-1px);
     }
 
-    /* Modal Backdrop & Container */
+    /* ---------- EMPTY STATES ---------- */
+    .jasa-page .jasa-empty {
+        grid-column: 1 / -1;
+        text-align: center;
+        padding: 70px 20px;
+        background: var(--color-white);
+        border-radius: var(--radius-card);
+        border: 1.5px dashed var(--color-placeholder);
+    }
+
+    .jasa-page .jasa-empty__icon {
+        font-size: 52px;
+        margin-bottom: 14px;
+    }
+
+    .jasa-page .jasa-empty__title {
+        font-size: 19px;
+        font-weight: 800;
+        color: var(--color-text);
+        margin-bottom: 8px;
+    }
+
+    .jasa-page .jasa-empty__text {
+        color: var(--color-muted);
+        font-size: 14.5px;
+        max-width: 480px;
+        margin: 0 auto;
+        line-height: 1.6;
+    }
+
+    .jasa-page .jasa-empty__reset {
+        display: inline-block;
+        margin-top: 16px;
+        background: var(--color-primary);
+        color: var(--color-white);
+        padding: 9px 20px;
+        border-radius: var(--radius-pill);
+        font-size: 13.5px;
+        font-weight: 700;
+        text-decoration: none;
+        cursor: pointer;
+        transition: background-color 0.2s ease;
+    }
+
+    .jasa-page .jasa-empty__reset:hover {
+        background: var(--color-primary-dark);
+    }
+
+    /* ---------- MODAL DETAIL LAYANAN (visual saja) ---------- */
     .jasa-modal-backdrop {
         display: none;
         position: fixed;
         inset: 0;
-        background-color: rgba(15, 23, 42, 0.7);
+        background-color: rgba(17, 17, 17, 0.7);
         backdrop-filter: blur(6px);
         z-index: 99999;
         overflow-y: auto;
@@ -375,12 +441,12 @@
     }
 
     .jasa-modal-container {
-        background: #ffffff;
-        border-radius: 24px;
+        background: var(--color-white, #ffffff);
+        border-radius: 20px;
         max-width: 680px;
         width: 100%;
         box-shadow: 0 25px 60px -15px rgba(15, 23, 42, 0.35);
-        border: 1px solid #e2e8f0;
+        border: 1px solid #e6eaef;
         overflow: hidden;
         position: relative;
         animation: modalSlideUp 0.3s cubic-bezier(0.16, 1, 0.3, 1);
@@ -399,7 +465,7 @@
         width: 38px;
         height: 38px;
         border-radius: 50%;
-        background: rgba(15, 23, 42, 0.6);
+        background: rgba(17, 17, 17, 0.6);
         color: #ffffff;
         border: 1px solid rgba(255, 255, 255, 0.2);
         display: flex;
@@ -414,7 +480,7 @@
     }
 
     .modal-close-btn:hover {
-        background: #dc2626;
+        background: var(--color-red, #e53935);
         transform: rotate(90deg);
     }
 
@@ -422,7 +488,7 @@
         height: 230px;
         width: 100%;
         position: relative;
-        background: #f1f5f9;
+        background: var(--color-placeholder, #cad2db);
         display: flex;
         align-items: center;
         justify-content: center;
@@ -435,15 +501,26 @@
         object-fit: cover;
     }
 
+    .modal-hero-thumb .jasa-thumb-fallback {
+        width: 100%;
+        height: 100%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 72px;
+        color: #ffffff;
+        position: relative;
+    }
+
     .modal-body {
         padding: 28px 30px;
-        color: #0f172a;
+        color: var(--color-text, #111111);
     }
 
     .modal-serv-title {
         font-size: 24px;
         font-weight: 900;
-        color: #0a215e;
+        color: var(--color-primary, #0a4aa6);
         line-height: 1.3;
         margin-bottom: 12px;
     }
@@ -451,15 +528,15 @@
     .modal-serv-price {
         font-size: 24px;
         font-weight: 900;
-        color: #2563eb;
+        color: var(--color-primary, #0a4aa6);
         margin-bottom: 18px;
     }
 
     .modal-serv-desc-box {
-        background: #f8fafc;
+        background: var(--color-bg, #fafafa);
         border-radius: 14px;
         padding: 16px 18px;
-        border: 1px solid #e2e8f0;
+        border: 1px solid #e6eaef;
         font-size: 14px;
         color: #334155;
         line-height: 1.65;
@@ -524,216 +601,260 @@
 
     .modal-btn-close-sec:hover {
         background: #e2e8f0;
-        color: #0f172a;
+        color: #111111;
+    }
+
+    /* ---------- BREAKPOINT >= 640px (tablet) ---------- */
+    @media (min-width: 640px) {
+        .jasa-page .banner {
+            min-height: 260px;
+        }
+        .jasa-page .filter {
+            flex-direction: row;
+            align-items: center;
+            justify-content: space-between;
+            gap: 24px;
+        }
+        .jasa-page .filter-tabs {
+            overflow: visible;
+            gap: 40px;
+        }
+        .jasa-page .search {
+            width: 314px;
+            flex: none;
+        }
+        .jasa-page .jasa-grid {
+            grid-template-columns: repeat(3, 1fr);
+            column-gap: 24px;
+            row-gap: 40px;
+        }
+    }
+
+    /* ---------- BREAKPOINT >= 1024px (desktop) ---------- */
+    @media (min-width: 1024px) {
+        .jasa-page .jasa-main {
+            padding-top: 56px;
+        }
+        .jasa-page .banner {
+            height: 310px;
+        }
+        .jasa-page .filter-tabs {
+            gap: 50px;
+        }
+        .jasa-page .jasa-grid {
+            grid-template-columns: repeat(4, 1fr);
+            column-gap: 28px;
+            row-gap: 44px;
+        }
     }
 </style>
 
-<div class="jasa-page-wrapper">
-    <!-- Header Section -->
-    <div class="jasa-header">
-        <span class="jasa-badge-label">
-            ✨ SOLUSI KEJURUAN INDUSTRI
-        </span>
-        <h1 class="jasa-title">LAYANAN JASA KEJURUAN TEFA</h1>
-        <p class="jasa-subtitle">
-            Solusi profesional karya siswa dan unit Teaching Factory SMKN 4 Tanjungpinang berstandar industri.
-        </p>
-    </div>
+<div class="jasa-page">
+    <main class="jasa-main">
+        <!-- ================= BANNER ================= -->
+        <section class="banner" aria-labelledby="banner-title">
+            <div class="banner__content">
+                <h1 class="banner__title" id="banner-title">Layanan Jasa Kejuruan TeFa</h1>
+                <a href="#jasa-items-grid" class="banner__cta">Lihat Selengkapnya</a>
+            </div>
+        </section>
 
-    <!-- Filter & Search Controls (Centered - Sesuai Gambar 3) -->
-    <div class="jasa-controls-container">
-        <!-- Centered Search Bar (Sesuai Gambar 3) -->
-        <div class="search-box-wrapper">
-            <span class="search-icon-left">
-                <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/>
-                </svg>
-            </span>
-            <input type="text" 
-                   id="jasa-search-input" 
-                   class="search-input-field" 
-                   placeholder="Cari layanan jasa kejuruan..." 
-                   oninput="filterJasa()" />
-            <button type="button" class="search-btn-action" onclick="filterJasa()">
-                Cari
-            </button>
-        </div>
-
-        <!-- Filter Pills Row (Semua, RPL, TKJ, DKV, PSPT, ANIMASI, GIM) - Sesuai Gambar 3 -->
-        <div class="filter-pills-row">
-            <button type="button" class="filter-pill-btn active" data-filter="all" onclick="setJasaFilter('all')">
-                <span>Semua</span>
-            </button>
-            <button type="button" class="filter-pill-btn" data-filter="RPL" onclick="setJasaFilter('RPL')">
-                <span>RPL</span>
-            </button>
-            <button type="button" class="filter-pill-btn" data-filter="TKJ" onclick="setJasaFilter('TKJ')">
-                <span>TKJ</span>
-            </button>
-            <button type="button" class="filter-pill-btn" data-filter="DKV" onclick="setJasaFilter('DKV')">
-                <span>DKV</span>
-            </button>
-            <button type="button" class="filter-pill-btn" data-filter="PSPT" onclick="setJasaFilter('PSPT')">
-                <span>PSPT</span>
-            </button>
-            <button type="button" class="filter-pill-btn" data-filter="ANIMASI" onclick="setJasaFilter('ANIMASI')">
-                <span>ANIMASI</span>
-            </button>
-            <button type="button" class="filter-pill-btn" data-filter="GIM" onclick="setJasaFilter('GIM')">
-                <span>GIM</span>
-            </button>
-        </div>
-    </div>
-
-    <!-- Service Cards Grid -->
-    <div class="jasa-grid" id="jasa-items-grid">
-        @forelse($services as $service)
+        <!-- ================= FILTER BAR + SEARCH ================= -->
+        <div class="filter">
             @php
-                $rawKode = strtoupper($service->department->kode ?? 'RPL');
-                $deptKode = match(true) {
-                    str_contains($rawKode, 'ANI') => 'ANIMASI',
-                    str_contains($rawKode, 'GIM') => 'GIM',
-                    str_contains($rawKode, 'RPL') => 'RPL',
-                    str_contains($rawKode, 'TKJ') => 'TKJ',
-                    str_contains($rawKode, 'DKV') => 'DKV',
-                    str_contains($rawKode, 'PSPT') || str_contains($rawKode, 'PSTV') => 'PSPT',
-                    default => 'TEFA',
-                };
-                $deptNama = $service->department->nama_jurusan ?? 'Unit Teaching Factory';
-
-                $badgeStyle = match($deptKode) {
-                    'RPL' => 'background: #eff6ff; color: #2563eb; border: 1px solid #bfdbfe;',
-                    'DKV' => 'background: #faf5ff; color: #9333ea; border: 1px solid #e9d5ff;',
-                    'TKJ' => 'background: #ecfeff; color: #0891b2; border: 1px solid #a5f3fc;',
-                    'ANIMASI' => 'background: #fff7ed; color: #ea580c; border: 1px solid #fed7aa;',
-                    'PSPT' => 'background: #fff1f2; color: #e11d48; border: 1px solid #fecdd3;',
-                    'GIM' => 'background: #f0fdf4; color: #16a34a; border: 1px solid #bbf7d0;',
-                    default => 'background: #eff6ff; color: #2563eb; border: 1px solid #bfdbfe;',
-                };
-
-                $fallbackBg = match($deptKode) {
-                    'RPL' => 'linear-gradient(135deg, #1e3a8a, #0284c7)',
-                    'DKV' => 'linear-gradient(135deg, #6b21a8, #7c3aed)',
-                    'TKJ' => 'linear-gradient(135deg, #0e7490, #0891b2)',
-                    'ANIMASI' => 'linear-gradient(135deg, #c2410c, #b45309)',
-                    'PSPT' => 'linear-gradient(135deg, #be123c, #e11d48)',
-                    'GIM' => 'linear-gradient(135deg, #15803d, #16a34a)',
-                    default => 'linear-gradient(135deg, #0a215e, #1e3a8a)',
-                };
-
-                $fallbackIcon = match($deptKode) {
-                    'RPL' => '💻',
-                    'DKV' => '🎨',
-                    'TKJ' => '🔧',
-                    'ANIMASI' => '🎬',
-                    'PSPT' => '🎥',
-                    'GIM' => '🎮',
-                    default => '🤝',
-                };
-
-                $hasRealPhoto = !empty($service->foto) && !str_starts_with($service->foto, 'http') && file_exists(public_path('storage/' . $service->foto));
-                $photoUrl = $hasRealPhoto ? asset('storage/' . $service->foto) : null;
-
-                $waMessage = urlencode("Halo Admin Teaching Factory SMKN 4 Tanjungpinang, saya tertarik untuk berkonsultasi mengenai layanan jasa: {$service->nama_layanan} ({$deptNama}). Mohon info prosedur dan jadwalnya.");
-                $waUrl = "https://wa.me/628781948317?text={$waMessage}";
-
-                $serviceModalData = [
-                    'id' => $service->id,
-                    'nama' => $service->nama_layanan,
-                    'jurusan' => $deptNama,
-                    'jurusan_code' => $deptKode,
-                    'badge_style' => $badgeStyle,
-                    'fallback_bg' => $fallbackBg,
-                    'fallback_icon' => $fallbackIcon,
-                    'harga' => 'Mulai Rp ' . number_format($service->estimasi_harga, 0, ',', '.'),
-                    'deskripsi' => $service->deskripsi,
-                    'foto' => $photoUrl,
-                    'wa_url' => $waUrl,
-                ];
+                $aktifJurusan = request('jurusan', 'all');
+                $qSekarang = request('q');
+                $tabJasaUrl = fn (string $tab) => route('jasa', array_filter([
+                    'jurusan' => $tab === 'all' ? null : $tab,
+                    'q' => $qSekarang,
+                ], fn ($value) => $value !== null && $value !== ''));
             @endphp
+            <nav aria-label="Filter program keahlian">
+                <div class="filter-tabs">
+                    <a href="{{ $tabJasaUrl('all') }}" class="filter-pill-btn{{ $aktifJurusan === 'all' ? ' active' : '' }}">Semua</a>
+                    <a href="{{ $tabJasaUrl('RPL') }}" class="filter-pill-btn{{ $aktifJurusan === 'RPL' ? ' active' : '' }}">RPL</a>
+                    <a href="{{ $tabJasaUrl('DKV') }}" class="filter-pill-btn{{ $aktifJurusan === 'DKV' ? ' active' : '' }}">DKV</a>
+                    <a href="{{ $tabJasaUrl('TKJ') }}" class="filter-pill-btn{{ $aktifJurusan === 'TKJ' ? ' active' : '' }}">TKJ</a>
+                    <a href="{{ $tabJasaUrl('GIM') }}" class="filter-pill-btn{{ $aktifJurusan === 'GIM' ? ' active' : '' }}">GIM</a>
+                    <a href="{{ $tabJasaUrl('PSPT') }}" class="filter-pill-btn{{ $aktifJurusan === 'PSPT' ? ' active' : '' }}">PSPT</a>
+                    <a href="{{ $tabJasaUrl('ANIMASI') }}" class="filter-pill-btn{{ $aktifJurusan === 'ANIMASI' ? ' active' : '' }}">ANIMASI</a>
+                </div>
+            </nav>
 
-            <div class="jasa-card" 
-                 data-id="{{ $service->id }}"
-                 data-jurusan="{{ $deptKode }}"
-                 data-title="{{ strtolower($service->nama_layanan) }}"
-                 data-desc="{{ strtolower($service->deskripsi ?? '') }}"
-                 onclick='openServiceModal(@json($serviceModalData))'>
-                
-                <!-- Thumbnail -->
-                <div class="jasa-thumb">
-                    @if($photoUrl)
-                        <img src="{{ $photoUrl }}" 
-                             alt="{{ $service->nama_layanan }}" 
-                             class="jasa-thumb-img" 
-                             onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
-                        <div class="jasa-thumb-fallback" style="background: {{ $fallbackBg }}; display: none;">
-                            <div class="thumb-pattern"></div>
-                            <span>{{ $fallbackIcon }}</span>
+            <form class="search" role="search" method="GET" action="{{ route('jasa') }}" id="jasa-search-form">
+                @if(request()->filled('jurusan') && request('jurusan') !== 'all')
+                    <input type="hidden" name="jurusan" value="{{ request('jurusan') }}">
+                @endif
+                <svg class="search__icon" viewBox="0 0 24 24" fill="none" stroke="#000000" stroke-width="2" stroke-linecap="round" aria-hidden="true">
+                    <circle cx="10.5" cy="10.5" r="7"/>
+                    <line x1="16" y1="16" x2="21.5" y2="21.5"/>
+                </svg>
+                <label class="visually-hidden" for="jasa-search-input">Cari di katalog layanan jasa</label>
+                <input class="search__input"
+                       id="jasa-search-input"
+                       name="q"
+                       type="search"
+                       value="{{ request('q') }}"
+                       placeholder="Cari di katalog layanan jasa..."
+                       oninput="debounceJasaSearch()" />
+                <button type="submit" class="search__btn">Cari</button>
+            </form>
+        </div>
+
+        <!-- ================= SERVICE GRID ================= -->
+        <section class="jasa-services" aria-label="Daftar layanan jasa">
+            <div class="jasa-grid" id="jasa-items-grid">
+                @forelse($services as $service)
+                    @php
+                        $rawKode = strtoupper($service->department->kode ?? 'RPL');
+                        $deptKode = match(true) {
+                            str_contains($rawKode, 'ANI') => 'ANIMASI',
+                            str_contains($rawKode, 'GIM') => 'GIM',
+                            str_contains($rawKode, 'RPL') => 'RPL',
+                            str_contains($rawKode, 'TKJ') => 'TKJ',
+                            str_contains($rawKode, 'DKV') => 'DKV',
+                            str_contains($rawKode, 'PSPT') || str_contains($rawKode, 'PSTV') => 'PSPT',
+                            default => 'TEFA',
+                        };
+                        $deptNama = $service->department->nama_jurusan ?? 'Unit Teaching Factory';
+
+                        $badgeStyle = match($deptKode) {
+                            'RPL' => 'background: #eff6ff; color: #2563eb; border: 1px solid #bfdbfe;',
+                            'DKV' => 'background: #faf5ff; color: #9333ea; border: 1px solid #e9d5ff;',
+                            'TKJ' => 'background: #ecfeff; color: #0891b2; border: 1px solid #a5f3fc;',
+                            'ANIMASI' => 'background: #fff7ed; color: #ea580c; border: 1px solid #fed7aa;',
+                            'PSPT' => 'background: #fff1f2; color: #e11d48; border: 1px solid #fecdd3;',
+                            'GIM' => 'background: #f0fdf4; color: #16a34a; border: 1px solid #bbf7d0;',
+                            default => 'background: #eff6ff; color: #2563eb; border: 1px solid #bfdbfe;',
+                        };
+
+                        $fallbackBg = match($deptKode) {
+                            'RPL' => 'linear-gradient(135deg, #1e3a8a, #0284c7)',
+                            'DKV' => 'linear-gradient(135deg, #6b21a8, #7c3aed)',
+                            'TKJ' => 'linear-gradient(135deg, #0e7490, #0891b2)',
+                            'ANIMASI' => 'linear-gradient(135deg, #c2410c, #b45309)',
+                            'PSPT' => 'linear-gradient(135deg, #be123c, #e11d48)',
+                            'GIM' => 'linear-gradient(135deg, #15803d, #16a34a)',
+                            default => 'linear-gradient(135deg, #0a215e, #1e3a8a)',
+                        };
+
+                        $fallbackIcon = match($deptKode) {
+                            'RPL' => '💻',
+                            'DKV' => '🎨',
+                            'TKJ' => '🔧',
+                            'ANIMASI' => '🎬',
+                            'PSPT' => '🎥',
+                            'GIM' => '🎮',
+                            default => '🤝',
+                        };
+
+                        $hasRealPhoto = !empty($service->foto) && !str_starts_with($service->foto, 'http') && file_exists(public_path('storage/' . $service->foto));
+                        $photoUrl = $hasRealPhoto ? asset('storage/' . $service->foto) : null;
+
+                        $waMessage = urlencode("Halo Admin Teaching Factory SMKN 4 Tanjungpinang, saya tertarik untuk berkonsultasi mengenai layanan jasa: {$service->nama_layanan} ({$deptNama}). Mohon info prosedur dan jadwalnya.");
+                        $waUrl = "https://wa.me/628781948317?text={$waMessage}";
+
+                        $serviceModalData = [
+                            'id' => $service->id,
+                            'nama' => $service->nama_layanan,
+                            'jurusan' => $deptNama,
+                            'jurusan_code' => $deptKode,
+                            'badge_style' => $badgeStyle,
+                            'fallback_bg' => $fallbackBg,
+                            'fallback_icon' => $fallbackIcon,
+                            'harga' => 'Mulai Rp ' . number_format($service->estimasi_harga, 0, ',', '.'),
+                            'deskripsi' => $service->deskripsi,
+                            'foto' => $photoUrl,
+                            'wa_url' => $waUrl,
+                        ];
+                    @endphp
+
+                    <div class="jasa-card"
+                         data-id="{{ $service->id }}"
+                         onclick='openServiceModal(@json($serviceModalData))'>
+
+                        <!-- Thumbnail -->
+                        <div class="jasa-thumb">
+                            @if($photoUrl)
+                                <img src="{{ $photoUrl }}"
+                                     alt="{{ $service->nama_layanan }}"
+                                     class="jasa-thumb-img"
+                                     onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+                                <div class="jasa-thumb-fallback" style="background: {{ $fallbackBg }}; display: none;">
+                                    <div class="thumb-pattern"></div>
+                                    <span>{{ $fallbackIcon }}</span>
+                                </div>
+                            @else
+                                <div class="jasa-thumb-fallback" style="background: {{ $fallbackBg }};">
+                                    <div class="thumb-pattern"></div>
+                                    <span>{{ $fallbackIcon }}</span>
+                                </div>
+                            @endif
+
+                            <!-- Department Badge -->
+                            <span class="thumb-dept-badge" style="{{ $badgeStyle }}">
+                                {{ $deptKode }}
+                            </span>
+
+                            <!-- Status Badge -->
+                            <span class="thumb-status-badge">
+                                Tersedia
+                            </span>
+                        </div>
+
+                        <!-- Content -->
+                        <div class="jasa-content">
+                            <h3 class="jasa-card-title">
+                                {{ $service->nama_layanan }}
+                            </h3>
+
+                            <p class="jasa-card-desc">
+                                {{ $service->deskripsi ?: 'Solusi layanan jasa kejuruan terpercaya hasil bimbingan guru dan instruktur TEFA SMKN 4 Tanjungpinang.' }}
+                            </p>
+
+                            <div class="jasa-price-box">
+                                Mulai Rp {{ number_format($service->estimasi_harga, 0, ',', '.') }}
+                            </div>
+
+                            <div class="jasa-card-footer">
+                                <button type="button" class="btn-card-consult">
+                                    <span aria-hidden="true">💬</span>
+                                    <span>Lihat Detail &amp; Konsultasi</span>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                @empty
+                    @if(request()->filled('q') || (request()->filled('jurusan') && request('jurusan') !== 'all'))
+                        <div class="jasa-empty">
+                            <div class="jasa-empty__icon" aria-hidden="true">🔍</div>
+                            <h3 class="jasa-empty__title">Layanan Tidak Ditemukan</h3>
+                            <p class="jasa-empty__text">
+                                Tidak ada layanan jasa yang sesuai dengan kata kunci atau jurusan yang Anda pilih.
+                            </p>
+                            <a href="{{ route('jasa') }}" class="jasa-empty__reset">Reset Filter &amp; Tampilkan Semua</a>
                         </div>
                     @else
-                        <div class="jasa-thumb-fallback" style="background: {{ $fallbackBg }};">
-                            <div class="thumb-pattern"></div>
-                            <span>{{ $fallbackIcon }}</span>
+                        <div class="jasa-empty">
+                            <div class="jasa-empty__icon" aria-hidden="true">🤝</div>
+                            <h3 class="jasa-empty__title">Belum Ada Layanan Jasa</h3>
+                            <p class="jasa-empty__text">
+                                Saat ini belum ada data layanan jasa yang aktif. Silakan kembali lagi nanti atau hubungi unit produksi sekolah.
+                            </p>
                         </div>
                     @endif
-
-                    <!-- Department Badge -->
-                    <span class="thumb-dept-badge" style="{{ $badgeStyle }}">
-                        {{ $deptKode }}
-                    </span>
-
-                    <!-- Status Badge -->
-                    <span class="thumb-status-badge">
-                        Tersedia
-                    </span>
-                </div>
-
-                <!-- Content -->
-                <div class="jasa-content">
-                    <h3 class="jasa-card-title">
-                        {{ $service->nama_layanan }}
-                    </h3>
-
-                    <p class="jasa-card-desc">
-                        {{ $service->deskripsi ?: 'Solusi layanan jasa kejuruan terpercaya hasil bimbingan guru dan instruktur TEFA SMKN 4 Tanjungpinang.' }}
-                    </p>
-
-                    <div class="jasa-price-box">
-                        Mulai Rp {{ number_format($service->estimasi_harga, 0, ',', '.') }}
-                    </div>
-
-                    <div class="jasa-card-footer">
-                        <button type="button" class="btn-card-consult">
-                            <span>💬</span>
-                            <span>Lihat Detail & Konsultasi</span>
-                        </button>
-                    </div>
-                </div>
+                @endforelse
             </div>
-        @empty
-            <div style="grid-column: 1 / -1; text-align: center; padding: 70px 20px; background: #fff; border-radius: 20px; border: 1.5px dashed #cbd5e1;">
-                <div style="font-size: 52px; margin-bottom: 14px;">🤝</div>
-                <h3 style="font-size: 19px; font-weight: 800; color: #0f172a; margin-bottom: 8px;">Belum Ada Layanan Jasa</h3>
-                <p style="color: #64748b; font-size: 14.5px; max-width: 480px; margin: 0 auto; line-height: 1.6;">
-                    Saat ini belum ada data layanan jasa yang aktif. Silakan kembali lagi nanti atau hubungi unit produksi sekolah.
-                </p>
-            </div>
-        @endforelse
-    </div>
 
-    <!-- Empty Filter Result Alert -->
-    <div id="no-jasa-match-alert" style="display: none; max-width: 600px; margin: 40px auto; text-align: center; background: #ffffff; padding: 40px 20px; border-radius: 18px; border: 1px solid #e2e8f0;">
-        <div style="font-size: 42px; margin-bottom: 10px;">🔍</div>
-        <h4 style="font-size: 18px; font-weight: 800; color: #0f172a; margin-bottom: 6px;">Layanan Tidak Ditemukan</h4>
-        <p style="color: #64748b; font-size: 14px; margin-bottom: 16px;">Tidak ada layanan jasa yang sesuai dengan kata kunci atau jurusan yang Anda pilih.</p>
-        <button type="button" onclick="resetJasaFilters()" style="background: #2563eb; color: #ffffff; border: none; padding: 9px 20px; border-radius: 999px; font-size: 13.5px; font-weight: 700; cursor: pointer;">
-            Reset Filter & Tampilkan Semua
-        </button>
-    </div>
+            {{-- Pagination 12/halaman; view global vendor/pagination/custom, hanya render bila punya halaman --}}
+            {{ $services->links() }}
+        </section>
+    </main>
 </div>
 
 <!-- ========================================== -->
 <!-- MODAL POP-UP DETAIL LAYANAN JASA DINAMIS   -->
+<!-- (struktur & logika dipertahankan, visual saja) -->
 <!-- ========================================== -->
 <div id="service-detail-modal" class="jasa-modal-backdrop" onclick="handleServiceBackdropClick(event)">
     <div class="jasa-modal-container">
@@ -771,7 +892,7 @@
             </div>
 
             <div style="margin-bottom: 8px;">
-                <label style="font-size: 12px; font-weight: 700; color: #64748b; text-transform: uppercase; letter-spacing: 0.5px; display: block; margin-bottom: 6px;">
+                <label style="font-size: 12px; font-weight: 700; color: #666666; text-transform: uppercase; letter-spacing: 0.5px; display: block; margin-bottom: 6px;">
                     Deskripsi Lengkap & Lingkup Layanan
                 </label>
                 <div id="modal-serv-desc" class="modal-serv-desc-box">
@@ -780,7 +901,7 @@
             </div>
 
             <div class="modal-wa-notice">
-                <span style="font-size: 20px;">💬</span>
+                <span style="font-size: 20px;" aria-hidden="true">💬</span>
                 <span><strong>Konsultasi Langsung via WhatsApp:</strong> Tim instruktur dan admin jurusan TEFA akan mendiskusikan kebutuhan spesifikasi, estimasi waktu, serta penugasan siswa untuk proyek Anda.</span>
             </div>
 
@@ -790,7 +911,7 @@
                     Tutup
                 </button>
                 <a id="modal-serv-wa-btn" href="#" target="_blank" class="modal-btn-wa-order">
-                    <span>💬</span>
+                    <span aria-hidden="true">💬</span>
                     <span>Konsultasi via WhatsApp</span>
                 </a>
             </div>
@@ -799,54 +920,26 @@
 </div>
 
 <script>
-    let activeJasaFilter = 'all';
+    // Filter jurusan & pencarian kini lewat query string (?jurusan=&q=) supaya
+    // selamat saat berpindah halaman paginator. Pencarian submit otomatis 400ms
+    // setelah mengetik agar terasa seperti filter langsung seperti sebelumnya.
+    let jasaSearchTimer = null;
 
-    function setJasaFilter(dept) {
-        activeJasaFilter = dept;
-
-        document.querySelectorAll('.filter-pill-btn').forEach(btn => {
-            if (btn.getAttribute('data-filter') === dept) {
-                btn.classList.add('active');
-            } else {
-                btn.classList.remove('active');
-            }
-        });
-
-        filterJasa();
+    function debounceJasaSearch() {
+        clearTimeout(jasaSearchTimer);
+        jasaSearchTimer = setTimeout(() => {
+            const form = document.getElementById('jasa-search-form');
+            if (form) form.submit();
+        }, 400);
     }
 
-    function resetJasaFilters() {
+    document.addEventListener('DOMContentLoaded', () => {
         const input = document.getElementById('jasa-search-input');
-        if (input) input.value = '';
-        setJasaFilter('all');
-    }
-
-    function filterJasa() {
-        const query = (document.getElementById('jasa-search-input')?.value || '').toLowerCase().trim();
-        const cards = document.querySelectorAll('.jasa-card');
-        let visibleCount = 0;
-
-        cards.forEach(card => {
-            const cardDept = card.getAttribute('data-jurusan') || '';
-            const cardTitle = card.getAttribute('data-title') || '';
-            const cardDesc = card.getAttribute('data-desc') || '';
-
-            const matchesDept = (activeJasaFilter === 'all' || cardDept.toUpperCase() === activeJasaFilter.toUpperCase());
-            const matchesQuery = (!query || cardTitle.includes(query) || cardDesc.includes(query));
-
-            if (matchesDept && matchesQuery) {
-                card.style.display = 'flex';
-                visibleCount++;
-            } else {
-                card.style.display = 'none';
-            }
-        });
-
-        const alert = document.getElementById('no-jasa-match-alert');
-        if (alert) {
-            alert.style.display = visibleCount === 0 ? 'block' : 'none';
+        if (input && input.value) {
+            input.focus();
+            input.setSelectionRange(input.value.length, input.value.length);
         }
-    }
+    });
 
     // Modal Interaction
     function openServiceModal(service) {

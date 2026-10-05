@@ -1,30 +1,234 @@
 @extends('layouts.public')
 
-@section('title', 'Lacak Pesanan — Teaching Factory SMKN 4 Tanjungpinang')
+@section('title', 'Status Pesanan — Katalog TEFA SMKN 4 Tanjungpinang')
 
 @section('content')
-<div class="page-header" style="background: linear-gradient(135deg, #0a215e 0%, #1e3a8a 100%); color: #fff; padding: 48px 20px; text-align: center;">
-    <h1 style="font-size: 28px; font-weight: 800; margin-bottom: 8px; letter-spacing: -0.5px;">Lacak Status & Progres Pesanan</h1>
-    <p style="color: #cbd5e1; font-size: 15px; max-width: 640px; margin: 0 auto 24px; line-height: 1.5;">
-        Pantau tahapan pengerjaan layanan jasa secara transparan oleh talenta siswa, atau cek status pengambilan pesanan produk fisik di unit Teaching Factory SMKN 4 Tanjungpinang.
-    </p>
+{{-- Font Hanken Grotesk — cara yang sama dengan client/orders.blade.php & profile/partials/card.blade.php --}}
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 
-    <!-- Search Box -->
-    <div style="max-width: 520px; margin: 0 auto;">
-        <form method="POST" action="{{ route('order.search') }}" style="display: flex; background: #fff; border-radius: 999px; padding: 6px 8px 6px 20px; box-shadow: 0 10px 25px rgba(0,0,0,0.2);">
-            @csrf
-            <input type="text" name="order_code" value="{{ $searchedCode ?? ($order->order_code ?? '') }}" placeholder="Masukkan Kode Tracking (Contoh: TEFA-9821 atau TEFA-FISIK-1234)" required
-                   style="flex: 1; border: none; outline: none; font-size: 14px; color: #0f172a; font-weight: 600; text-transform: uppercase;">
-            <button type="submit" style="background: #2563eb; color: #fff; border: none; padding: 10px 24px; border-radius: 999px; font-weight: 700; font-size: 14px; cursor: pointer; display: flex; align-items: center; gap: 6px; transition: background 0.15s;">
-                <span>🔍</span> Lacak
-            </button>
-        </form>
-    </div>
-</div>
+<style>
+    /* ==========================================================
+       STATUS PESANAN — restyle mengikuti desain halaman tracking baru.
+       Token di-scope ke .status-page (bukan :root) supaya tidak bocor
+       ke halaman lain. Semua selector di-prefix .status-page agar
+       menang spesifisitas atas aturan global di layouts/public.
+       ========================================================== */
+    .status-page {
+        /* Warna */
+        --color-primary: #0a4aa6;
+        --color-primary-dark: #00357f;
+        --color-action: #00a3ff;
+        --color-track: #50b9fb;
+        --color-text: #111111;
+        --color-muted: #8a8a8a;
+        --color-bg: #fafafa;
+        --color-white: #ffffff;
+        --color-yellow: #f2b630;
+        --color-border: #cfcfcf;
+        --color-step-bg: #f1f1f1;
 
-<div class="container" style="max-width: 960px; margin: 40px auto 70px; padding: 0 20px;">
+        /* Tipografi */
+        --font-body: "Hanken Grotesk", "Helvetica Neue", Arial, sans-serif;
+        --fs-xs: 0.8125rem;
+        --fs-base: 0.9375rem;
+        --fs-md: 1rem;
+        --fs-hero-title: clamp(1.75rem, 5vw, 3rem);
+        --fs-hero-text: clamp(1rem, 2.5vw, 1.375rem);
+        --fs-card-title: clamp(1.25rem, 3vw, 1.5rem);
+
+        /* Jarak & bentuk */
+        --space-2: 0.5rem;
+        --space-3: 0.75rem;
+        --space-4: 1rem;
+        --space-5: 1.5rem;
+        --space-6: 2rem;
+        --radius-bar: 22px;
+        --radius-card: 22px;
+        --radius-step: 14px;
+        --radius-pill: 999px;
+        --shadow-card: 0 2px 10px rgba(0, 0, 0, 0.12);
+
+        /* Layout */
+        --search-width: 841px;
+        --card-width: 983px;
+
+        background: var(--color-bg);
+        color: var(--color-text);
+        font-family: var(--font-body);
+        font-size: var(--fs-base);
+        line-height: 1.5;
+    }
+
+    /* Font & box-sizing desain harus menang atas reset `*` global di layouts/public */
+    .status-page *,
+    .status-page *::before,
+    .status-page *::after {
+        box-sizing: border-box;
+        font-family: var(--font-body);
+    }
+
+    .status-page ul,
+    .status-page ol { margin: 0; padding: 0; list-style: none; }
+    .status-page h1, .status-page h2, .status-page h3, .status-page p { margin: 0; }
+    .status-page button, .status-page input { font: inherit; }
+    .status-page :focus-visible { outline: 3px solid var(--color-yellow); outline-offset: 2px; }
+
+    .status-page .visually-hidden {
+        position: absolute;
+        width: 1px;
+        height: 1px;
+        overflow: hidden;
+        clip: rect(0 0 0 0);
+        white-space: nowrap;
+    }
+
+    /* ---------- HERO ---------- */
+    .status-page .hero {
+        padding: 40px var(--space-4) 48px;
+        background: var(--color-primary);
+        color: var(--color-white);
+        text-align: center;
+    }
+    .status-page .hero__title {
+        max-width: 12em;
+        margin: 0 auto;
+        font-size: var(--fs-hero-title);
+        font-weight: 700;
+        line-height: 1.05;
+        text-transform: uppercase;
+    }
+    .status-page .hero__text {
+        max-width: 47rem;
+        margin: 35px auto 0;
+        font-size: var(--fs-hero-text);
+        line-height: 1.1;
+    }
+
+    /* ---------- AREA KONTEN + SEARCH BAR ---------- */
+    .status-page .main { padding: 40px var(--space-4) 149px; }
+
+    .status-page .search {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        gap: var(--space-3);
+        max-width: var(--search-width);
+        margin: 0 auto;
+        padding: var(--space-3) var(--space-4);
+        border: 1px solid var(--color-border);
+        border-radius: var(--radius-bar);
+        background: var(--color-white);
+        box-shadow: var(--shadow-card);
+    }
+    .status-page .search:focus-within { outline: 3px solid var(--color-track); outline-offset: 2px; }
+    .status-page .search__input {
+        flex: 1 1 220px;
+        min-width: 0;
+        height: 40px;
+        padding: 0;
+        border: 0;
+        outline: none;
+        background: transparent;
+        font-size: var(--fs-md);
+        font-weight: 600;
+        text-transform: uppercase;
+        color: var(--color-text);
+    }
+    .status-page .search__input::placeholder {
+        color: #222222;
+        opacity: 1;
+        text-transform: none;
+        font-weight: 400;
+    }
+    .status-page .search__button {
+        flex: none;
+        width: 100%;
+        height: 40px;
+        border: 0;
+        border-radius: var(--radius-pill);
+        background: var(--color-track);
+        font-weight: 700;
+        font-size: var(--fs-md);
+        letter-spacing: 0.02em;
+        color: var(--color-white);
+        cursor: pointer;
+    }
+
+    /* ---------- WADAH HASIL PENCARIAN (state tidak-ditemukan & hasil) ---------- */
+    .status-page .results {
+        max-width: 960px;
+        margin: 40px auto 0;
+        padding: 0 20px;
+    }
+
+    /* ---------- INFO CARD (state awal / belum ada pencarian) ---------- */
+    .status-page .info {
+        max-width: var(--card-width);
+        margin: 24px auto 0;
+        padding: 32px var(--space-4);
+        border: 1px solid var(--color-border);
+        border-radius: var(--radius-card);
+        background: var(--color-white);
+        box-shadow: var(--shadow-card);
+        text-align: center;
+    }
+    .status-page .info__title { font-size: var(--fs-card-title); font-weight: 700; line-height: 1.2; }
+    .status-page .info__text { max-width: 33rem; margin: 29px auto 0; font-size: var(--fs-md); line-height: 1.1; }
+
+    .status-page .steps {
+        display: grid;
+        grid-template-columns: 1fr;
+        gap: var(--space-4);
+        margin-top: 32px;
+        text-align: left;
+    }
+    .status-page .step {
+        min-height: 145px;
+        padding: 14px 13px;
+        border-radius: var(--radius-step);
+        background: var(--color-step-bg);
+    }
+    .status-page .step__number { font-size: 1.375rem; font-weight: 700; line-height: 1.2; }
+    .status-page .step__title { margin-top: 8px; font-size: var(--fs-xs); font-weight: 700; line-height: 1.4; }
+    .status-page .step__text { margin-top: 12px; font-size: 0.6875rem; line-height: 1.1; color: var(--color-muted); }
+
+    /* ---------- BREAKPOINT >= 640px (tablet) ---------- */
+    @media (min-width: 640px) {
+        .status-page .hero { padding: 61px var(--space-4) 66px; }
+        .status-page .main { padding-top: 67px; }
+        .status-page .search { flex-wrap: nowrap; height: 67px; padding: 0 22px 0 24px; gap: var(--space-4); }
+        .status-page .search__button { width: 157px; }
+        .status-page .info { padding: 40px 32px 48px; }
+        .status-page .steps { grid-template-columns: repeat(3, 1fr); gap: 20px; }
+    }
+
+    /* ---------- BREAKPOINT >= 1024px (desktop) ---------- */
+    @media (min-width: 1024px) {
+        .status-page .info { padding: 40px 65px 48px; }
+        .status-page .steps { gap: 38px; }
+    }
+</style>
+<div class="status-page">
+    <section class="hero">
+        <h1 class="hero__title">Status Pesanan</h1>
+        <p class="hero__text">Pantau status pengerjaan pesanan Anda secara transparan. Dapatkan pembaruan terkini pada setiap tahapannya — dari konfirmasi admin hingga pesanan selesai.</p>
+    </section>
+
+    <main class="main">
+    <form class="search" role="search" method="POST" action="{{ route('order.search') }}">
+        @csrf
+        <label class="visually-hidden" for="tracking-code">Kode Tracking</label>
+        <input class="search__input" id="tracking-code" name="order_code" type="text"
+               value="{{ $searchedCode ?? ($order->order_code ?? '') }}"
+               placeholder="Masukkan Kode Tracking (Contoh: TEFA-9821 atau TEFA-FISIK-1234)"
+               autocomplete="off" required>
+        <button class="search__button" type="submit">LACAK</button>
+    </form>
 
     @if(isset($searchedCode) && !isset($order))
+    <div class="results">
         <!-- Order Not Found -->
         <div style="background: #fff; border-radius: 16px; border: 1px solid #fee2e2; padding: 48px 24px; text-align: center; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05);">
             <div style="font-size: 48px; margin-bottom: 14px;">🔎</div>
@@ -41,8 +245,10 @@
                 </a>
             </div>
         </div>
+    </div>
 
     @elseif(isset($order))
+    <div class="results">
 
         @if($order->service_id || !$order->product_id)
             {{-- ======================================================== --}}
@@ -461,37 +667,33 @@
                 </a>
             </div>
         @endif
+    </div>
 
     @else
-        <!-- Initial Landing Explainer -->
-        <div style="background: #fff; border-radius: 16px; border: 1px solid #e2e8f0; padding: 48px 24px; text-align: center; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05);">
-            <div style="font-size: 54px; margin-bottom: 16px;">📦✨</div>
-            <h3 style="font-size: 22px; font-weight: 800; color: #0f172a; margin-bottom: 10px;">Pelacakan Progres Pengerjaan Transparan</h3>
-            <p style="color: #64748b; font-size: 15px; max-width: 580px; margin: 0 auto 28px; line-height: 1.6;">
-                Setiap pemesanan jasa yang disepakati melalui WhatsApp akan diberikan <strong>Kode Tracking Unik (TEFA-XXXX)</strong> oleh Admin Jurusan. Masukkan kode tersebut pada kolom pencarian di atas untuk memantau status secara langsung.
-            </p>
+        <!-- Initial Landing Explainer — kartu info desain baru -->
+        <section class="info" aria-labelledby="info-title">
+            <h2 class="info__title" id="info-title">Pelacakan Progres Pengerjaan Transparan</h2>
+            <p class="info__text">Setiap pemesanan jasa yang disepakati melalui WhatsApp akan diberikan Kode Tracking Unik (TEFA-XXXX) oleh Admin Jurusan. Masukkan kode tersebut pada kolom pencarian di atas untuk memantau status secara langsung.</p>
 
-            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 18px; max-width: 800px; margin: 0 auto; text-align: left;">
-                <div style="background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 12px; padding: 18px;">
-                    <div style="font-size: 24px; margin-bottom: 8px;">1️⃣</div>
-                    <strong style="color: #1e293b; font-size: 14px; display: block; margin-bottom: 4px;">Konsultasi & Order via WA</strong>
-                    <span style="color: #64748b; font-size: 12.5px;">Pilih layanan di katalog, lalu hubungi admin jurusan untuk kesepakatan spesifikasi.</span>
-                </div>
-
-                <div style="background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 12px; padding: 18px;">
-                    <div style="font-size: 24px; margin-bottom: 8px;">2️⃣</div>
-                    <strong style="color: #1e293b; font-size: 14px; display: block; margin-bottom: 4px;">Dapatkan Kode Tracking</strong>
-                    <span style="color: #64748b; font-size: 12.5px;">Admin akan mencatat order dan mengirimkan tautan pelacakan langsung ke nomor WA Anda.</span>
-                </div>
-
-                <div style="background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 12px; padding: 18px;">
-                    <div style="font-size: 24px; margin-bottom: 8px;">3️⃣</div>
-                    <strong style="color: #1e293b; font-size: 14px; display: block; margin-bottom: 4px;">Pantau & Review Hasil</strong>
-                    <span style="color: #64748b; font-size: 12.5px;">Lihat tahapan pengerjaan oleh talenta siswa, lampiran revisi, hingga hasil akhir disetujui.</span>
-                </div>
-            </div>
-        </div>
+            <ol class="steps">
+                <li class="step">
+                    <p class="step__number">1</p>
+                    <h3 class="step__title">Konsultasi &amp; Order via WA</h3>
+                    <p class="step__text">Pilih layanan di katalog, lalu hubungi admin jurusan untuk kesepakatan spesifikasi.</p>
+                </li>
+                <li class="step">
+                    <p class="step__number">2</p>
+                    <h3 class="step__title">Dapatkan Kode Tracking</h3>
+                    <p class="step__text">Admin akan mencatat order dan mengirimkan tautan pelacakan langsung ke nomor WA Anda.</p>
+                </li>
+                <li class="step">
+                    <p class="step__number">3</p>
+                    <h3 class="step__title">Pantau &amp; Review Hasil</h3>
+                    <p class="step__text">Lihat tahapan pengerjaan oleh talenta siswa, lampiran revisi, hingga hasil akhir disetujui.</p>
+                </li>
+            </ol>
+        </section>
     @endif
-
+    </main>
 </div>
 @endsection

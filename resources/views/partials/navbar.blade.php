@@ -356,7 +356,7 @@
                 <!-- Trigger Avatar Dropdown -->
                 <button type="button" class="nav-avatar-btn" onclick="togglePublicDropdown(event)" id="public-avatar-trigger">
                     <div class="nav-avatar-circle">
-                        {{ $initial }}
+                        @include('partials.avatar', ['user' => $u, 'initial' => $initial])
                     </div>
                     @if($r !== 'pelanggan')
                         <span class="nav-role-badge {{ $badgeClass }}">
@@ -375,7 +375,7 @@
                     <!-- Header User Ringkas -->
                     <div class="nav-popover-header">
                         <div class="nav-avatar-circle" style="width: 36px; height: 36px; font-size: 14px;">
-                            {{ $initial }}
+                            @include('partials.avatar', ['user' => $u, 'initial' => $initial])
                         </div>
                         <div style="overflow: hidden;">
                             <div style="font-weight: 700; font-size: 14px; color: #0f172a; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">{{ $u->name }}</div>
@@ -417,7 +417,7 @@
                             <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" style="color: #f59e0b;">
                                 <path stroke-linecap="round" stroke-linejoin="round" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01"/>
                             </svg>
-                            <span>Lacak Pesanan</span>
+                            <span>Status Pesanan</span>
                         </a>
                     </div>
 

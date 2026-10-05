@@ -23,6 +23,8 @@ class User extends Authenticatable
         'role',
         'jurusan_id',
         'is_active',
+        'phone',
+        'foto_profil',
     ];
 
     /**
@@ -44,6 +46,14 @@ class User extends Authenticatable
         'password',
         'remember_token',
     ];
+
+    /**
+     * Public URL of the profile photo, or null when the user has none.
+     */
+    public function getFotoProfilUrlAttribute(): ?string
+    {
+        return $this->foto_profil ? asset('storage/'.$this->foto_profil) : null;
+    }
 
     /**
      * @return BelongsTo<Jurusan, $this>

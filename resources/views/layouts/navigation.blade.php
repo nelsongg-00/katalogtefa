@@ -93,7 +93,7 @@
                             <!-- Avatar Bulat -->
                             <div class="relative">
                                 <div class="w-8 h-8 rounded-full bg-gradient-to-tr from-blue-600 to-indigo-600 text-white font-bold text-xs flex items-center justify-center shadow-inner select-none">
-                                    {{ $userInitial }}
+                                    @include('partials.avatar', ['user' => $user, 'initial' => $userInitial])
                                 </div>
                                 @if($role !== 'pelanggan')
                                     <!-- Indikator Role Internal -->

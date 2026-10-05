@@ -662,7 +662,7 @@
         <span>{{ auth()->user()?->name ?? 'Admin' }}</span>
         <small>{{ auth()->user()?->jurusan?->nama_jurusan ?? 'Admin Jurusan' }}</small>
       </div>
-      <div class="avatar">{{ strtoupper(substr(auth()->user()?->name ?? 'AD', 0, 2)) }}</div>
+      <div class="avatar">@include('partials.avatar', ['user' => auth()->user(), 'initial' => strtoupper(substr(auth()->user()?->name ?? 'AD', 0, 2))])</div>
       <form method="POST" action="{{ route('logout') }}" style="margin: 0;">
         @csrf
         <button type="submit" class="btn-logout" title="Keluar dari sistem">Logout</button>

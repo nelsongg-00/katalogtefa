@@ -1,57 +1,51 @@
-<section>
-    <div class="profile-section-title">
-        <span>🔒</span> Keamanan & Kata Sandi
-    </div>
-    <div class="profile-section-desc">
-        Pastikan akun Anda menggunakan kata sandi yang aman untuk melindungi data pesanan Anda.
-    </div>
+{{-- Ubah Kata Sandi (form tetap: PUT password.update) --}}
+<section class="password" aria-labelledby="password-title">
+    <hr class="card__divider">
+    <h2 class="section__title" id="password-title">Ubah Kata Sandi</h2>
 
-    <form method="post" action="{{ route('password.update') }}">
+    <form class="password__form" method="post" action="{{ route('password.update') }}">
         @csrf
         @method('put')
 
-        <div class="profile-form-group">
-            <label for="update_password_current_password" class="profile-form-label">Kata Sandi Saat Ini</label>
-            <input id="update_password_current_password" 
-                   name="current_password" 
-                   type="password" 
-                   class="profile-form-input" 
-                   autocomplete="current-password" 
-                   placeholder="••••••••" />
-            <x-input-error :messages="$errors->updatePassword->get('current_password')" class="mt-1" />
+        <div class="field">
+            <label class="field__label" for="update_password_current_password">Kata Sandi Saat Ini</label>
+            <input class="field__input"
+                   id="update_password_current_password"
+                   name="current_password"
+                   type="password"
+                   autocomplete="current-password"
+                   placeholder="*************" />
+            <x-input-error :messages="$errors->updatePassword->get('current_password')" />
         </div>
 
-        <div class="profile-form-group">
-            <label for="update_password_password" class="profile-form-label">Kata Sandi Baru</label>
-            <input id="update_password_password" 
-                   name="password" 
-                   type="password" 
-                   class="profile-form-input" 
-                   autocomplete="new-password" 
-                   placeholder="Minimal 8 karakter" />
-            <x-input-error :messages="$errors->updatePassword->get('password')" class="mt-1" />
+        <div class="field">
+            <label class="field__label" for="update_password_password">Kata Sandi Baru</label>
+            <input class="field__input"
+                   id="update_password_password"
+                   name="password"
+                   type="password"
+                   autocomplete="new-password"
+                   placeholder="Minimal 8 Karakter"
+                   minlength="8" />
+            <x-input-error :messages="$errors->updatePassword->get('password')" />
         </div>
 
-        <div class="profile-form-group">
-            <label for="update_password_password_confirmation" class="profile-form-label">Konfirmasi Kata Sandi Baru</label>
-            <input id="update_password_password_confirmation" 
-                   name="password_confirmation" 
-                   type="password" 
-                   class="profile-form-input" 
-                   autocomplete="new-password" 
-                   placeholder="Ulangi kata sandi baru" />
-            <x-input-error :messages="$errors->updatePassword->get('password_confirmation')" class="mt-1" />
+        <div class="field">
+            <label class="field__label" for="update_password_password_confirmation">Konfirmasi Kata Sandi Baru</label>
+            <input class="field__input"
+                   id="update_password_password_confirmation"
+                   name="password_confirmation"
+                   type="password"
+                   autocomplete="new-password"
+                   placeholder="Ulangi Kata Sandi Baru" />
+            <x-input-error :messages="$errors->updatePassword->get('password_confirmation')" />
         </div>
 
-        <div style="display: flex; align-items: center; gap: 14px; margin-top: 24px;">
-            <button type="submit" class="profile-btn-save">
-                Perbarui Kata Sandi
-            </button>
+        <div class="info__actions">
+            <button class="btn btn--password" type="submit">Perbarui Kata Sandi</button>
 
             @if (session('status') === 'password-updated')
-                <span style="font-size: 13.5px; font-weight: 700; color: #16a34a; display: flex; align-items: center; gap: 4px;">
-                    ✓ Kata sandi berhasil diperbarui
-                </span>
+                <span class="save-status">✓ Kata sandi berhasil diperbarui</span>
             @endif
         </div>
     </form>
