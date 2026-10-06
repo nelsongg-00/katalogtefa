@@ -21,7 +21,17 @@
             background: #ffffff;
             font-size: 7pt;
             line-height: 1.35;
-            padding: 8mm;
+            padding: 15mm;
+        }
+
+        /* Pastikan warna latar & teks tetap tercetak saat pratinjau dicetak
+           dari browser (browser default membuang background). */
+        @media print {
+            * {
+                -webkit-print-color-adjust: exact !important;
+                print-color-adjust: exact !important;
+                color-adjust: exact !important;
+            }
         }
 
         /* ---------- Sampul biru ---------- */
@@ -29,6 +39,7 @@
             width: 100%;
             background: #06449b;
             border-collapse: collapse;
+            border-bottom: 2pt solid #0a4aa6;
             margin-bottom: 6mm;
         }
 
@@ -80,7 +91,7 @@
 
         /* ---------- Grid 3 kolom ---------- */
         .grid-wrap {
-            padding: 0 2.9mm;
+            padding: 0;
         }
 
         /* Batasi isi: 3 baris x 3 kartu per halaman, sisanya pindah halaman baru */
@@ -96,13 +107,13 @@
         }
 
         .grid td.kol {
-            width: 30.33%;
+            width: 31.33%;
             vertical-align: top;
-            padding: 0 0 4mm 0;
+            padding: 0 0 5mm 0;
         }
 
         .grid td.sp {
-            width: 4.5%;
+            width: 3%;
             padding: 0;
         }
 
@@ -119,7 +130,10 @@
 
         .kartu {
             background: #ffffff;
-            border: 0.5pt solid #d7e8f8;
+            border: 1px solid #d0d7e2;
+            border-radius: 3mm;
+            overflow: hidden;
+            page-break-inside: avoid;
         }
 
         /* ---------- Pill ---------- */
@@ -144,6 +158,7 @@
             line-height: 1;
             color: #ffffff;
             background: #06449b;
+            border: 0.5pt solid #01326f;
             border-radius: 3mm;
             padding: 0.5mm 2.5mm;
         }
@@ -154,53 +169,66 @@
 
         .pill.tipe.jasa {
             background: #b30d35;
+            border: 0.5pt solid #7d0a28;
         }
 
         /* ---------- Gambar ----------
-           Kotak foto dibuat tinggi (24mm) agar rasio kartu lebih seimbang
-           dan gambar tidak terlihat gepeng/terenggang ke samping. */
+           Kotak foto seragam 4:5 (55,7 x 70 mm di dalam kartu) — ramah foto
+           potret sekaligus landscape. dompdf tidak mendukung object-fit,
+           jadi skala "contain" dihitung per gambar di controller (foto_fit)
+           dan dipasang sebagai style inline: gambar selalu muat penuh tanpa
+           distorsi, area kosong di sekitarnya ditutupi warna latar.
+           Fallback width:100%/height:auto bila dimensi tak terbaca; overflow
+           dipotong rapi oleh overflow:hidden. */
         .foto {
             width: 100%;
-            height: 24mm;
+            height: 70mm;
+            margin-top: 3mm;
             background: #e2edf7;
             text-align: center;
+            overflow: hidden;
         }
 
         .foto img {
             width: 100%;
-            height: 24mm;
+            height: auto;
+            vertical-align: top;
         }
 
         /* ---------- Teks kartu ----------
            Tinggi kotak = tinggi maksimum teks (nama 2 baris, deskripsi 3 baris)
-           agar teks tidak pernah meluber dan menimpa elemen lain. */
+           agar teks tidak pernah meluber dan menimpa elemen lain.
+           Garis aksen biru di atas badan kartu + garis tipis pemisah
+           deskripsi/harga memberi struktur visual. */
         .nama {
-            font-size: 9pt;
+            font-size: 14pt;
             font-weight: bold;
-            color: #07377d;
-            line-height: 1;
-            padding: 0.5mm 2.2mm 0 2.2mm;
-            height: 9.5mm;
+            color: #00357f;
+            line-height: 1.15;
+            border-top: 2px solid #0a4aa6;
+            padding: 1mm 2.2mm 0 2.2mm;
+            height: 13mm;
             overflow: hidden;
         }
 
         .deskripsi {
-            font-size: 7pt;
-            color: #475569;
-            line-height: 1;
-            padding: 0.4mm 2.2mm 0 2.2mm;
-            height: 11mm;
+            font-size: 10pt;
+            color: #666666;
+            line-height: 1.3;
+            padding: 1mm 2.2mm 0 2.2mm;
+            height: 17mm;
             overflow: hidden;
         }
 
         .harga {
-            font-size: 9pt;
+            font-size: 13pt;
             font-weight: bold;
             line-height: 1;
-            color: #06449b;
+            color: #00357f;
             background: #e2edf7;
-            padding: 0.6mm 2.2mm;
-            margin-top: 0.8mm;
+            border-top: 1px solid #e0e6ef;
+            padding: 1.2mm 2.2mm;
+            margin-top: 1.5mm;
         }
 
         /* ---------- Elemen kosong ---------- */
@@ -216,13 +244,14 @@
         .catatan-kaki {
             width: 100%;
             border-collapse: collapse;
-            background: #e9eef5;
+            background: #ffffff;
+            border-top: 1pt solid #cfd6e0;
             margin-top: 2mm;
         }
 
         .catatan-kaki td {
-            padding: 2mm 3mm;
-            font-size: 7pt;
+            padding: 2mm 0;
+            font-size: 9pt;
             line-height: 1;
             color: #475569;
         }
@@ -230,29 +259,125 @@
         .catatan-kaki .kanan {
             text-align: right;
         }
+
+        /* ---------- Toolbar pratinjau (hanya saat dibuka di browser) ---------- */
+        .toolbar-pratinjau {
+            position: sticky;
+            top: 0;
+            z-index: 10;
+            display: none;
+            align-items: center;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 10px;
+            background: #00357f;
+            color: #ffffff;
+            padding: 12px 24px;
+            margin: -15mm -15mm 6mm;
+        }
+
+        .toolbar-pratinjau.tampil {
+            display: flex;
+        }
+
+        .toolbar-pratinjau .judul-pratinjau {
+            font-size: 10pt;
+            font-weight: bold;
+            letter-spacing: 0.4pt;
+        }
+
+        .toolbar-pratinjau .aksi {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            flex-wrap: wrap;
+        }
+
+        .toolbar-pratinjau a,
+        .toolbar-pratinjau button {
+            display: inline-block;
+            font-size: 8pt;
+            font-weight: bold;
+            color: #ffffff;
+            background: #06449b;
+            border: 1px solid #7fa8d9;
+            border-radius: 3mm;
+            padding: 1.6mm 4mm;
+            cursor: pointer;
+            text-decoration: none;
+            line-height: 1.2;
+        }
+
+        .toolbar-pratinjau button.utama,
+        .toolbar-pratinjau a.utama {
+            background: #f2b630;
+            border-color: #f2b630;
+            color: #00357f;
+        }
+
+        .toolbar-pratinjau a:hover,
+        .toolbar-pratinjau button:hover {
+            filter: brightness(1.12);
+        }
+
+        @media print {
+            .toolbar-pratinjau {
+                display: none !important;
+            }
+        }
     </style>
 </head>
 <body>
 
-{{-- Sampul biru --}}
-<table class="cover">
-    <tr>
-        <td class="logo">
-            <img src="asset/img/logo-smkn4.png" alt="Logo SMK Negeri 4 Tanjung Pinang">
-        </td>
-        <td class="teks">
-            <div class="meta">Dicetak {{ $tanggal }}</div>
-            <div class="eyebrow">UNIT TEACHING FACTORY</div>
-            <div class="judul-utama">TEFA SMK N 4 TANJUNG PINANG</div>
-            <div class="judul-sub">KATALOG PRODUK DAN JASA</div>
-        </td>
-    </tr>
-</table>
+{{-- Toolbar pratinjau browser — tidak ikut tercetak / tidak ada di PDF --}}
+@if (!empty($preview))
+    <div class="toolbar-pratinjau tampil" role="toolbar" aria-label="Toolbar pratinjau katalog">
+        <span class="judul-pratinjau">PRATINJAU — {{ $judul }}</span>
+        <div class="aksi">
+            <a href="{{ $preview['unduhUrl'] }}" class="utama" aria-label="{{ $preview['unduhLabel'] }} dalam format PDF">
+                ⬇ Unduh PDF
+            </a>
+            <button type="button" onclick="window.print()" aria-label="Cetak pratinjau katalog ini langsung dari browser">
+                🖨 Cetak Langsung
+            </button>
+            <a href="{{ route('superadmin.dashboard') }}" aria-label="Kembali ke dashboard Super Admin">
+                ← Kembali ke Dashboard
+            </a>
+        </div>
+    </div>
+@endif
 
-{{-- Grid katalog: 3 kartu per baris, maksimal 3 baris (9 kartu) per halaman --}}
+{{-- Sampul biru — mengalir langsung ke baris pertama di halaman 1 --}}
+<div class="sampul">
+    <table class="cover">
+        <tr>
+            <td class="logo">
+                <img src="{{ !empty($preview) ? asset('asset/img/logo-smkn4.png') : 'asset/img/logo-smkn4.png' }}" alt="Logo SMK Negeri 4 Tanjung Pinang">
+            </td>
+            <td class="teks">
+                <div class="meta">Dicetak {{ $tanggal }}</div>
+                <div class="eyebrow">UNIT TEACHING FACTORY</div>
+                <div class="judul-utama">TEFA SMK N 4 TANJUNG PINANG</div>
+                <div class="judul-sub">KATALOG PRODUK DAN JASA</div>
+            </td>
+        </tr>
+    </table>
+</div>
+
+{{-- Grid katalog: 3 kartu per baris. Halaman 1 berbagi dengan sampul sehingga
+     hanya 1 baris (baris pertama muncul tepat di bawah banner); halaman
+     berikutnya memuat 2 baris penuh agar muat di satu halaman A4. --}}
 @php
     $barisSemua = array_chunk($items, 3);        // 3 kartu per baris
-    $halamanSemua = array_chunk($barisSemua, 3); // 3 baris per halaman
+    $halamanSemua = [];
+
+    if ($barisSemua !== []) {
+        $halamanSemua[] = [array_shift($barisSemua)];    // halaman 1: sampul + 1 baris
+
+        foreach (array_chunk($barisSemua, 2) as $sisa) { // halaman berikutnya: 2 baris
+            $halamanSemua[] = $sisa;
+        }
+    }
 @endphp
 
 @foreach ($halamanSemua as $halaman)
@@ -274,7 +399,7 @@
 
                                 <div class="foto">
                                     @if ($item['foto'])
-                                        <img src="{{ $item['foto'] }}" alt="{{ $item['nama'] }}">
+                                        <img src="{{ !empty($preview) ? asset($item['foto']) : $item['foto'] }}" alt="{{ $item['nama'] }}"@if($item['foto_fit']) style="width: {{ $item['foto_fit']['w'] }}mm; height: {{ $item['foto_fit']['h'] }}mm; margin-top: {{ $item['foto_fit']['dy'] }}mm;" @endif>
                                     @endif
                                 </div>
 

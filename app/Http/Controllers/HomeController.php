@@ -49,6 +49,16 @@ class HomeController extends Controller
         return view('public.produk', compact('products'));
     }
 
+    /**
+     * Halaman detail produk fisik (pengganti modal pop-up).
+     */
+    public function showProduct(Product $product): View
+    {
+        $product->load('jurusan');
+
+        return view('public.produk.show', compact('product'));
+    }
+
     public function jasa(Request $request): View
     {
         $services = Service::with('department')
@@ -69,6 +79,16 @@ class HomeController extends Controller
             ->withQueryString();
 
         return view('public.jasa', compact('services'));
+    }
+
+    /**
+     * Halaman detail layanan jasa (pengganti modal pop-up).
+     */
+    public function showService(Service $service): View
+    {
+        $service->load('department');
+
+        return view('public.jasa.show', compact('service'));
     }
 
     public function portofolio()

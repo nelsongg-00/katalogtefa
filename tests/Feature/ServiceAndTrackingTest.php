@@ -113,7 +113,7 @@ class ServiceAndTrackingTest extends TestCase
         $response->assertStatus(200);
         $response->assertSee('Layanan Jasa Kejuruan TeFa');
         $response->assertSee($this->service->nama_layanan);
-        $response->assertSee('Konsultasi via WhatsApp');
+        $response->assertSee(route('jasa.show', $this->service->id), false);
     }
 
     public function test_public_can_track_order_with_valid_code_without_login(): void

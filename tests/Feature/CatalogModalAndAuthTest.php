@@ -66,28 +66,53 @@ class CatalogModalAndAuthTest extends TestCase
         );
     }
 
-    public function test_product_catalog_displays_products_and_interactive_modal(): void
+    public function test_product_catalog_displays_products_with_detail_links(): void
     {
         $response = $this->get(route('produk'));
 
         $response->assertStatus(200);
         $response->assertSee('Mousepad TeFa Gaming RPL');
-        $response->assertSee('product-detail-modal');
-        $response->assertSee('openProductModal');
-        $response->assertSee('Pesan Sekarang (Checkout)');
-        $response->assertSee('Anda akan diarahkan ke halaman login terlebih dahulu untuk menyelesaikan pemesanan');
+        $response->assertSee(route('produk.show', $this->product->id), false);
+        $response->assertDontSee('product-detail-modal', false);
+        $response->assertDontSee('openProductModal', false);
+        $response->assertSee('Lihat Detail &amp; Pesan', false);
     }
 
-    public function test_service_catalog_displays_services_and_interactive_modal(): void
+    public function test_service_catalog_displays_services_with_detail_links(): void
     {
         $response = $this->get(route('jasa'));
 
         $response->assertStatus(200);
         $response->assertSee('Jasa Pembuatan Web Profil Perusahaan');
-        $response->assertSee('service-detail-modal');
-        $response->assertSee('openServiceModal');
+        $response->assertSee(route('jasa.show', $this->service->id), false);
+        $response->assertDontSee('service-detail-modal', false);
+        $response->assertDontSee('openServiceModal', false);
+        $response->assertSee('Lihat Detail &amp; Konsultasi', false);
+    }
+
+    public function test_guest_can_view_product_detail_page(): void
+    {
+        $response = $this->get(route('produk.show', $this->product->id));
+
+        $response->assertStatus(200);
+        $response->assertSee('Mousepad TeFa Gaming RPL');
+        $response->assertSee('Pesan Sekarang (Checkout)');
+        $response->assertSee(route('checkout.show', $this->product->id), false);
+        $response->assertSee('Kembali ke Katalog');
+        $response->assertSee(route('produk'), false);
+        $response->assertSee('Anda akan diarahkan ke halaman login terlebih dahulu untuk menyelesaikan pemesanan');
+    }
+
+    public function test_guest_can_view_service_detail_page(): void
+    {
+        $response = $this->get(route('jasa.show', $this->service->id));
+
+        $response->assertStatus(200);
+        $response->assertSee('Jasa Pembuatan Web Profil Perusahaan');
         $response->assertSee('Konsultasi via WhatsApp');
-        $response->assertSee('Lihat Detail & Konsultasi');
+        $response->assertSee('https://wa.me/628781948317', false);
+        $response->assertSee('Kembali ke Katalog');
+        $response->assertSee(route('jasa'), false);
     }
 
     public function test_guest_cannot_access_checkout_directly_and_is_redirected_to_login_with_intended_url(): void

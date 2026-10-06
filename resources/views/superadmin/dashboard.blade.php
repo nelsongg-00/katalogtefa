@@ -81,6 +81,14 @@
   </div>
   <div class="card-body">
     <div class="katalog-aksi">
+      <a href="{{ route('superadmin.katalog.preview', 'produk') }}" class="btn ghost" aria-label="Pratinjau katalog produk di browser sebelum diunduh">
+        <svg class="i" viewBox="0 0 24 24"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+        Pratinjau Katalog Produk
+      </a>
+      <a href="{{ route('superadmin.katalog.preview', 'jasa') }}" class="btn ghost" aria-label="Pratinjau katalog layanan jasa di browser sebelum diunduh">
+        <svg class="i" viewBox="0 0 24 24"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+        Pratinjau Katalog Jasa
+      </a>
       <a href="{{ route('superadmin.katalog.produk') }}" class="btn primary" aria-label="Unduh katalog produk dalam format PDF">
         <svg class="i" viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4M7 10l5 5 5-5M12 15V3"/></svg>
         Katalog Produk
@@ -89,7 +97,7 @@
         <svg class="i" viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4M7 10l5 5 5-5M12 15V3"/></svg>
         Katalog Layanan Jasa
       </a>
-      <span class="hint">Dibuat otomatis dari data produk dan layanan jasa aktif.</span>
+      <span class="hint">Pratinjau katalog di browser atau unduh langsung dalam format PDF siap cetak.</span>
     </div>
   </div>
 </section>

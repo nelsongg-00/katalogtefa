@@ -167,6 +167,102 @@ class SuperAdminKatalogPdfTest extends TestCase
             ->assertSee(route('superadmin.katalog.jasa'));
     }
 
+    public function test_super_admin_can_preview_product_catalog_in_browser(): void
+    {
+        Product::firstOrCreate(
+            ['nama_produk' => 'Mug Pratinjau'],
+            [
+                'jurusan_id' => $this->jurusan->id,
+                'deskripsi' => 'Mug untuk pengujian pratinjau.',
+                'harga' => 75000,
+                'stok' => 5,
+            ]
+        );
+
+        $response = $this->actingAs($this->superAdmin)->get(route('superadmin.katalog.preview', 'produk'));
+
+        $response->assertOk();
+        $this->assertStringContainsString('text/html', (string) $response->headers->get('Content-Type'));
+        $response->assertSee('PRATINJAU — Katalog Produk');
+        $response->assertSee('Unduh PDF');
+        $response->assertSee('Cetak Langsung');
+        $response->assertSee('Kembali ke Dashboard');
+        $response->assertSee(route('superadmin.katalog.produk'), false);
+        $response->assertSee('Mug Pratinjau');
+        $response->assertSee('Rp75.000');
+    }
+
+    public function test_super_admin_can_preview_service_catalog_in_browser(): void
+    {
+        Service::firstOrCreate(
+            ['nama_layanan' => 'Jasa Sablon Pratinjau'],
+            [
+                'department_id' => $this->jurusan->id,
+                'slug' => 'jasa-sablon-pratinjau',
+                'deskripsi' => 'Layanan untuk pengujian pratinjau.',
+                'estimasi_harga' => 300000,
+                'is_active' => true,
+            ]
+        );
+
+        $response = $this->actingAs($this->superAdmin)->get(route('superadmin.katalog.preview', 'jasa'));
+
+        $response->assertOk();
+        $this->assertStringContainsString('text/html', (string) $response->headers->get('Content-Type'));
+        $response->assertSee('PRATINJAU — Katalog Layanan Jasa');
+        $response->assertSee(route('superadmin.katalog.jasa'), false);
+        $response->assertSee('Jasa Sablon Pratinjau');
+        $response->assertSee('Mulai Rp300.000');
+    }
+
+    public function test_preview_page_shows_inactive_services_same_as_pdf(): void
+    {
+        Service::firstOrCreate(
+            ['nama_layanan' => 'Jasa Nonaktif Pratinjau'],
+            [
+                'department_id' => $this->jurusan->id,
+                'slug' => 'jasa-nonaktif-pratinjau',
+                'deskripsi' => 'Layanan nonaktif.',
+                'estimasi_harga' => 111111,
+                'is_active' => false,
+            ]
+        );
+
+        $response = $this->actingAs($this->superAdmin)->get(route('superadmin.katalog.preview', 'jasa'));
+
+        $response->assertOk();
+        $response->assertDontSee('Jasa Nonaktif Pratinjau');
+    }
+
+    public function test_preview_rejects_unknown_catalog_type(): void
+    {
+        $this->actingAs($this->superAdmin)
+            ->get(route('superadmin.katalog.preview', 'buku'))
+            ->assertNotFound();
+    }
+
+    public function test_pelanggan_cannot_access_catalog_preview(): void
+    {
+        $this->actingAs($this->pelanggan)
+            ->get(route('superadmin.katalog.preview', 'produk'))
+            ->assertRedirect('/');
+    }
+
+    public function test_guest_cannot_access_catalog_preview(): void
+    {
+        $this->get(route('superadmin.katalog.preview', 'jasa'))
+            ->assertRedirect(route('login'));
+    }
+
+    public function test_dashboard_shows_catalog_preview_buttons(): void
+    {
+        $this->actingAs($this->superAdmin)
+            ->get(route('superadmin.dashboard'))
+            ->assertOk()
+            ->assertSee(route('superadmin.katalog.preview', 'produk'))
+            ->assertSee(route('superadmin.katalog.preview', 'jasa'));
+    }
+
     /**
      * Ambil teks yang benar-benar tertulis di dalam PDF (stream sudah didekompresi).
      */
