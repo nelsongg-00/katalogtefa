@@ -83,6 +83,11 @@
             padding: 0 2.9mm;
         }
 
+        /* Batasi isi: 3 baris x 3 kartu per halaman, sisanya pindah halaman baru */
+        .grid-wrap.putus {
+            page-break-after: always;
+        }
+
         .grid {
             width: 100%;
             table-layout: fixed;
@@ -93,7 +98,7 @@
         .grid td.kol {
             width: 30.33%;
             vertical-align: top;
-            padding: 0 0 5.5mm 0;
+            padding: 0 0 4mm 0;
         }
 
         .grid td.sp {
@@ -151,17 +156,19 @@
             background: #b30d35;
         }
 
-        /* ---------- Gambar ---------- */
+        /* ---------- Gambar ----------
+           Kotak foto dibuat tinggi (24mm) agar rasio kartu lebih seimbang
+           dan gambar tidak terlihat gepeng/terenggang ke samping. */
         .foto {
             width: 100%;
-            height: 16mm;
+            height: 24mm;
             background: #e2edf7;
             text-align: center;
         }
 
         .foto img {
             width: 100%;
-            height: 16mm;
+            height: 24mm;
         }
 
         /* ---------- Teks kartu ----------
@@ -242,53 +249,66 @@
     </tr>
 </table>
 
-{{-- Grid katalog: 3 kartu + 2 sel spasi agar lebar kartu seragam --}}
-<div class="grid-wrap">
-    <table class="grid">
-        @forelse (array_chunk($items, 3) as $baris)
-            <tr @if($loop->last) class="baris-akhir" @endif>
-                @foreach ($baris as $item)
-                    <td class="kol">
-                        <div class="kartu">
-                            <table class="pills">
-                                <tr>
-                                    <td><span class="pill kode">{{ $item['kode'] }}</span></td>
-                                    <td class="kanan">
-                                        <span class="pill tipe {{ $item['isJasa'] ? 'jasa' : '' }}">{{ $item['tipe'] }}</span>
-                                    </td>
-                                </tr>
-                            </table>
+{{-- Grid katalog: 3 kartu per baris, maksimal 3 baris (9 kartu) per halaman --}}
+@php
+    $barisSemua = array_chunk($items, 3);        // 3 kartu per baris
+    $halamanSemua = array_chunk($barisSemua, 3); // 3 baris per halaman
+@endphp
 
-                            <div class="foto">
-                                @if ($item['foto'])
-                                    <img src="{{ $item['foto'] }}" alt="{{ $item['nama'] }}">
-                                @endif
+@foreach ($halamanSemua as $halaman)
+    <div class="grid-wrap @if(! $loop->last) putus @endif">
+        <table class="grid">
+            @foreach ($halaman as $baris)
+                <tr @if($loop->last) class="baris-akhir" @endif>
+                    @foreach ($baris as $item)
+                        <td class="kol">
+                            <div class="kartu">
+                                <table class="pills">
+                                    <tr>
+                                        <td><span class="pill kode">{{ $item['kode'] }}</span></td>
+                                        <td class="kanan">
+                                            <span class="pill tipe {{ $item['isJasa'] ? 'jasa' : '' }}">{{ $item['tipe'] }}</span>
+                                        </td>
+                                    </tr>
+                                </table>
+
+                                <div class="foto">
+                                    @if ($item['foto'])
+                                        <img src="{{ $item['foto'] }}" alt="{{ $item['nama'] }}">
+                                    @endif
+                                </div>
+
+                                <div class="nama">{{ $item['nama'] }}</div>
+                                <div class="deskripsi">{{ $item['deskripsi'] }}</div>
+                                <div class="harga">{{ $item['harga'] }}</div>
                             </div>
+                        </td>
+                        @if (!$loop->last)
+                            <td class="sp"></td>
+                        @endif
+                    @endforeach
 
-                            <div class="nama">{{ $item['nama'] }}</div>
-                            <div class="deskripsi">{{ $item['deskripsi'] }}</div>
-                            <div class="harga">{{ $item['harga'] }}</div>
-                        </div>
-                    </td>
-                    @if (!$loop->last)
+                    @for ($s = count($baris); $s < 3; $s++)
                         <td class="sp"></td>
-                    @endif
-                @endforeach
+                        <td class="kol"></td>
+                    @endfor
+                </tr>
+            @endforeach
+        </table>
+    </div>
+@endforeach
 
-                @for ($s = count($baris); $s < 3; $s++)
-                    <td class="sp"></td>
-                    <td class="kol"></td>
-                @endfor
-            </tr>
-        @empty
+@if (empty($items))
+    <div class="grid-wrap">
+        <table class="grid">
             <tr>
                 <td class="penuh">
                     <div class="kosong">Belum ada data {{ $tipe === 'JASA' ? 'layanan jasa' : 'produk' }} untuk dicetak.</div>
                 </td>
             </tr>
-        @endforelse
-    </table>
-</div>
+        </table>
+    </div>
+@endif
 
 {{-- Catatan kaki --}}
 <table class="catatan-kaki">
