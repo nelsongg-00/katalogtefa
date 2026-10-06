@@ -1,4 +1,4 @@
-{{-- Navbar publik (info topbar + navbar utama). Dipakai bersama oleh layouts/public.blade.php
+{{-- Navbar publik (navbar utama). Dipakai bersama oleh layouts/public.blade.php
      dan halaman login. CSS + JS ikut di dalam partial agar tampil & berperilaku identik
      walau halaman pemanggil tidak memuat @vite (mis. login yang berdiri sendiri).
      Font dipaksa Segoe UI di wrapper .site-header supaya tidak mewarisi font halaman. --}}
@@ -9,28 +9,6 @@
 .site-header * {
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
-
-        /* --- TOPBAR (Baris Atas Informasi) --- */
-        .topbar {
-            background-color: #081b4b;
-            color: #e2e8f0;
-            font-size: 13px;
-            padding: 10px 50px;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            gap: 30px;
-            font-weight: 500;
-        }
-        .topbar-item {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-        .topbar-icon {
-            color: #d946ef;
-            font-size: 14px;
-        }
 
         /* --- NAVBAR --- */
         .navbar {
@@ -276,19 +254,6 @@
             color: #b91c1c;
         }
 </style>
-
-    <!-- TOPBAR INFORMASI -->
-    <div class="topbar">
-        <div class="topbar-item">
-            <span class="topbar-icon">📍</span> Jl. Nusantara No.KM.14 Batu IX, Kec. Tanjungpinang, Kepulauan Riau 29157
-        </div>
-        <div class="topbar-item">
-            <span class="topbar-icon">✉️</span> smkntpi4@gmail.com
-        </div>
-        <div class="topbar-item">
-            <span class="topbar-icon">📞</span> +62 878-1948-317
-        </div>
-    </div>
 
     <!-- NAVBAR UTAMA -->
     <nav class="navbar">
