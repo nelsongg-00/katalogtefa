@@ -270,8 +270,7 @@
         position: relative;
     }
 
-    .produk-page .thumb-pattern,
-    .modal-hero-thumb .thumb-pattern {
+    .produk-page .thumb-pattern {
         position: absolute;
         inset: 0;
         background-image: radial-gradient(rgba(255, 255, 255, 0.15) 1px, transparent 1px);
@@ -428,196 +427,6 @@
         background: var(--color-primary-dark);
     }
 
-    /* ---------- MODAL DETAIL PRODUK (visual saja) ---------- */
-    .produk-modal-backdrop {
-        display: none;
-        position: fixed;
-        inset: 0;
-        background-color: rgba(17, 17, 17, 0.7);
-        backdrop-filter: blur(6px);
-        z-index: 99999;
-        overflow-y: auto;
-        padding: 24px 16px;
-        place-items: center;
-        animation: modalFadeIn 0.25s cubic-bezier(0.16, 1, 0.3, 1);
-    }
-
-    @keyframes modalFadeIn {
-        from { opacity: 0; }
-        to { opacity: 1; }
-    }
-
-    .produk-modal-container {
-        background: var(--color-white, #ffffff);
-        border-radius: 20px;
-        max-width: 680px;
-        width: 100%;
-        box-shadow: 0 25px 60px -15px rgba(15, 23, 42, 0.35);
-        border: 1px solid #e6eaef;
-        overflow: hidden;
-        position: relative;
-        animation: modalSlideUp 0.3s cubic-bezier(0.16, 1, 0.3, 1);
-        margin: auto;
-    }
-
-    @keyframes modalSlideUp {
-        from { transform: scale(0.96) translateY(20px); opacity: 0; }
-        to { transform: scale(1) translateY(0); opacity: 1; }
-    }
-
-    .modal-close-btn {
-        position: absolute;
-        top: 16px;
-        right: 16px;
-        width: 38px;
-        height: 38px;
-        border-radius: 50%;
-        background: rgba(17, 17, 17, 0.6);
-        color: #ffffff;
-        border: 1px solid rgba(255, 255, 255, 0.2);
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        cursor: pointer;
-        font-size: 20px;
-        line-height: 1;
-        transition: all 0.2s ease;
-        backdrop-filter: blur(4px);
-        z-index: 10;
-    }
-
-    .modal-close-btn:hover {
-        background: var(--color-red, #e53935);
-        transform: rotate(90deg);
-    }
-
-    .modal-hero-thumb {
-        height: 230px;
-        width: 100%;
-        position: relative;
-        background: var(--color-placeholder, #cad2db);
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        overflow: hidden;
-    }
-
-    .modal-hero-img {
-        width: 100%;
-        height: 100%;
-        object-fit: cover;
-    }
-
-    .modal-hero-thumb .produk-thumb-fallback {
-        width: 100%;
-        height: 100%;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        font-size: 72px;
-        color: #ffffff;
-        position: relative;
-    }
-
-    .modal-body {
-        padding: 28px 30px;
-        color: var(--color-text, #111111);
-    }
-
-    .modal-prod-title {
-        font-size: 24px;
-        font-weight: 900;
-        color: var(--color-primary, #0a4aa6);
-        line-height: 1.3;
-        margin-bottom: 12px;
-    }
-
-    .modal-prod-price {
-        font-size: 24px;
-        font-weight: 900;
-        color: var(--color-primary, #0a4aa6);
-        margin-bottom: 18px;
-    }
-
-    .modal-prod-desc-box {
-        background: var(--color-bg, #fafafa);
-        border-radius: 14px;
-        padding: 16px 18px;
-        border: 1px solid #e6eaef;
-        font-size: 14px;
-        color: #334155;
-        line-height: 1.65;
-        margin-bottom: 22px;
-        max-height: 180px;
-        overflow-y: auto;
-    }
-
-    .modal-pickup-notice {
-        background: #f0fdf4;
-        border: 1px solid #bbf7d0;
-        border-radius: 12px;
-        padding: 12px 16px;
-        font-size: 13px;
-        color: #166534;
-        display: flex;
-        align-items: center;
-        gap: 10px;
-        margin-bottom: 22px;
-    }
-
-    .modal-actions-row {
-        display: flex;
-        align-items: center;
-        gap: 12px;
-    }
-
-    .modal-btn-checkout {
-        flex: 1;
-        background: var(--color-primary, #0a4aa6);
-        color: #ffffff;
-        text-decoration: none;
-        padding: 13px 20px;
-        border-radius: 12px;
-        font-weight: 800;
-        font-size: 14.5px;
-        display: inline-flex;
-        align-items: center;
-        justify-content: center;
-        gap: 8px;
-        box-shadow: 0 4px 14px rgba(10, 74, 166, 0.3);
-        transition: all 0.2s ease;
-    }
-
-    .modal-btn-checkout:hover {
-        background: var(--color-primary-dark, #00357f);
-        transform: translateY(-1px);
-        box-shadow: 0 6px 18px rgba(10, 74, 166, 0.4);
-    }
-
-    .modal-btn-disabled {
-        background: #94a3b8 !important;
-        cursor: not-allowed !important;
-        box-shadow: none !important;
-        pointer-events: none;
-    }
-
-    .modal-btn-close-sec {
-        background: #f1f5f9;
-        color: #475569;
-        border: 1px solid #cbd5e1;
-        padding: 13px 22px;
-        border-radius: 12px;
-        font-weight: 700;
-        font-size: 14px;
-        cursor: pointer;
-        transition: all 0.2s ease;
-    }
-
-    .modal-btn-close-sec:hover {
-        background: #e2e8f0;
-        color: #111111;
-    }
-
     /* ---------- BREAKPOINT >= 640px (tablet) ---------- */
     @media (min-width: 640px) {
         .produk-page .banner {
@@ -765,26 +574,9 @@
                         $hasRealPhoto = !empty($product->foto) && !str_starts_with($product->foto, 'http') && file_exists(public_path('storage/' . $product->foto));
                         $photoUrl = $hasRealPhoto ? asset('storage/' . $product->foto) : null;
 
-                        $productModalData = [
-                            'id' => $product->id,
-                            'nama' => $product->nama_produk,
-                            'jurusan' => $deptNama,
-                            'jurusan_code' => $deptKode,
-                            'badge_style' => $badgeStyle,
-                            'fallback_bg' => $fallbackBg,
-                            'fallback_icon' => $fallbackIcon,
-                            'harga' => 'Rp ' . number_format($product->harga, 0, ',', '.'),
-                            'stok' => (int) $product->stok,
-                            'deskripsi' => $product->deskripsi,
-                            'foto' => $photoUrl,
-                            'checkout_url' => route('checkout.show', $product->id),
-                            'login_url' => route('login', ['redirect' => route('checkout.show', $product->id)]),
-                        ];
                     @endphp
 
-                    <div class="produk-card"
-                         data-id="{{ $product->id }}"
-                         onclick='openProductModal(@json($productModalData))'>
+                    <a href="{{ route('produk.show', $product) }}" class="produk-card" data-id="{{ $product->id }}">
 
                         <!-- Thumbnail -->
                         <div class="produk-thumb">
@@ -830,13 +622,13 @@
                             </div>
 
                             <div class="produk-card-footer">
-                                <button type="button" class="btn-card-order">
+                                <span class="btn-card-order">
                                     <span aria-hidden="true">🛒</span>
                                     <span>Lihat Detail &amp; Pesan</span>
-                                </button>
+                                </span>
                             </div>
                         </div>
-                    </div>
+                    </a>
                 @empty
                     @if(request()->filled('q') || (request()->filled('jurusan') && request('jurusan') !== 'all'))
                         <div class="produk-empty">
@@ -865,186 +657,4 @@
     </main>
 </div>
 
-<!-- ========================================== -->
-<!-- MODAL POP-UP DETAIL PRODUK FISIK DINAMIS   -->
-<!-- (struktur & logika dipertahankan, visual saja) -->
-<!-- ========================================== -->
-<div id="product-detail-modal" class="produk-modal-backdrop" role="dialog" aria-modal="true" aria-labelledby="modal-prod-name" onclick="handleProductBackdropClick(event)">
-    <div class="produk-modal-container">
-        <!-- Close Button -->
-        <button type="button" class="modal-close-btn" onclick="closeProductModal()" aria-label="Tutup Modal">
-            &times;
-        </button>
-
-        <!-- Modal Hero Thumbnail -->
-        <div class="modal-hero-thumb">
-            <img id="modal-prod-img" src="" alt="Foto Produk" class="modal-hero-img" style="display: none;">
-            <div id="modal-prod-fallback" class="produk-thumb-fallback" style="display: flex;">
-                <div class="thumb-pattern"></div>
-                <span id="modal-prod-icon" style="font-size: 72px;">📦</span>
-            </div>
-        </div>
-
-        <!-- Konten Detail Produk -->
-        <div class="modal-body">
-            <div style="display: flex; gap: 8px; align-items: center; flex-wrap: wrap; margin-bottom: 10px;">
-                <span id="modal-prod-jurusan" style="font-size: 12px; font-weight: 700; padding: 4px 12px; border-radius: 999px;">
-                    Jurusan
-                </span>
-                <span id="modal-prod-stok-badge" style="font-size: 12px; font-weight: 800; padding: 4px 12px; border-radius: 999px;">
-                    Stok
-                </span>
-            </div>
-
-            <h2 id="modal-prod-name" class="modal-prod-title">
-                Nama Produk
-            </h2>
-
-            <div id="modal-prod-price" class="modal-prod-price">
-                Rp 0
-            </div>
-
-            <div style="margin-bottom: 8px;">
-                <label style="font-size: 12px; font-weight: 700; color: #666666; text-transform: uppercase; letter-spacing: 0.5px; display: block; margin-bottom: 6px;">
-                    Deskripsi Lengkap
-                </label>
-                <div id="modal-prod-desc" class="modal-prod-desc-box">
-                    Deskripsi produk...
-                </div>
-            </div>
-
-            <div class="modal-pickup-notice">
-                <span style="font-size: 20px;" aria-hidden="true">📍</span>
-                <span><strong>Pengambilan Langsung di Sekolah:</strong> Pesanan produk fisik diambil di Lab/Unit Teaching Factory SMKN 4 Tanjungpinang setelah pesanan diverifikasi.</span>
-            </div>
-
-            <!-- Footer & Tombol Aksi -->
-            <div class="modal-actions-row">
-                <button type="button" class="modal-btn-close-sec" onclick="closeProductModal()">
-                    Tutup
-                </button>
-                <a id="modal-prod-action-btn" href="#" class="modal-btn-checkout">
-                    <span aria-hidden="true">🛒</span>
-                    <span id="modal-prod-btn-text">Pesan Sekarang (Checkout)</span>
-                </a>
-            </div>
-
-            <div id="modal-prod-guest-notice" style="display: none; text-align: center; font-size: 12px; color: #b91c1c; font-weight: 700; background: #fef2f2; padding: 8px 12px; border-radius: 8px; border: 1px solid #fecaca; margin-top: 10px;">
-                🔒 Anda akan diarahkan ke halaman login terlebih dahulu untuk menyelesaikan pemesanan
-            </div>
-        </div>
-    </div>
-</div>
-
-<script>
-    const isUserLoggedIn = {{ auth()->check() ? 'true' : 'false' }};
-
-    // Filter jurusan & pencarian kini lewat query string (?jurusan=&q=) supaya
-    // selamat saat berpindah halaman paginator. Pencarian submit otomatis 400ms
-    // setelah mengetik agar terasa seperti filter langsung seperti sebelumnya.
-    let produkSearchTimer = null;
-
-    function debounceProdukSearch() {
-        clearTimeout(produkSearchTimer);
-        produkSearchTimer = setTimeout(() => {
-            const form = document.getElementById('produk-search-form');
-            if (form) form.submit();
-        }, 400);
-    }
-
-    document.addEventListener('DOMContentLoaded', () => {
-        const input = document.getElementById('produk-search-input');
-        if (input && input.value) {
-            input.focus();
-            input.setSelectionRange(input.value.length, input.value.length);
-        }
-    });
-
-    // Modal Interaction
-    function openProductModal(product) {
-        const modal = document.getElementById('product-detail-modal');
-        if (!modal) return;
-
-        const imgEl = document.getElementById('modal-prod-img');
-        const fallbackEl = document.getElementById('modal-prod-fallback');
-        const iconEl = document.getElementById('modal-prod-icon');
-
-        if (product.foto) {
-            imgEl.src = product.foto;
-            imgEl.style.display = 'block';
-            fallbackEl.style.display = 'none';
-        } else {
-            imgEl.style.display = 'none';
-            fallbackEl.style.display = 'flex';
-            fallbackEl.style.background = product.fallback_bg;
-            iconEl.textContent = product.fallback_icon;
-        }
-
-        const deptEl = document.getElementById('modal-prod-jurusan');
-        deptEl.textContent = product.jurusan + ' (' + product.jurusan_code + ')';
-        deptEl.setAttribute('style', product.badge_style + '; font-size: 12px; font-weight: 700; padding: 4px 12px; border-radius: 999px;');
-
-        document.getElementById('modal-prod-name').textContent = product.nama;
-        document.getElementById('modal-prod-price').textContent = product.harga;
-        document.getElementById('modal-prod-desc').textContent = product.deskripsi || 'Tidak ada keterangan detail untuk produk ini.';
-
-        const stokBadge = document.getElementById('modal-prod-stok-badge');
-        const actionBtn = document.getElementById('modal-prod-action-btn');
-        const btnText = document.getElementById('modal-prod-btn-text');
-        const guestNotice = document.getElementById('modal-prod-guest-notice');
-
-        if (product.stok > 0) {
-            stokBadge.textContent = 'Stok: ' + product.stok + ' unit';
-            stokBadge.style.background = '#ecfdf5';
-            stokBadge.style.color = '#059669';
-            stokBadge.style.border = '1px solid #a7f3d0';
-        } else {
-            stokBadge.textContent = 'Stok Habis';
-            stokBadge.style.background = '#fef2f2';
-            stokBadge.style.color = '#dc2626';
-            stokBadge.style.border = '1px solid #fecaca';
-        }
-
-        if (isUserLoggedIn) {
-            guestNotice.style.display = 'none';
-            if (product.stok > 0) {
-                actionBtn.href = product.checkout_url;
-                actionBtn.className = 'modal-btn-checkout';
-                btnText.textContent = 'Pesan Sekarang (Checkout)';
-            } else {
-                actionBtn.href = 'javascript:void(0)';
-                actionBtn.className = 'modal-btn-checkout modal-btn-disabled';
-                btnText.textContent = 'Stok Habis';
-            }
-        } else {
-            guestNotice.style.display = 'block';
-            actionBtn.href = product.login_url;
-            actionBtn.className = 'modal-btn-checkout';
-            btnText.textContent = 'Pesan Sekarang (Login)';
-        }
-
-        modal.style.display = 'grid';
-        document.body.style.overflow = 'hidden';
-    }
-
-    function closeProductModal() {
-        const modal = document.getElementById('product-detail-modal');
-        if (modal) {
-            modal.style.display = 'none';
-            document.body.style.overflow = '';
-        }
-    }
-
-    function handleProductBackdropClick(e) {
-        if (e.target.id === 'product-detail-modal') {
-            closeProductModal();
-        }
-    }
-
-    document.addEventListener('keydown', function(e) {
-        if (e.key === 'Escape') {
-            closeProductModal();
-        }
-    });
-</script>
 @endsection

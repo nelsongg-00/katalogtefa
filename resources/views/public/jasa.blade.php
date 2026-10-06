@@ -271,8 +271,7 @@
         position: relative;
     }
 
-    .jasa-page .thumb-pattern,
-    .modal-hero-thumb .thumb-pattern {
+    .jasa-page .thumb-pattern {
         position: absolute;
         inset: 0;
         background-image: radial-gradient(rgba(255, 255, 255, 0.15) 1px, transparent 1px);
@@ -421,189 +420,6 @@
         background: var(--color-primary-dark);
     }
 
-    /* ---------- MODAL DETAIL LAYANAN (visual saja) ---------- */
-    .jasa-modal-backdrop {
-        display: none;
-        position: fixed;
-        inset: 0;
-        background-color: rgba(17, 17, 17, 0.7);
-        backdrop-filter: blur(6px);
-        z-index: 99999;
-        overflow-y: auto;
-        padding: 24px 16px;
-        place-items: center;
-        animation: modalFadeIn 0.25s cubic-bezier(0.16, 1, 0.3, 1);
-    }
-
-    @keyframes modalFadeIn {
-        from { opacity: 0; }
-        to { opacity: 1; }
-    }
-
-    .jasa-modal-container {
-        background: var(--color-white, #ffffff);
-        border-radius: 20px;
-        max-width: 680px;
-        width: 100%;
-        box-shadow: 0 25px 60px -15px rgba(15, 23, 42, 0.35);
-        border: 1px solid #e6eaef;
-        overflow: hidden;
-        position: relative;
-        animation: modalSlideUp 0.3s cubic-bezier(0.16, 1, 0.3, 1);
-        margin: auto;
-    }
-
-    @keyframes modalSlideUp {
-        from { transform: scale(0.96) translateY(20px); opacity: 0; }
-        to { transform: scale(1) translateY(0); opacity: 1; }
-    }
-
-    .modal-close-btn {
-        position: absolute;
-        top: 16px;
-        right: 16px;
-        width: 38px;
-        height: 38px;
-        border-radius: 50%;
-        background: rgba(17, 17, 17, 0.6);
-        color: #ffffff;
-        border: 1px solid rgba(255, 255, 255, 0.2);
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        cursor: pointer;
-        font-size: 20px;
-        line-height: 1;
-        transition: all 0.2s ease;
-        backdrop-filter: blur(4px);
-        z-index: 10;
-    }
-
-    .modal-close-btn:hover {
-        background: var(--color-red, #e53935);
-        transform: rotate(90deg);
-    }
-
-    .modal-hero-thumb {
-        height: 230px;
-        width: 100%;
-        position: relative;
-        background: var(--color-placeholder, #cad2db);
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        overflow: hidden;
-    }
-
-    .modal-hero-img {
-        width: 100%;
-        height: 100%;
-        object-fit: cover;
-    }
-
-    .modal-hero-thumb .jasa-thumb-fallback {
-        width: 100%;
-        height: 100%;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        font-size: 72px;
-        color: #ffffff;
-        position: relative;
-    }
-
-    .modal-body {
-        padding: 28px 30px;
-        color: var(--color-text, #111111);
-    }
-
-    .modal-serv-title {
-        font-size: 24px;
-        font-weight: 900;
-        color: var(--color-primary, #0a4aa6);
-        line-height: 1.3;
-        margin-bottom: 12px;
-    }
-
-    .modal-serv-price {
-        font-size: 24px;
-        font-weight: 900;
-        color: var(--color-primary, #0a4aa6);
-        margin-bottom: 18px;
-    }
-
-    .modal-serv-desc-box {
-        background: var(--color-bg, #fafafa);
-        border-radius: 14px;
-        padding: 16px 18px;
-        border: 1px solid #e6eaef;
-        font-size: 14px;
-        color: #334155;
-        line-height: 1.65;
-        margin-bottom: 22px;
-        max-height: 180px;
-        overflow-y: auto;
-    }
-
-    .modal-wa-notice {
-        background: #f0fdf4;
-        border: 1px solid #bbf7d0;
-        border-radius: 12px;
-        padding: 12px 16px;
-        font-size: 13px;
-        color: #166534;
-        display: flex;
-        align-items: center;
-        gap: 10px;
-        margin-bottom: 22px;
-    }
-
-    .modal-actions-row {
-        display: flex;
-        align-items: center;
-        gap: 12px;
-    }
-
-    .modal-btn-wa-order {
-        flex: 1;
-        background: #10b981;
-        color: #ffffff;
-        text-decoration: none;
-        padding: 13px 20px;
-        border-radius: 12px;
-        font-weight: 800;
-        font-size: 14.5px;
-        display: inline-flex;
-        align-items: center;
-        justify-content: center;
-        gap: 8px;
-        box-shadow: 0 4px 14px rgba(16, 185, 129, 0.3);
-        transition: all 0.2s ease;
-    }
-
-    .modal-btn-wa-order:hover {
-        background: #059669;
-        transform: translateY(-1px);
-        box-shadow: 0 6px 18px rgba(16, 185, 129, 0.4);
-    }
-
-    .modal-btn-close-sec {
-        background: #f1f5f9;
-        color: #475569;
-        border: 1px solid #cbd5e1;
-        padding: 13px 22px;
-        border-radius: 12px;
-        font-weight: 700;
-        font-size: 14px;
-        cursor: pointer;
-        transition: all 0.2s ease;
-    }
-
-    .modal-btn-close-sec:hover {
-        background: #e2e8f0;
-        color: #111111;
-    }
-
     /* ---------- BREAKPOINT >= 640px (tablet) ---------- */
     @media (min-width: 640px) {
         .jasa-page .banner {
@@ -750,28 +566,9 @@
 
                         $hasRealPhoto = !empty($service->foto) && !str_starts_with($service->foto, 'http') && file_exists(public_path('storage/' . $service->foto));
                         $photoUrl = $hasRealPhoto ? asset('storage/' . $service->foto) : null;
-
-                        $waMessage = urlencode("Halo Admin Teaching Factory SMKN 4 Tanjungpinang, saya tertarik untuk berkonsultasi mengenai layanan jasa: {$service->nama_layanan} ({$deptNama}). Mohon info prosedur dan jadwalnya.");
-                        $waUrl = "https://wa.me/628781948317?text={$waMessage}";
-
-                        $serviceModalData = [
-                            'id' => $service->id,
-                            'nama' => $service->nama_layanan,
-                            'jurusan' => $deptNama,
-                            'jurusan_code' => $deptKode,
-                            'badge_style' => $badgeStyle,
-                            'fallback_bg' => $fallbackBg,
-                            'fallback_icon' => $fallbackIcon,
-                            'harga' => 'Mulai Rp ' . number_format($service->estimasi_harga, 0, ',', '.'),
-                            'deskripsi' => $service->deskripsi,
-                            'foto' => $photoUrl,
-                            'wa_url' => $waUrl,
-                        ];
                     @endphp
 
-                    <div class="jasa-card"
-                         data-id="{{ $service->id }}"
-                         onclick='openServiceModal(@json($serviceModalData))'>
+                    <a href="{{ route('jasa.show', $service) }}" class="jasa-card" data-id="{{ $service->id }}">
 
                         <!-- Thumbnail -->
                         <div class="jasa-thumb">
@@ -817,13 +614,13 @@
                             </div>
 
                             <div class="jasa-card-footer">
-                                <button type="button" class="btn-card-consult">
+                                <span class="btn-card-consult">
                                     <span aria-hidden="true">💬</span>
                                     <span>Lihat Detail &amp; Konsultasi</span>
-                                </button>
+                                </span>
                             </div>
                         </div>
-                    </div>
+                    </a>
                 @empty
                     @if(request()->filled('q') || (request()->filled('jurusan') && request('jurusan') !== 'all'))
                         <div class="jasa-empty">
@@ -852,150 +649,4 @@
     </main>
 </div>
 
-<!-- ========================================== -->
-<!-- MODAL POP-UP DETAIL LAYANAN JASA DINAMIS   -->
-<!-- (struktur & logika dipertahankan, visual saja) -->
-<!-- ========================================== -->
-<div id="service-detail-modal" class="jasa-modal-backdrop" onclick="handleServiceBackdropClick(event)">
-    <div class="jasa-modal-container">
-        <!-- Close Button -->
-        <button type="button" class="modal-close-btn" onclick="closeServiceModal()" aria-label="Tutup Modal">
-            &times;
-        </button>
-
-        <!-- Modal Hero Thumbnail -->
-        <div class="modal-hero-thumb">
-            <img id="modal-serv-img" src="" alt="Foto Layanan" class="modal-hero-img" style="display: none;">
-            <div id="modal-serv-fallback" class="jasa-thumb-fallback" style="display: flex;">
-                <div class="thumb-pattern"></div>
-                <span id="modal-serv-icon" style="font-size: 72px;">🤝</span>
-            </div>
-        </div>
-
-        <!-- Konten Detail Jasa -->
-        <div class="modal-body">
-            <div style="display: flex; gap: 8px; align-items: center; flex-wrap: wrap; margin-bottom: 10px;">
-                <span id="modal-serv-jurusan" style="font-size: 12px; font-weight: 700; padding: 4px 12px; border-radius: 999px;">
-                    Jurusan
-                </span>
-                <span style="font-size: 12px; font-weight: 800; color: #059669; background: #ecfdf5; border: 1px solid #a7f3d0; padding: 4px 12px; border-radius: 999px;">
-                    Dikerjakan Siswa & Instruktur TEFA
-                </span>
-            </div>
-
-            <h2 id="modal-serv-name" class="modal-serv-title">
-                Nama Layanan
-            </h2>
-
-            <div id="modal-serv-price" class="modal-serv-price">
-                Mulai Rp 0
-            </div>
-
-            <div style="margin-bottom: 8px;">
-                <label style="font-size: 12px; font-weight: 700; color: #666666; text-transform: uppercase; letter-spacing: 0.5px; display: block; margin-bottom: 6px;">
-                    Deskripsi Lengkap & Lingkup Layanan
-                </label>
-                <div id="modal-serv-desc" class="modal-serv-desc-box">
-                    Deskripsi layanan jasa...
-                </div>
-            </div>
-
-            <div class="modal-wa-notice">
-                <span style="font-size: 20px;" aria-hidden="true">💬</span>
-                <span><strong>Konsultasi Langsung via WhatsApp:</strong> Tim instruktur dan admin jurusan TEFA akan mendiskusikan kebutuhan spesifikasi, estimasi waktu, serta penugasan siswa untuk proyek Anda.</span>
-            </div>
-
-            <!-- Footer & Tombol Aksi -->
-            <div class="modal-actions-row">
-                <button type="button" class="modal-btn-close-sec" onclick="closeServiceModal()">
-                    Tutup
-                </button>
-                <a id="modal-serv-wa-btn" href="#" target="_blank" class="modal-btn-wa-order">
-                    <span aria-hidden="true">💬</span>
-                    <span>Konsultasi via WhatsApp</span>
-                </a>
-            </div>
-        </div>
-    </div>
-</div>
-
-<script>
-    // Filter jurusan & pencarian kini lewat query string (?jurusan=&q=) supaya
-    // selamat saat berpindah halaman paginator. Pencarian submit otomatis 400ms
-    // setelah mengetik agar terasa seperti filter langsung seperti sebelumnya.
-    let jasaSearchTimer = null;
-
-    function debounceJasaSearch() {
-        clearTimeout(jasaSearchTimer);
-        jasaSearchTimer = setTimeout(() => {
-            const form = document.getElementById('jasa-search-form');
-            if (form) form.submit();
-        }, 400);
-    }
-
-    document.addEventListener('DOMContentLoaded', () => {
-        const input = document.getElementById('jasa-search-input');
-        if (input && input.value) {
-            input.focus();
-            input.setSelectionRange(input.value.length, input.value.length);
-        }
-    });
-
-    // Modal Interaction
-    function openServiceModal(service) {
-        const modal = document.getElementById('service-detail-modal');
-        if (!modal) return;
-
-        const imgEl = document.getElementById('modal-serv-img');
-        const fallbackEl = document.getElementById('modal-serv-fallback');
-        const iconEl = document.getElementById('modal-serv-icon');
-
-        if (service.foto) {
-            imgEl.src = service.foto;
-            imgEl.style.display = 'block';
-            fallbackEl.style.display = 'none';
-        } else {
-            imgEl.style.display = 'none';
-            fallbackEl.style.display = 'flex';
-            fallbackEl.style.background = service.fallback_bg;
-            iconEl.textContent = service.fallback_icon;
-        }
-
-        const deptEl = document.getElementById('modal-serv-jurusan');
-        deptEl.textContent = service.jurusan + ' (' + service.jurusan_code + ')';
-        deptEl.setAttribute('style', service.badge_style + '; font-size: 12px; font-weight: 700; padding: 4px 12px; border-radius: 999px;');
-
-        document.getElementById('modal-serv-name').textContent = service.nama;
-        document.getElementById('modal-serv-price').textContent = service.harga;
-        document.getElementById('modal-serv-desc').textContent = service.deskripsi || 'Tidak ada keterangan detail untuk layanan ini.';
-
-        const waBtn = document.getElementById('modal-serv-wa-btn');
-        if (waBtn) {
-            waBtn.href = service.wa_url;
-        }
-
-        modal.style.display = 'grid';
-        document.body.style.overflow = 'hidden';
-    }
-
-    function closeServiceModal() {
-        const modal = document.getElementById('service-detail-modal');
-        if (modal) {
-            modal.style.display = 'none';
-            document.body.style.overflow = '';
-        }
-    }
-
-    function handleServiceBackdropClick(e) {
-        if (e.target.id === 'service-detail-modal') {
-            closeServiceModal();
-        }
-    }
-
-    document.addEventListener('keydown', function(e) {
-        if (e.key === 'Escape') {
-            closeServiceModal();
-        }
-    });
-</script>
 @endsection
