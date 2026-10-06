@@ -3,6 +3,12 @@
 @section('title', 'Ringkasan Dashboard')
 
 @section('content')
+@push('styles')
+<style>
+  .katalog-aksi{display:flex;flex-wrap:wrap;gap:10px;align-items:center}
+  .katalog-aksi .hint{color:var(--muted);font-size:12.5px}
+</style>
+@endpush
 <div class="page-head">
   <div>
     <h1>RINGKASAN DASHBOARD <span class="pill yellow">★ Super Admin · Semua Jurusan</span></h1>
@@ -60,6 +66,30 @@
     </div>
     <div class="ico c-green">
       <svg class="i" viewBox="0 0 24 24"><path d="M12 3l9 5-9 5-9-5 9-5zM3 13l9 5 9-5M3 17.5l9 5 9-5"/></svg>
+    </div>
+  </div>
+</section>
+
+<!-- CETAK KATALOG PRODUK & LAYANAN JASA (PDF) -->
+<section class="card">
+  <div class="card-head">
+    <div>
+      <h3>Cetak Katalog TeFa</h3>
+      <p>Unduh katalog produk dan layanan jasa dalam format PDF siap cetak.</p>
+    </div>
+    <span class="chip">PDF</span>
+  </div>
+  <div class="card-body">
+    <div class="katalog-aksi">
+      <a href="{{ route('superadmin.katalog.produk') }}" class="btn primary" aria-label="Unduh katalog produk dalam format PDF">
+        <svg class="i" viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4M7 10l5 5 5-5M12 15V3"/></svg>
+        Katalog Produk
+      </a>
+      <a href="{{ route('superadmin.katalog.jasa') }}" class="btn ghost" aria-label="Unduh katalog layanan jasa dalam format PDF">
+        <svg class="i" viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4M7 10l5 5 5-5M12 15V3"/></svg>
+        Katalog Layanan Jasa
+      </a>
+      <span class="hint">Dibuat otomatis dari data produk dan layanan jasa aktif.</span>
     </div>
   </div>
 </section>

@@ -13,6 +13,7 @@ use App\Http\Controllers\HomeController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\SuperAdmin\DashboardController as SuperAdminDashboardController;
 use App\Http\Controllers\SuperAdmin\DepartmentController as SuperAdminDepartmentController;
+use App\Http\Controllers\SuperAdmin\KatalogController as SuperAdminKatalogController;
 use App\Http\Controllers\SuperAdmin\ReportController as SuperAdminReportController;
 use App\Http\Controllers\SuperAdmin\UserController as SuperAdminUserController;
 use App\Http\Controllers\TrackingController;
@@ -53,6 +54,10 @@ Route::middleware(['auth', 'verified'])->group(function () {
         Route::get('/reports', [SuperAdminReportController::class, 'index'])->name('reports.index');
         Route::get('/reports/print', [SuperAdminReportController::class, 'print'])->name('reports.print');
         Route::patch('/reports/{pesanan}/koreksi', [SuperAdminReportController::class, 'correct'])->name('reports.correct');
+
+        // 5. Cetak Katalog Produk & Layanan Jasa (PDF)
+        Route::get('/katalog/produk', [SuperAdminKatalogController::class, 'produk'])->name('katalog.produk');
+        Route::get('/katalog/jasa', [SuperAdminKatalogController::class, 'jasa'])->name('katalog.jasa');
     });
 
     // Admins Jurusan (Modular routes)
