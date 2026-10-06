@@ -5,15 +5,19 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>@yield('title', 'Katalog TEFA SMKN 4 Tanjungpinang')</title>
     
-    <!-- Fonts dari desain homepage (Plus Jakarta Sans untuk teks, Anton untuk label kartu program) -->
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Anton&display=swap" rel="stylesheet">
-
-    {{-- Open Sauce One (judul hero). Tidak tersedia di Google Fonts — diambil dari
-         Fontsource CDN (npm @fontsource/open-sauce-one, lisensi OFL-1.1).
-         Hanya dipakai di .tefa-hero h1, bukan global. --}}
+    {{-- Font utama situs: Open Sauce Sans untuk SEMUA teks — diambil dari Fontsource
+         CDN (npm @fontsource/open-sauce-sans, lisensi OFL-1.1), bukan Google Fonts. --}}
     <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
+    <link href="https://cdn.jsdelivr.net/fontsource/css/open-sauce-sans@5.3.0/400.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/fontsource/css/open-sauce-sans@5.3.0/500.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/fontsource/css/open-sauce-sans@5.3.0/600.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/fontsource/css/open-sauce-sans@5.3.0/700.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/fontsource/css/open-sauce-sans@5.3.0/800.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/fontsource/css/open-sauce-sans@5.3.0/900.css" rel="stylesheet">
+
+    {{-- PENGECUALIAN: Open Sauce One (judul hero) — sudah Open Sauce sejak awal dan
+         sengaja TIDAK diganti. Sama-sama dari Fontsource CDN (@fontsource/open-sauce-one).
+         Hanya dipakai di .tefa-hero h1, bukan global. --}}
     <link href="https://cdn.jsdelivr.net/fontsource/css/open-sauce-one@5.3.0/400.css" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/fontsource/css/open-sauce-one@5.3.0/600.css" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/fontsource/css/open-sauce-one@5.3.0/700.css" rel="stylesheet">
@@ -31,7 +35,7 @@
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            font-family: 'Open Sauce Sans', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
         }
 
         body {

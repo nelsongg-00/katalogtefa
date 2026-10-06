@@ -12,10 +12,12 @@ export default {
     theme: {
         extend: {
             fontFamily: {
-                sans: ['Figtree', ...defaultTheme.fontFamily.sans],
+                // Seluruh teks situs memakai Open Sauce Sans (Fontsource CDN, OFL-1.1).
+                // Pengecualian: judul hero di home.blade.php tetap Open Sauce One.
+                sans: ['"Open Sauce Sans"', ...defaultTheme.fontFamily.sans],
                 // Design tokens from docs/design/homepage.html
-                body: ['"Plus Jakarta Sans"', ...defaultTheme.fontFamily.sans],
-                display: ['Anton', 'Impact', 'Arial Narrow', 'sans-serif'],
+                body: ['"Open Sauce Sans"', ...defaultTheme.fontFamily.sans],
+                display: ['"Open Sauce Sans"', 'Impact', 'Arial Narrow', 'sans-serif'],
             },
             colors: {
                 ink: {

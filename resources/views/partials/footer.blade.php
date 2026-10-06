@@ -6,9 +6,13 @@
      partials/navbar.blade.php). Token ditaruh di .site-footer, BUKAN :root, supaya tidak
      menimpa token global halaman (mis. --color-yellow yang dipakai outline :focus-visible
      di halaman produk/jasa/tracking/profil). --}}
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
+<link href="https://cdn.jsdelivr.net/fontsource/css/open-sauce-sans@5.3.0/400.css" rel="stylesheet">
+<link href="https://cdn.jsdelivr.net/fontsource/css/open-sauce-sans@5.3.0/500.css" rel="stylesheet">
+<link href="https://cdn.jsdelivr.net/fontsource/css/open-sauce-sans@5.3.0/600.css" rel="stylesheet">
+<link href="https://cdn.jsdelivr.net/fontsource/css/open-sauce-sans@5.3.0/700.css" rel="stylesheet">
+<link href="https://cdn.jsdelivr.net/fontsource/css/open-sauce-sans@5.3.0/800.css" rel="stylesheet">
+<link href="https://cdn.jsdelivr.net/fontsource/css/open-sauce-sans@5.3.0/900.css" rel="stylesheet">
 
 <footer class="site-footer">
     <style>
@@ -21,7 +25,7 @@
             --color-white: #ffffff;
             --color-icon-red: #e53935;
 
-            --font-body: "Hanken Grotesk", Arial, "Helvetica Neue", sans-serif;
+            --font-body: "Open Sauce Sans", "Hanken Grotesk", Arial, "Helvetica Neue", sans-serif;
             --fs-sm: 0.75rem;       /* 12px: teks footer */
             --fs-title: 1.375rem;   /* 22px: judul kuning */
 

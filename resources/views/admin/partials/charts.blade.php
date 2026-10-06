@@ -58,7 +58,7 @@
                 usePointStyle: true,
                 pointStyle: 'circle',
                 font: {
-                  family: "'Plus Jakarta Sans', sans-serif",
+                  family: "'Open Sauce Sans', sans-serif",
                   size: 12,
                   weight: '600'
                 }
@@ -66,8 +66,8 @@
             },
             tooltip: {
               backgroundColor: '#16234a',
-              titleFont: { family: "'Plus Jakarta Sans', sans-serif", size: 12, weight: '700' },
-              bodyFont: { family: "'Plus Jakarta Sans', sans-serif", size: 12 },
+              titleFont: { family: "'Open Sauce Sans', sans-serif", size: 12, weight: '700' },
+              bodyFont: { family: "'Open Sauce Sans', sans-serif", size: 12 },
               padding: 10,
               cornerRadius: 8
             }
@@ -77,7 +77,7 @@
               beginAtZero: true,
               ticks: {
                 stepSize: 1,
-                font: { family: "'Plus Jakarta Sans', sans-serif", size: 11, color: '#7a839c' }
+                font: { family: "'Open Sauce Sans', sans-serif", size: 11, color: '#7a839c' }
               },
               grid: {
                 color: '#eef2fd'
@@ -85,7 +85,7 @@
             },
             x: {
               ticks: {
-                font: { family: "'Plus Jakarta Sans', sans-serif", size: 11, weight: '600', color: '#7a839c' }
+                font: { family: "'Open Sauce Sans', sans-serif", size: 11, weight: '600', color: '#7a839c' }
               },
               grid: {
                 display: false

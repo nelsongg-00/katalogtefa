@@ -27,7 +27,7 @@
         --radius-banner: 40px;
         --radius-card: 15px;
         --radius-pill: 999px;
-        --font-display: 'Anton', 'Impact', 'Arial Narrow', sans-serif;
+        --font-display: 'Open Sauce Sans', 'Anton', 'Impact', 'Arial Narrow', sans-serif;
 
         background-color: var(--color-bg);
         color: var(--color-text);
@@ -73,8 +73,11 @@
 
     .jasa-page .banner__title {
         font-family: var(--font-display);
-        font-size: clamp(2.25rem, 7vw, 4.25rem);
-        font-weight: 400;
+        /* Dikecilkan ~20% dari clamp(2.25rem, 7vw, 4.25rem) */
+        font-size: clamp(1.8rem, 5.6vw, 3.4rem);
+        /* Anton (font display lama) berbobot berat pada 400 — Open Sauce Sans perlu
+           bobot eksplisit agar judul banner tetap setebal sebelumnya. */
+        font-weight: 800;
         line-height: 1.05;
         text-transform: uppercase;
         letter-spacing: 0.5px;

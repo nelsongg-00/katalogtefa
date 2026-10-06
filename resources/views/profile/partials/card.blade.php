@@ -6,9 +6,13 @@
     Navbar & footer TIDAK ditulis di sini — masing-masing layout yang menyediakannya.
     Semua CSS di-scope ke .profile-page / .profile-card agar tidak mengganggu styling layout.
 --}}
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
+<link href="https://cdn.jsdelivr.net/fontsource/css/open-sauce-sans@5.3.0/400.css" rel="stylesheet">
+<link href="https://cdn.jsdelivr.net/fontsource/css/open-sauce-sans@5.3.0/500.css" rel="stylesheet">
+<link href="https://cdn.jsdelivr.net/fontsource/css/open-sauce-sans@5.3.0/600.css" rel="stylesheet">
+<link href="https://cdn.jsdelivr.net/fontsource/css/open-sauce-sans@5.3.0/700.css" rel="stylesheet">
+<link href="https://cdn.jsdelivr.net/fontsource/css/open-sauce-sans@5.3.0/800.css" rel="stylesheet">
+<link href="https://cdn.jsdelivr.net/fontsource/css/open-sauce-sans@5.3.0/900.css" rel="stylesheet">
 
 <style>
     /* ==========================================================
@@ -27,7 +31,7 @@
         --color-input-bg: #f1f1f1;
         --color-danger: #dc2626;
 
-        --font-body: "Hanken Grotesk", "Helvetica Neue", Arial, sans-serif;
+        --font-body: "Open Sauce Sans", "Hanken Grotesk", "Helvetica Neue", Arial, sans-serif;
         --fs-xs: 0.8125rem;
         --fs-sm: 0.875rem;
         --fs-base: 0.9375rem;

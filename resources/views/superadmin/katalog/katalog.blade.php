@@ -3,6 +3,15 @@
 <head>
     <meta charset="UTF-8">
     <title>{{ $judul }} — TeFa SMKN 4 Tanjung Pinang</title>
+    <!-- Font pratinjau di browser. Catatan PDF: dompdf tidak memuat font remote,
+         jadi ia jatuh ke 'DejaVu Sans' di urutan kedua (tetap tercetak benar). -->
+    <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
+    <link href="https://cdn.jsdelivr.net/fontsource/css/open-sauce-sans@5.3.0/400.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/fontsource/css/open-sauce-sans@5.3.0/500.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/fontsource/css/open-sauce-sans@5.3.0/600.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/fontsource/css/open-sauce-sans@5.3.0/700.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/fontsource/css/open-sauce-sans@5.3.0/800.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/fontsource/css/open-sauce-sans@5.3.0/900.css" rel="stylesheet">
     <style>
         @page {
             size: A4 portrait;
@@ -16,7 +25,7 @@
 
         /* @page margin tidak dipakai dompdf — margin halaman dibuat lewat body */
         body {
-            font-family: 'DejaVu Sans', sans-serif;
+            font-family: 'Open Sauce Sans', 'DejaVu Sans', sans-serif;
             color: #000000;
             background: #ffffff;
             font-size: 7pt;

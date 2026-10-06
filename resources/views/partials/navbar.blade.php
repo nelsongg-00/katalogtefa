@@ -1,13 +1,13 @@
 {{-- Navbar publik (navbar utama). Dipakai bersama oleh layouts/public.blade.php
      dan halaman login. CSS + JS ikut di dalam partial agar tampil & berperilaku identik
      walau halaman pemanggil tidak memuat @vite (mis. login yang berdiri sendiri).
-     Font dipaksa Segoe UI di wrapper .site-header supaya tidak mewarisi font halaman. --}}
+     Font dipaksa Open Sauce Sans di wrapper .site-header supaya tidak mewarisi font halaman. --}}
 <div class="site-header">
 <style>
 /* Font khusus navbar agar identik dengan layout publik (halaman login memakai font lain). */
 .site-header,
 .site-header * {
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    font-family: 'Open Sauce Sans', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
 
         /* --- NAVBAR --- */

@@ -3,10 +3,14 @@
 @section('title', 'Status Pesanan — Katalog TEFA SMKN 4 Tanjungpinang')
 
 @section('content')
-{{-- Font Hanken Grotesk — cara yang sama dengan client/orders.blade.php & profile/partials/card.blade.php --}}
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+{{-- Font Open Sauce Sans — cara yang sama dengan client/orders.blade.php & profile/partials/card.blade.php --}}
+<link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
+<link href="https://cdn.jsdelivr.net/fontsource/css/open-sauce-sans@5.3.0/400.css" rel="stylesheet">
+<link href="https://cdn.jsdelivr.net/fontsource/css/open-sauce-sans@5.3.0/500.css" rel="stylesheet">
+<link href="https://cdn.jsdelivr.net/fontsource/css/open-sauce-sans@5.3.0/600.css" rel="stylesheet">
+<link href="https://cdn.jsdelivr.net/fontsource/css/open-sauce-sans@5.3.0/700.css" rel="stylesheet">
+<link href="https://cdn.jsdelivr.net/fontsource/css/open-sauce-sans@5.3.0/800.css" rel="stylesheet">
+<link href="https://cdn.jsdelivr.net/fontsource/css/open-sauce-sans@5.3.0/900.css" rel="stylesheet">
 
 <style>
     /* ==========================================================
@@ -30,7 +34,7 @@
         --color-step-bg: #f1f1f1;
 
         /* Tipografi */
-        --font-body: "Hanken Grotesk", "Helvetica Neue", Arial, sans-serif;
+        --font-body: "Open Sauce Sans", "Hanken Grotesk", "Helvetica Neue", Arial, sans-serif;
         --fs-xs: 0.8125rem;
         --fs-base: 0.9375rem;
         --fs-md: 1rem;
@@ -234,7 +238,7 @@
             <div style="font-size: 48px; margin-bottom: 14px;">🔎</div>
             <h3 style="font-size: 20px; font-weight: 800; color: #1e293b; margin-bottom: 8px;">Pesanan Tidak Ditemukan</h3>
             <p style="color: #64748b; font-size: 14.5px; max-width: 520px; margin: 0 auto 24px; line-height: 1.6;">
-                Kode tracking <strong style="color: #dc2626; font-family: monospace; background: #fef2f2; padding: 2px 8px; border-radius: 4px;">{{ $searchedCode }}</strong> tidak terdaftar dalam database kami. Pastikan format kode sudah sesuai (contoh: <code>TEFA-9821</code> untuk jasa atau <code>TEFA-FISIK-XXXX</code> untuk produk fisik).
+                Kode tracking <strong style="color: #dc2626; font-family: inherit; background: #fef2f2; padding: 2px 8px; border-radius: 4px;">{{ $searchedCode }}</strong> tidak terdaftar dalam database kami. Pastikan format kode sudah sesuai (contoh: <code>TEFA-9821</code> untuk jasa atau <code>TEFA-FISIK-XXXX</code> untuk produk fisik).
             </p>
             <div style="display: flex; justify-content: center; gap: 12px; flex-wrap: wrap;">
                 <a href="{{ route('order.tracking.index') }}" style="background: #f1f5f9; color: #334155; padding: 10px 20px; border-radius: 10px; font-weight: 700; text-decoration: none; font-size: 13.5px;">
@@ -300,7 +304,7 @@
                             <span style="font-size: 12px; font-weight: 600; color: #64748b;">Nomor Resi / Pelacakan</span>
                         </div>
                         <div style="display: flex; align-items: center; gap: 10px; margin-top: 4px;">
-                            <span style="font-family: monospace; font-size: 24px; font-weight: 800; color: #1e3a8a;">{{ $order->order_code }}</span>
+                            <span style="font-family: inherit; font-size: 24px; font-weight: 800; color: #1e3a8a;">{{ $order->order_code }}</span>
                             <button type="button" onclick="navigator.clipboard.writeText('{{ $order->order_code }}'); alert('Kode tracking tersalin!');" title="Salin Kode" style="background: #eff6ff; border: 1px solid #bfdbfe; color: #2563eb; border-radius: 6px; padding: 4px 8px; font-size: 12px; cursor: pointer; font-weight: 700;">
                                 📋 Salin
                             </button>
@@ -500,7 +504,7 @@
                             <span style="font-size: 12px; color: #64748b; font-weight: 600;">Nomor Pelacakan</span>
                         </div>
                         <div style="display: flex; align-items: center; gap: 10px; margin-top: 4px;">
-                            <span style="font-family: monospace; font-size: 24px; font-weight: 800; color: #1e3a8a;">{{ $order->order_code }}</span>
+                            <span style="font-family: inherit; font-size: 24px; font-weight: 800; color: #1e3a8a;">{{ $order->order_code }}</span>
                             <button type="button" onclick="navigator.clipboard.writeText('{{ $order->order_code }}'); alert('Kode tracking tersalin!');" title="Salin Kode" style="background: #eff6ff; border: 1px solid #bfdbfe; color: #2563eb; border-radius: 6px; padding: 4px 8px; font-size: 12px; cursor: pointer; font-weight: 700;">
                                 📋 Salin
                             </button>

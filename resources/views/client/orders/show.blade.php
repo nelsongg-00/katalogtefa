@@ -32,7 +32,7 @@
         <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px; margin-bottom: 24px; border-bottom: 1px solid #f1f5f9; padding-bottom: 16px;">
             <div>
                 <span style="font-size: 12px; color: #64748b; font-weight: 700; text-transform: uppercase;">Kode Pesanan</span>
-                <div style="font-family: monospace; font-size: 22px; font-weight: 800; color: #1e3a8a;">
+                <div style="font-family: inherit; font-size: 22px; font-weight: 800; color: #1e3a8a;">
                     {{ $order->order_code }}
                 </div>
             </div>

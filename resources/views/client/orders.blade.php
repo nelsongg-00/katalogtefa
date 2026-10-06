@@ -3,10 +3,14 @@
 @section('title', 'Riwayat Pesanan Saya — Katalog TEFA SMKN 4 Tanjungpinang')
 
 @section('content')
-{{-- Font Hanken Grotesk — cara yang sama dengan profile/partials/card.blade.php --}}
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+{{-- Font Open Sauce Sans — cara yang sama dengan profile/partials/card.blade.php --}}
+<link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
+<link href="https://cdn.jsdelivr.net/fontsource/css/open-sauce-sans@5.3.0/400.css" rel="stylesheet">
+<link href="https://cdn.jsdelivr.net/fontsource/css/open-sauce-sans@5.3.0/500.css" rel="stylesheet">
+<link href="https://cdn.jsdelivr.net/fontsource/css/open-sauce-sans@5.3.0/600.css" rel="stylesheet">
+<link href="https://cdn.jsdelivr.net/fontsource/css/open-sauce-sans@5.3.0/700.css" rel="stylesheet">
+<link href="https://cdn.jsdelivr.net/fontsource/css/open-sauce-sans@5.3.0/800.css" rel="stylesheet">
+<link href="https://cdn.jsdelivr.net/fontsource/css/open-sauce-sans@5.3.0/900.css" rel="stylesheet">
 
 <style>
     /* ==========================================================
@@ -38,7 +42,7 @@
         --status-rejected: #ff1f2d;  /* Dibatalkan        — merah      */
 
         /* Tipografi */
-        --font-body: "Hanken Grotesk", "Helvetica Neue", Arial, sans-serif;
+        --font-body: "Open Sauce Sans", "Hanken Grotesk", "Helvetica Neue", Arial, sans-serif;
         --fs-xs: 0.8125rem;
         --fs-sm: 0.875rem;
         --fs-base: 0.9375rem;
@@ -175,7 +179,7 @@
     }
 
     .my-orders-page .order__code-chip {
-        font-family: ui-monospace, "SFMono-Regular", Menlo, Consolas, monospace;
+        font-family: inherit;
         font-size: 12px;
         font-weight: 700;
         color: var(--color-primary);

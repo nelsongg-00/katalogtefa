@@ -89,7 +89,7 @@
                     @endphp
                     <tr style="border-bottom: 1px solid #f1f5f9; background: {{ $order->status === 'menunggu_konfirmasi' ? '#fffdf7' : 'inherit' }};">
                         <td style="padding: 14px 18px;">
-                            <a href="{{ $trackingUrl }}" target="_blank" style="font-family: monospace; font-size: 13.5px; font-weight: 800; color: #2563eb; text-decoration: underline; background: #eff6ff; padding: 3px 8px; border-radius: 6px; display: inline-block;">
+                            <a href="{{ $trackingUrl }}" target="_blank" style="font-family: inherit; font-size: 13.5px; font-weight: 800; color: #2563eb; text-decoration: underline; background: #eff6ff; padding: 3px 8px; border-radius: 6px; display: inline-block;">
                                 {{ $order->order_code }} ↗
                             </a>
                             <div style="font-size: 11px; color: #94a3b8; margin-top: 4px;">{{ $order->created_at->format('d M Y, H:i') }}</div>
