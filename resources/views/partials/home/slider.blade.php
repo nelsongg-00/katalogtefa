@@ -67,7 +67,7 @@
             data-stagger-group
             x-ref="track">
             <li class="px-[0.75rem]">
-                <a href="#" class="relative block aspect-[3/4] overflow-hidden rounded-card bg-card-blue">
+                <a href="{{ route('jurusan.show', 'gim') }}" class="relative block aspect-[3/4] overflow-hidden rounded-card bg-card-blue">
                     <span class="absolute left-4 top-3 font-display text-5xl leading-none text-white">GIM</span>
                     <span class="sr-only">Program keahlian Pengembangan GIM</span>
                     <!-- TODO: add image (asset/img/program-1.jpg) -->
@@ -75,7 +75,7 @@
             </li>
 
             <li class="px-[0.75rem]">
-                <a href="#" class="relative block aspect-[3/4] overflow-hidden rounded-card bg-card-orange">
+                <a href="{{ route('jurusan.show', 'rpl') }}" class="relative block aspect-[3/4] overflow-hidden rounded-card bg-card-orange">
                     <span class="absolute left-4 top-3 font-display text-5xl leading-none text-white">RPL</span>
                     <span class="sr-only">Program keahlian Rekayasa Perangkat Lunak</span>
                     <!-- TODO: add image (asset/img/program-2.jpg) -->
@@ -83,7 +83,7 @@
             </li>
 
             <li class="px-[0.75rem]">
-                <a href="#" class="relative block aspect-[3/4] overflow-hidden rounded-card bg-card-red">
+                <a href="{{ route('jurusan.show', 'dkv') }}" class="relative block aspect-[3/4] overflow-hidden rounded-card bg-card-red">
                     <span class="absolute left-4 top-3 font-display text-5xl leading-none text-white">DKV</span>
                     <span class="sr-only">Program keahlian Desain Komunikasi dan Visual</span>
                     <!-- TODO: add image (asset/img/program-3.jpg) -->
@@ -91,7 +91,7 @@
             </li>
 
             <li class="px-[0.75rem]">
-                <a href="#" class="relative block aspect-[3/4] overflow-hidden rounded-card bg-card-blue">
+                <a href="{{ route('jurusan.show', 'pspt') }}" class="relative block aspect-[3/4] overflow-hidden rounded-card bg-card-blue">
                     <span class="absolute left-4 top-3 font-display text-5xl leading-none text-white">PSPT</span>
                     <span class="sr-only">Program keahlian Produksi dan Siaran Program Televisi</span>
                     <!-- TODO: add image (asset/img/program-4.jpg) -->
@@ -99,7 +99,7 @@
             </li>
 
             <li class="px-[0.75rem]">
-                <a href="#" class="relative block aspect-[3/4] overflow-hidden rounded-card bg-card-orange">
+                <a href="{{ route('jurusan.show', 'tkj') }}" class="relative block aspect-[3/4] overflow-hidden rounded-card bg-card-orange">
                     <span class="absolute left-4 top-3 font-display text-5xl leading-none text-white">TKJ</span>
                     <span class="sr-only">Program keahlian Teknik Komputer dan Jaringan</span>
                     <!-- TODO: add image (asset/img/program-5.jpg) -->
@@ -107,7 +107,7 @@
             </li>
 
             <li class="px-[0.75rem]">
-                <a href="#" class="relative block aspect-[3/4] overflow-hidden rounded-card bg-card-red">
+                <a href="{{ route('jurusan.show', 'animasi') }}" class="relative block aspect-[3/4] overflow-hidden rounded-card bg-card-red">
                     <span class="absolute left-4 top-3 font-display text-5xl leading-none text-white">ANM</span>
                     <span class="sr-only">Program keahlian Animasi</span>
                     <!-- TODO: add image (asset/img/program-6.jpg) -->

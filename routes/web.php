@@ -10,6 +10,7 @@ use App\Http\Controllers\AdminJurusanController;
 use App\Http\Controllers\CheckoutController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\HomeController;
+use App\Http\Controllers\JurusanController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\SuperAdmin\DashboardController as SuperAdminDashboardController;
 use App\Http\Controllers\SuperAdmin\DepartmentController as SuperAdminDepartmentController;
@@ -23,8 +24,11 @@ use Illuminate\Support\Facades\Route;
 Route::get('/', [HomeController::class, 'index'])->name('home');
 Route::get('/profil-sekolah', [HomeController::class, 'profil'])->name('profil');
 Route::get('/produk', [HomeController::class, 'produk'])->name('produk');
+Route::get('/produk/{product}', [HomeController::class, 'showProduct'])->name('produk.show');
 Route::get('/layanan-jasa', [HomeController::class, 'jasa'])->name('jasa');
+Route::get('/layanan-jasa/{service}', [HomeController::class, 'showService'])->name('jasa.show');
 Route::get('/portofolio', [HomeController::class, 'portofolio'])->name('portofolio');
+Route::get('/jurusan/{slug}', [JurusanController::class, 'show'])->name('jurusan.show');
 Route::get('/lacak', [TrackingController::class, 'index'])->name('order.tracking.index');
 Route::get('/lacak/{order_code}', [TrackingController::class, 'show'])->name('order.track');
 Route::post('/lacak/search', [TrackingController::class, 'search'])->name('order.search');
@@ -58,6 +62,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
         // 5. Cetak Katalog Produk & Layanan Jasa (PDF)
         Route::get('/katalog/produk', [SuperAdminKatalogController::class, 'produk'])->name('katalog.produk');
         Route::get('/katalog/jasa', [SuperAdminKatalogController::class, 'jasa'])->name('katalog.jasa');
+        Route::get('/katalog/{type}/preview', [SuperAdminKatalogController::class, 'preview'])->name('katalog.preview');
     });
 
     // Admins Jurusan (Modular routes)
