@@ -14,26 +14,26 @@
     <link href="https://cdn.jsdelivr.net/fontsource/css/open-sauce-sans@5.3.0/900.css" rel="stylesheet">
     <style>
     :root{
-      --header:#16224a;
-      --sidebar:#1e2b5c;
-      --sidebar-active:#2a3a73;
-      --bg:#f3f6fb;
+      --header:#0a215e;
+      --sidebar:#0b1a6b;
+      --sidebar-active:#16357a;
+      --bg:#f5f8fc;
       --card:#ffffff;
-      --ink:#0f1b3d;
+      --ink:#0f172a;
       --muted:#64748b;
-      --line:#e6ebf3;
-      --yellow:#fbbf24;
+      --line:#e6eaef;
+      --yellow:#f2b630;
       --yellow-soft:#fef3c7;
-      --yellow-ink:#d99a06;
-      --blue:#2b6cdb;
-      --blue-soft:#e6eefc;
-      --green:#16a870;
-      --green-soft:#dcf5ea;
-      --red:#e0484f;
-      --red-soft:#fde8e9;
-      --purple:#7c4ddb;
-      --purple-soft:#eee7fc;
-      --radius:16px;
+      --yellow-ink:#b45309;
+      --blue:#0a4aa6;
+      --blue-soft:#eef4ff;
+      --green:#16a34a;
+      --green-soft:#dcfce7;
+      --red:#e53935;
+      --red-soft:#fee2e2;
+      --purple:#7c3aed;
+      --purple-soft:#f5f3ff;
+      --radius:15px;
     }
     *{box-sizing:border-box;margin:0;padding:0}
     html{scroll-behavior:smooth}
@@ -60,8 +60,8 @@
     .whoami b{display:block;font-size:13.5px}
     .whoami span{font-size:11.5px;color:var(--yellow);font-weight:700}
     .avatar{width:36px;height:36px;border-radius:50%;background:var(--yellow);color:var(--header);font-weight:800;font-size:12.5px;display:grid;place-items:center;flex:none}
-    .logout{border:1px solid #6b2f47;background:#3b2441;color:#ff8d95;font-weight:700;font-size:12.5px;padding:7px 16px;border-radius:999px;transition:background .15s}
-    .logout:hover{background:#4b2a4d}
+    .logout{border:1px solid rgba(229,57,53,.45);background:rgba(229,57,53,.12);color:#f0868b;font-weight:700;font-size:12.5px;padding:7px 16px;border-radius:999px;transition:background .15s,color .15s}
+    .logout:hover{background:var(--red);color:#fff}
 
     .notif{position:absolute;top:52px;right:0;width:320px;background:#fff;color:var(--ink);border-radius:14px;box-shadow:0 18px 40px rgba(15,27,61,.22);padding:8px;display:none}
     .notif.open{display:block}
@@ -92,7 +92,7 @@
     .actions{display:flex;gap:10px;flex-wrap:wrap}
     .btn{display:inline-flex;align-items:center;gap:8px;padding:10px 20px;border-radius:999px;font-weight:700;font-size:13.5px;transition:transform .12s,box-shadow .15s,background .15s;cursor:pointer}
     .btn:active{transform:translateY(1px)}
-    .btn.primary{background:var(--yellow);color:var(--header);box-shadow:0 6px 16px rgba(251,191,36,.35)}
+    .btn.primary{background:var(--yellow);color:var(--header);box-shadow:0 6px 16px rgba(242,182,48,.35)}
     .btn.primary:hover{background:#f7b50f}
     .btn.ghost{background:#fff;border:1px solid var(--line);color:var(--ink)}
     .btn.ghost:hover{background:#f8fafd}
@@ -168,7 +168,7 @@
     .field{display:flex;flex-direction:column;gap:5px}
     .field label{font-size:12px;font-weight:700;color:#3b4a6b}
     .inp,.sel{border:1px solid #d8e0ee;background:#fff;border-radius:11px;padding:9px 13px;min-width:0;transition:border-color .15s,box-shadow .15s}
-    .inp:focus,.sel:focus{outline:none;border-color:var(--blue);box-shadow:0 0 0 3px rgba(43,108,219,.15)}
+    .inp:focus,.sel:focus{outline:none;border-color:var(--blue);box-shadow:0 0 0 3px rgba(10,74,166,.15)}
     .search{position:relative;flex:1;min-width:200px}
     .search svg{position:absolute;left:12px;top:50%;transform:translateY(-50%);color:var(--muted);width:16px;height:16px}
     .search .inp{width:100%;padding-left:36px}

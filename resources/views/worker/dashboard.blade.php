@@ -11,8 +11,8 @@
       border-radius: 20px;
       color: white;
       background:
-        radial-gradient(circle at 80% 10%, rgba(227, 183, 91, .18), transparent 28%),
-        radial-gradient(circle at 10% 130%, rgba(77, 120, 255, .20), transparent 38%),
+        radial-gradient(circle at 80% 10%, rgba(242, 182, 48, .18), transparent 28%),
+        radial-gradient(circle at 10% 130%, rgba(10, 74, 166, .20), transparent 38%),
         linear-gradient(135deg, var(--navy-800), var(--navy-700));
       box-shadow: 0 16px 40px rgba(13, 27, 58, .16);
       margin-bottom: 22px;
@@ -83,7 +83,7 @@
       font-size: 12px;
       font-weight: 800;
       transition: .18s ease;
-      box-shadow: 0 8px 20px rgba(227, 183, 91, .2);
+      box-shadow: 0 8px 20px rgba(242, 182, 48, .2);
     }
     .btn-gold:hover {
       filter: brightness(1.05);
@@ -222,7 +222,7 @@
     .progress-fill {
       height: 100%;
       border-radius: 99px;
-      background: linear-gradient(90deg, #4d78ff, #2563eb);
+      background: linear-gradient(90deg, #0a4aa6, #00357f);
     }
     .progress-pct {
       font-size: 11.5px;
@@ -232,7 +232,7 @@
     }
 
     .btn-work {
-      background: #2f6fda;
+      background: var(--blue);
       color: #fff;
       padding: 7px 14px;
       border-radius: 8px;
@@ -244,7 +244,7 @@
       transition: background .15s ease;
     }
     .btn-work:hover {
-      background: #1e56b8;
+      background: #00357f;
     }
 
     @media (max-width: 900px) {
@@ -277,7 +277,7 @@
     <div class="metric">
       <div class="metric-top">
         <span class="metric-label">Tugas Berjalan</span>
-        <div class="metric-icon" style="background: #eff6ff; color: #2563eb;">
+        <div class="metric-icon" style="background: #eff6ff; color: var(--blue);">
           <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
         </div>
       </div>

@@ -5,8 +5,8 @@
 @section('content')
 <div class="content-head" style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 24px; flex-wrap: wrap; gap: 16px;">
     <div>
-        <h1 style="font-size: 22px; font-weight: 800; color: #16234a; margin-bottom: 4px;">Manajemen Pesanan TeFa</h1>
-        <p style="color: #7a839c; font-size: 13.5px;">Kelola pesanan produk fisik (COD & Ambil di Tempat) dan pencatatan pesanan jasa WhatsApp jurusan.</p>
+        <h1 style="font-size: 22px; font-weight: 800; color: var(--text); margin-bottom: 4px;">Manajemen Pesanan TeFa</h1>
+        <p style="color: var(--muted); font-size: 13.5px;">Kelola pesanan produk fisik (COD & Ambil di Tempat) dan pencatatan pesanan jasa WhatsApp jurusan.</p>
     </div>
     <div>
         <a href="{{ route('admin.orders.create') }}" class="btn btn-primary" style="background: #16a34a; color: #fff; padding: 10px 20px; border-radius: 10px; font-weight: 700; text-decoration: none; display: inline-flex; align-items: center; gap: 8px; font-size: 13.5px; box-shadow: 0 4px 12px rgba(22,163,74,0.25);">
@@ -29,15 +29,15 @@
 <!-- Tabs Tipe Pesanan -->
 <div style="display: flex; gap: 10px; margin-bottom: 20px; border-bottom: 2px solid #e2e8f0; padding-bottom: 2px;">
     <a href="{{ route('admin.orders.index') }}" 
-       style="padding: 10px 18px; font-size: 13.5px; font-weight: 700; text-decoration: none; border-bottom: 3px solid {{ !request('tipe') ? '#2563eb' : 'transparent' }}; color: {{ !request('tipe') ? '#2563eb' : '#64748b' }};">
+       style="padding: 10px 18px; font-size: 13.5px; font-weight: 700; text-decoration: none; border-bottom: 3px solid {{ !request('tipe') ? 'var(--blue)' : 'transparent' }}; color: {{ !request('tipe') ? 'var(--blue)' : '#64748b' }};">
         Semua Pesanan
     </a>
     <a href="{{ route('admin.orders.index', ['tipe' => 'fisik']) }}" 
-       style="padding: 10px 18px; font-size: 13.5px; font-weight: 700; text-decoration: none; border-bottom: 3px solid {{ request('tipe') === 'fisik' ? '#2563eb' : 'transparent' }}; color: {{ request('tipe') === 'fisik' ? '#2563eb' : '#64748b' }};">
+       style="padding: 10px 18px; font-size: 13.5px; font-weight: 700; text-decoration: none; border-bottom: 3px solid {{ request('tipe') === 'fisik' ? 'var(--blue)' : 'transparent' }}; color: {{ request('tipe') === 'fisik' ? 'var(--blue)' : '#64748b' }};">
         📦 Pesanan Produk Fisik (COD)
     </a>
     <a href="{{ route('admin.orders.index', ['tipe' => 'jasa']) }}" 
-       style="padding: 10px 18px; font-size: 13.5px; font-weight: 700; text-decoration: none; border-bottom: 3px solid {{ request('tipe') === 'jasa' ? '#2563eb' : 'transparent' }}; color: {{ request('tipe') === 'jasa' ? '#2563eb' : '#64748b' }};">
+       style="padding: 10px 18px; font-size: 13.5px; font-weight: 700; text-decoration: none; border-bottom: 3px solid {{ request('tipe') === 'jasa' ? 'var(--blue)' : 'transparent' }}; color: {{ request('tipe') === 'jasa' ? 'var(--blue)' : '#64748b' }};">
         🤝 Pesanan Layanan Jasa WA
     </a>
 </div>
@@ -57,7 +57,7 @@
                 <option value="selesai" {{ request('status') === 'selesai' ? 'selected' : '' }}>Selesai / Lunas</option>
                 <option value="dibatalkan" {{ request('status') === 'dibatalkan' ? 'selected' : '' }}>Dibatalkan</option>
             </select>
-            <button type="submit" style="background: #2563eb; color: #fff; border: none; padding: 7px 16px; border-radius: 8px; font-size: 13px; font-weight: 600; cursor: pointer;">Filter</button>
+            <button type="submit" style="background: var(--blue); color: #fff; border: none; padding: 7px 16px; border-radius: 8px; font-size: 13px; font-weight: 600; cursor: pointer;">Filter</button>
             @if(request('search') || request('status') || request('tipe'))
                 <a href="{{ route('admin.orders.index') }}" style="color: #64748b; font-size: 13px; text-decoration: underline; margin-left: 6px;">Reset</a>
             @endif
@@ -89,11 +89,11 @@
                     @endphp
                     <tr style="border-bottom: 1px solid #f1f5f9; background: {{ $order->status === 'menunggu_konfirmasi' ? '#fffdf7' : 'inherit' }};">
                         <td style="padding: 14px 18px;">
-                            <a href="{{ $trackingUrl }}" target="_blank" style="font-family: inherit; font-size: 13.5px; font-weight: 800; color: #2563eb; text-decoration: underline; background: #eff6ff; padding: 3px 8px; border-radius: 6px; display: inline-block;">
+                            <a href="{{ $trackingUrl }}" target="_blank" style="font-family: inherit; font-size: 13.5px; font-weight: 800; color: var(--blue); text-decoration: underline; background: #eff6ff; padding: 3px 8px; border-radius: 6px; display: inline-block;">
                                 {{ $order->order_code }} ↗
                             </a>
                             <div style="font-size: 11px; color: #94a3b8; margin-top: 4px;">{{ $order->created_at->format('d M Y, H:i') }}</div>
-                            <span style="font-size: 11px; font-weight: 700; color: {{ $isPhysical ? '#059669' : '#2563eb' }};">
+                            <span style="font-size: 11px; font-weight: 700; color: {{ $isPhysical ? '#059669' : 'var(--blue)' }};">
                                 {{ $isPhysical ? '📦 Produk Fisik (COD)' : '🤝 Jasa WA' }}
                             </span>
                         </td>
@@ -117,7 +117,7 @@
                             @if($isPhysical)
                                 <div style="font-size: 12px; color: #64748b;">Jumlah: <strong>{{ $order->jumlah }} unit</strong></div>
                             @endif
-                            <div style="color: #2563eb; font-weight: 800; font-size: 13px; margin-top: 2px;">
+                            <div style="color: var(--blue); font-weight: 800; font-size: 13px; margin-top: 2px;">
                                 Rp {{ number_format($order->total_harga ?: $order->total_biaya, 0, ',', '.') }}
                             </div>
                         </td>
@@ -141,7 +141,7 @@
                             @php
                                 $badgeStyle = match($order->status) {
                                     'selesai', 'completed' => 'background: #ecfdf5; color: #059669;',
-                                    'bisa_diambil' => 'background: #eff6ff; color: #2563eb; border: 1px solid #bfdbfe;',
+                                    'bisa_diambil' => 'background: #eff6ff; color: var(--blue); border: 1px solid #bfdbfe;',
                                     'sedang_dikemas', 'in_progress' => 'background: #fef3c7; color: #b45309;',
                                     'dibatalkan', 'cancelled' => 'background: #fef2f2; color: #dc2626;',
                                     default => 'background: #f1f5f9; color: #475569;',
@@ -169,7 +169,7 @@
                                             @csrf
                                             @method('PATCH')
                                             <input type="hidden" name="status" value="sedang_dikemas">
-                                            <button type="submit" style="background: #2563eb; color: #fff; border: none; padding: 6px 12px; border-radius: 6px; font-size: 11.5px; font-weight: 700; cursor: pointer; box-shadow: 0 2px 6px rgba(37,99,235,0.2);">
+                                            <button type="submit" style="background: var(--blue); color: #fff; border: none; padding: 6px 12px; border-radius: 6px; font-size: 11.5px; font-weight: 700; cursor: pointer; box-shadow: 0 2px 6px rgba(10,74,166,0.2);">
                                                 ✓ Terima & Proses
                                             </button>
                                         </form>
@@ -227,7 +227,7 @@
                                     <a href="{{ $waUrl }}" target="_blank" style="background: #25d366; color: #fff; border: none; padding: 6px 10px; border-radius: 6px; font-size: 11.5px; font-weight: 700; text-decoration: none;">
                                         💬 WA
                                     </a>
-                                    <button type="button" onclick="openStatusModal('{{ $order->id }}', '{{ $order->order_code }}', '{{ $order->status }}')" style="background: #eff6ff; color: #2563eb; border: 1px solid #bfdbfe; padding: 6px 10px; border-radius: 6px; font-size: 11.5px; font-weight: 700; cursor: pointer;">
+                                    <button type="button" onclick="openStatusModal('{{ $order->id }}', '{{ $order->order_code }}', '{{ $order->status }}')" style="background: #eff6ff; color: var(--blue); border: 1px solid #bfdbfe; padding: 6px 10px; border-radius: 6px; font-size: 11.5px; font-weight: 700; cursor: pointer;">
                                         ⚙️
                                     </button>
                                     <form method="POST" action="{{ route('admin.orders.destroy', $order) }}" onsubmit="return confirm('Hapus pesanan ini?')" style="display: inline;">
@@ -283,7 +283,7 @@
             </div>
             <div style="display: flex; justify-content: flex-end; gap: 10px; margin-top: 20px;">
                 <button type="button" onclick="closeStatusModal()" style="padding: 8px 16px; border: 1px solid #cbd5e1; background: #fff; border-radius: 6px; font-weight: 600; font-size: 13px; cursor: pointer;">Batal</button>
-                <button type="submit" style="padding: 8px 18px; background: #2563eb; color: #fff; border: none; border-radius: 6px; font-weight: 700; font-size: 13px; cursor: pointer;">Simpan Perubahan</button>
+                <button type="submit" style="padding: 8px 18px; background: var(--blue); color: #fff; border: none; border-radius: 6px; font-weight: 700; font-size: 13px; cursor: pointer;">Simpan Perubahan</button>
             </div>
         </form>
     </div>

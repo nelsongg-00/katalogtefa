@@ -14,31 +14,31 @@
   <link href="https://cdn.jsdelivr.net/fontsource/css/open-sauce-sans@5.3.0/900.css" rel="stylesheet">
   <style>
     :root {
-      --navy-950: #0b1127;
-      --navy-900: #0d1837;
-      --navy-800: #16234a;
-      --navy-700: #1e2e5e;
-      --navy-600: #2b3d73;
-      --ink: #13213f;
-      --muted: #74809b;
-      --line: #e7ebf3;
+      --navy-950: #0a215e;
+      --navy-900: #0b1a6b;
+      --navy-800: #0a215e;
+      --navy-700: #16357a;
+      --navy-600: #1f3a8a;
+      --ink: #0f172a;
+      --muted: #64748b;
+      --line: #e6eaef;
       --surface: #ffffff;
-      --surface-2: #f7f9fc;
-      --gold: #e3b75b;
-      --gold-deep: #be8b2d;
-      --green: #2ba77a;
-      --blue: #4d78ff;
-      --red: #d95f68;
-      --shadow: 0 12px 32px rgba(18, 33, 63, .08);
-      --shadow-soft: 0 7px 22px rgba(18, 33, 63, .06);
-      --radius-card: 16px;
+      --surface-2: #f8fafc;
+      --gold: #f2b630;
+      --gold-deep: #b45309;
+      --green: #16a34a;
+      --blue: #0a4aa6;
+      --red: #e53935;
+      --shadow: 0 12px 32px rgba(15, 23, 42, .08);
+      --shadow-soft: 0 7px 22px rgba(15, 23, 42, .06);
+      --radius-card: 15px;
     }
 
     * { box-sizing: border-box; }
     html { scroll-behavior: smooth; }
     body {
       margin: 0;
-      background: #f4f6fb;
+      background: #f5f8fc;
       color: var(--ink);
       font-family: 'Open Sauce Sans', Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
       -webkit-font-smoothing: antialiased;
@@ -65,7 +65,7 @@
       display: flex;
       align-items: center;
       justify-content: space-between;
-      background: #18285a;
+      background: var(--navy-950);
       color: #fff;
       border-bottom: 1px solid rgba(255, 255, 255, .08);
       box-shadow: 0 2px 8px rgba(10, 20, 50, .14);
@@ -80,9 +80,9 @@
       width: 34px; height: 34px;
       border-radius: 10px;
       display: grid; place-items: center;
-      background: #ffba32; color: #17305f;
+      background: var(--gold); color: var(--navy-950);
       font-weight: 900; font-size: 12px;
-      box-shadow: 0 5px 14px rgba(255, 183, 46, .22);
+      box-shadow: 0 5px 14px rgba(242, 182, 48, .22);
       flex: none;
     }
     .top-brand strong {
@@ -119,7 +119,7 @@
     .top-user-copy span {
       display: block;
       margin-top: 3px;
-      color: #ffbd2f;
+      color: var(--gold);
       font-size: 10px;
       font-weight: 800;
     }
@@ -127,8 +127,8 @@
       width: 36px; height: 36px;
       border-radius: 50%;
       border: 0;
-      background: #ffba32;
-      color: #17305f;
+      background: var(--gold);
+      color: var(--navy-950);
       font-weight: 900;
       font-size: 11px;
       display: grid;
@@ -138,15 +138,15 @@
       height: 31px;
       padding: 0 13px;
       border-radius: 999px;
-      border: 1px solid rgba(239, 91, 105, .42);
-      background: rgba(239, 91, 105, .08);
-      color: #ff8691;
+      border: 1px solid rgba(229, 57, 53, .42);
+      background: rgba(229, 57, 53, .10);
+      color: #f0868b;
       font-size: 11px;
       font-weight: 850;
       transition: all .15s;
     }
     .top-logout:hover {
-      background: #f3535f;
+      background: var(--red);
       color: #fff;
     }
 
@@ -158,7 +158,7 @@
       padding: 0;
       display: flex;
       flex-direction: column;
-      background: #1f3472;
+      background: var(--navy-900);
       color: #eaf0ff;
       border-right: 1px solid rgba(16, 30, 67, .12);
       overflow-y: auto;
@@ -185,9 +185,9 @@
       transition: .16s ease;
     }
     .nav-item svg { width: 16px; height: 16px; color: #9cb3e9; flex: none; }
-    .nav-item:hover { background: rgba(67, 101, 182, .33); color: #fff; }
+    .nav-item:hover { background: rgba(255, 255, 255, .06); color: #fff; }
     .nav-item.active {
-      background: #29458d;
+      background: var(--navy-800);
       color: #fff;
     }
     .nav-item.active::before {
@@ -195,16 +195,16 @@
       position: absolute;
       left: 0; top: 0; bottom: 0;
       width: 3px;
-      background: #ffb92f;
+      background: var(--gold);
     }
-    .nav-item.active svg { color: #ffb92f; }
+    .nav-item.active svg { color: var(--gold); }
     .nav-badge {
       margin-left: auto;
       min-width: 21px; height: 18px;
       padding: 0 6px;
       border-radius: 999px;
       display: grid; place-items: center;
-      background: #f25560; color: #fff;
+      background: var(--red); color: #fff;
       font-size: 9px; font-weight: 900;
     }
 

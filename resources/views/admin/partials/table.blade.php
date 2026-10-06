@@ -37,7 +37,7 @@
   }
   .search-box:focus-within {
     border-color: var(--blue);
-    box-shadow: 0 0 0 3px rgba(47, 111, 219, 0.1);
+    box-shadow: 0 0 0 3px rgba(10, 74, 166, 0.1);
   }
   .search-box input {
     border: none;
@@ -111,11 +111,11 @@
     display: inline-block;
     white-space: nowrap;
   }
-  .badge-wait { background: #fef3d6; color: #9a6b0c; }
-  .badge-review { background: #e8f0ff; color: #1866c2; }
-  .badge-progress { background: #f1e8fd; color: #7237c9; }
-  .badge-done { background: #e4f7ee; color: #167a50; }
-  .badge-cancel { background: #fde3e4; color: #b3282d; }
+  .badge-wait { background: #fef3d6; color: #b45309; }
+  .badge-review { background: #e8f0ff; color: #0a4aa6; }
+  .badge-progress { background: #f1e8fd; color: #7c3aed; }
+  .badge-done { background: #e4f7ee; color: #15803d; }
+  .badge-cancel { background: #fde3e4; color: #b91c1c; }
 
   .btn-action-validate {
     background: var(--green);

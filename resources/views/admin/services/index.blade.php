@@ -5,11 +5,11 @@
 @section('content')
 <div class="content-head" style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 24px; flex-wrap: wrap; gap: 16px;">
     <div>
-        <h1 style="font-size: 22px; font-weight: 800; color: #16234a; margin-bottom: 4px;">Katalog Layanan Jasa</h1>
-        <p style="color: #7a839c; font-size: 13.5px;">Kelola daftar penawaran jasa dan unit produksi jurusan yang tampil di website publik.</p>
+        <h1 style="font-size: 22px; font-weight: 800; color: var(--text); margin-bottom: 4px;">Katalog Layanan Jasa</h1>
+        <p style="color: var(--muted); font-size: 13.5px;">Kelola daftar penawaran jasa dan unit produksi jurusan yang tampil di website publik.</p>
     </div>
     <div>
-        <a href="{{ route('admin.services.create') }}" class="btn btn-primary" style="background: #2563eb; color: #fff; padding: 10px 20px; border-radius: 10px; font-weight: 700; text-decoration: none; display: inline-flex; align-items: center; gap: 8px; font-size: 13.5px;">
+        <a href="{{ route('admin.services.create') }}" class="btn btn-primary" style="background: var(--blue); color: #fff; padding: 10px 20px; border-radius: 10px; font-weight: 700; text-decoration: none; display: inline-flex; align-items: center; gap: 8px; font-size: 13.5px;">
             <span>+</span> Tambah Layanan Jasa
         </a>
     </div>
@@ -50,7 +50,7 @@
                                 </div>
                             </div>
                         </td>
-                        <td style="padding: 14px 18px; font-weight: 700; color: #2563eb;">
+                        <td style="padding: 14px 18px; font-weight: 700; color: var(--blue);">
                             Rp {{ number_format($service->estimasi_harga, 0, ',', '.') }}
                         </td>
                         <td style="padding: 14px 18px;">
@@ -62,7 +62,7 @@
                         </td>
                         <td style="padding: 14px 18px; text-align: right;">
                             <div style="display: inline-flex; gap: 8px;">
-                                <a href="{{ route('admin.services.edit', $service->id) }}" style="padding: 6px 12px; background: #eff6ff; color: #2563eb; border-radius: 6px; font-weight: 700; font-size: 12px; text-decoration: none;">
+                                <a href="{{ route('admin.services.edit', $service->id) }}" style="padding: 6px 12px; background: #eff6ff; color: var(--blue); border-radius: 6px; font-weight: 700; font-size: 12px; text-decoration: none;">
                                     Edit
                                 </a>
                                 <form method="POST" action="{{ route('admin.services.destroy', $service->id) }}" style="display:inline" onsubmit="return confirm('Apakah Anda yakin ingin menghapus layanan jasa ini?')">

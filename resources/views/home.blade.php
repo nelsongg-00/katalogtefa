@@ -130,6 +130,43 @@
             box-shadow: 0 18px 40px -14px rgba(11, 96, 207, 0.35);
         }
 
+        /* Kartu nilai (ilustrasi SVG inline). */
+        .value-card {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 20px 16px 22px;
+            border-radius: 18px;
+            background: #ffffff;
+            text-align: center;
+            box-shadow: 0 6px 20px -10px rgba(11, 96, 207, 0.25);
+        }
+
+        .value-card svg {
+            width: 96px;
+            height: 96px;
+            margin-bottom: 12px;
+        }
+
+        .value-card h3 {
+            margin: 0;
+            font-size: 1.05rem;
+            font-weight: 800;
+        }
+
+        .value-card .value-tag {
+            margin: 2px 0 8px;
+            font-size: 0.8rem;
+            font-weight: 700;
+        }
+
+        .value-card p {
+            margin: 0;
+            font-size: 0.85rem;
+            line-height: 1.45;
+            color: #5b6470;
+        }
+
         /* ================= HERO =================
            Token hero di-scope ke .tefa-hero (bukan :root) supaya tidak bocor ke halaman lain.
            Gradient 5 stop sama persis dengan desain: #6c9ddd -> #0b60cf. */
@@ -394,40 +431,13 @@
             outline-offset: 2px;
         }
 
-        /* Hormati preferensi pengguna: matikan semua gerak. */
-        @media (prefers-reduced-motion: reduce) {
-            .js [data-reveal],
-            .js [data-stagger-item],
-            .js .split-word > span,
-            .js .tefa-hero__line > span,
-            .js .tefa-hero__actions {
-                opacity: 1;
-                transform: none;
-                filter: none;
-                clip-path: none;
-                transition: none;
-                transition-delay: 0s;
-                animation: none;
-            }
-
-            .tefa-hero__orb > i,
-            .tefa-hero__wave--back svg,
-            .tefa-hero__scroll::before,
-            .shine-text {
-                animation: none;
-            }
-
-            [data-parallax-img] {
-                transform: none;
-            }
-        }
+        /* Catatan: blok prefers-reduced-motion sengaja dihapus — animasi dipaksa selalu tampil. */
     </style>
 
     <div class="scroll-progress" id="scrollProgress" aria-hidden="true"></div>
 
     <main class="bg-surface font-body">
-        {{-- ================= HERO =================
-             Tidak diberi data-scroll-reveal: hero ada di atas fold dan beranimasi saat dimuat. --}}
+        {{-- ================= HERO ================= --}}
         <section class="tefa-hero" aria-label="Hero" id="hero">
             <div class="tefa-hero__orb tefa-hero__orb--3" data-parallax-y="0.18" aria-hidden="true"><i></i></div>
             <div class="tefa-hero__orb tefa-hero__orb--1" data-parallax-y="0.32" aria-hidden="true"><i></i></div>
@@ -503,10 +513,9 @@
                 </div>
                 <div class="aspect-[7/5] w-full overflow-hidden rounded-card bg-[#ddd]" data-reveal="mask" style="--d:150ms">
                     <img class="h-full w-full object-cover" data-parallax-img="0.08"
-                         src="{{ asset('asset/img/about-school.jpg') }}"
+                         src="{{ asset('asset/img/foto-sekolahmu.jpg') }}"
                          alt="Siswa SMKN 4 Tanjungpinang berkumpul di halaman sekolah">
                 </div>
-                <!-- TODO: add image -->
             </div>
         </section>
 
@@ -543,45 +552,95 @@
                     TEFA SMKN 4 TANJUNGPINANG <span class="block text-brand-blue">SIAP MENJADI MITRA YANG</span>
                 </h2>
 
-                <ul class="mx-auto grid max-w-[760px] gap-6 sm:grid-cols-2 lg:grid-cols-4" data-stagger-group data-tilt>
-                    @include('partials.home.value-card', [
-                        'icon' => 'icon-kreatif.png',
-                        'title' => 'Kreatif',
-                        'tag' => 'Ide dari siswa',
-                        'tagClass' => 'text-brand-blue',
-                        'text' => 'Karya dibuat berdasarkan kreativitas dan inovasi siswa sendiri.',
-                    ])
-                    @include('partials.home.value-card', [
-                        'icon' => 'icon-kompeten.png',
-                        'title' => 'Kompeten',
-                        'tag' => 'Proses terarah',
-                        'tagClass' => 'text-brand-orange',
-                        'text' => 'Dikerjakan melalui proses pembelajaran kejuruan yang terstruktur.',
-                    ])
-                    @include('partials.home.value-card', [
-                        'icon' => 'icon-kolaboratif.png',
-                        'title' => 'Kolaboratif',
-                        'tag' => 'Lintas bidang',
-                        'tagClass' => 'text-brand-green',
-                        'text' => 'Melibatkan berbagai bidang keahlian dalam satu proses produksi.',
-                    ])
-                    @include('partials.home.value-card', [
-                        'icon' => 'icon-siap-industri.png',
-                        'title' => 'Siap Industri',
-                        'tag' => 'Standar kerja',
-                        'tagClass' => 'text-brand-purple',
-                        'text' => 'Mengenalkan siswa pada proses kerja yang mendekati dunia industri.',
-                    ])
+                <ul class="mx-auto grid max-w-[920px] gap-6 sm:grid-cols-2 lg:grid-cols-4" data-stagger-group data-tilt>
+                    {{-- Kreatif --}}
+                    <li class="value-card">
+                        <svg viewBox="0 0 240 240" role="img" aria-label="Kreatif">
+                            <defs>
+                                <linearGradient id="vk-g" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#7fb2ff"/><stop offset="1" stop-color="#0b60cf"/></linearGradient>
+                                <radialGradient id="vk-glow"><stop offset="0" stop-color="#ffe9a8"/><stop offset="1" stop-color="#f2b630"/></radialGradient>
+                            </defs>
+                            <circle cx="120" cy="120" r="112" fill="#e8f1ff"/>
+                            <circle cx="120" cy="104" r="52" fill="url(#vk-glow)"/>
+                            <path d="M98 150h44v14a10 10 0 0 1-10 10h-24a10 10 0 0 1-10-10z" fill="url(#vk-g)"/>
+                            <rect x="104" y="178" width="32" height="10" rx="5" fill="#0b60cf"/>
+                            <path d="M104 92l16 22 16-22M120 114v36" stroke="#fff" stroke-width="6" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+                            <g stroke="#f2b630" stroke-width="7" stroke-linecap="round"><path d="M120 28v14M52 56l10 10M188 56l-10 10M34 112h14M192 112h14"/></g>
+                            <circle cx="64" cy="170" r="7" fill="#0b60cf"/><circle cx="182" cy="168" r="5" fill="#f2b630"/><circle cx="176" cy="192" r="3.5" fill="#7fb2ff"/>
+                        </svg>
+                        <h3>Kreatif</h3>
+                        <span class="value-tag text-brand-blue">Ide dari siswa</span>
+                        <p>Karya dibuat berdasarkan kreativitas dan inovasi siswa sendiri.</p>
+                    </li>
+
+                    {{-- Kompeten --}}
+                    <li class="value-card">
+                        <svg viewBox="0 0 240 240" role="img" aria-label="Kompeten">
+                            <defs>
+                                <linearGradient id="vo-o" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#ffc46b"/><stop offset="1" stop-color="#ef7d00"/></linearGradient>
+                            </defs>
+                            <circle cx="120" cy="120" r="112" fill="#fff1de"/>
+                            <circle cx="120" cy="108" r="54" fill="url(#vo-o)"/>
+                            <circle cx="120" cy="108" r="38" fill="none" stroke="#fff" stroke-width="5" stroke-dasharray="3 9" stroke-linecap="round"/>
+                            <path d="M98 108l16 16 30-32" stroke="#fff" stroke-width="10" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+                            <path d="M92 150l-14 52 42-18 42 18-14-52" fill="#0b60cf"/>
+                            <path d="M120 184l42 18-8-30" fill="#0a4fa8"/>
+                            <circle cx="52" cy="60" r="6" fill="#ef7d00"/><circle cx="192" cy="54" r="8" fill="#ffc46b"/><circle cx="196" cy="162" r="5" fill="#0b60cf"/>
+                        </svg>
+                        <h3>Kompeten</h3>
+                        <span class="value-tag text-brand-orange">Proses terarah</span>
+                        <p>Dikerjakan melalui proses pembelajaran kejuruan yang terstruktur.</p>
+                    </li>
+
+                    {{-- Kolaboratif --}}
+                    <li class="value-card">
+                        <svg viewBox="0 0 240 240" role="img" aria-label="Kolaboratif">
+                            <defs>
+                                <linearGradient id="vl-gr" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#7fe0a4"/><stop offset="1" stop-color="#14a44d"/></linearGradient>
+                            </defs>
+                            <circle cx="120" cy="120" r="112" fill="#e4f8ec"/>
+                            <g stroke="#14a44d" stroke-width="5" stroke-linecap="round" opacity=".6"><path d="M120 80L70 150M120 80l50 70M70 150h100"/></g>
+                            <g fill="url(#vl-gr)"><circle cx="120" cy="64" r="22"/><circle cx="64" cy="156" r="22"/><circle cx="176" cy="156" r="22"/></g>
+                            <g fill="#fff"><circle cx="120" cy="58" r="8"/><circle cx="64" cy="150" r="8"/><circle cx="176" cy="150" r="8"/>
+                            <path d="M105 80a15 11 0 0 1 30 0z"/><path d="M49 172a15 11 0 0 1 30 0z"/><path d="M161 172a15 11 0 0 1 30 0z"/></g>
+                            <circle cx="120" cy="132" r="14" fill="#f2b630"/><circle cx="120" cy="132" r="6" fill="#fff"/>
+                            <circle cx="44" cy="68" r="6" fill="#14a44d"/><circle cx="200" cy="74" r="5" fill="#7fe0a4"/>
+                        </svg>
+                        <h3>Kolaboratif</h3>
+                        <span class="value-tag text-brand-green">Lintas bidang</span>
+                        <p>Melibatkan berbagai bidang keahlian dalam satu proses produksi.</p>
+                    </li>
+
+                    {{-- Siap Industri --}}
+                    <li class="value-card">
+                        <svg viewBox="0 0 240 240" role="img" aria-label="Siap Industri">
+                            <defs>
+                                <linearGradient id="vp-p" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#c9a0ff"/><stop offset="1" stop-color="#7a35d6"/></linearGradient>
+                            </defs>
+                            <circle cx="120" cy="120" r="112" fill="#f1e8ff"/>
+                            <path d="M40 190V120l36-20v20l36-20v20l36-20v-40h32v120z" fill="url(#vp-p)"/>
+                            <g fill="#fff" opacity=".9"><rect x="64" y="146" width="18" height="18" rx="3"/><rect x="96" y="146" width="18" height="18" rx="3"/><rect x="128" y="146" width="18" height="18" rx="3"/></g>
+                            <rect x="164" y="60" width="14" height="30" rx="3" fill="#5a22a8"/>
+                            <path d="M60 60a14 14 0 0 1 28 0" fill="none" stroke="#f2b630" stroke-width="6" stroke-linecap="round"/>
+                            <g transform="translate(178 128)"><circle r="26" fill="#f2b630"/><circle r="10" fill="#f1e8ff"/>
+                            <g stroke="#f2b630" stroke-width="10" stroke-linecap="round"><path d="M0-34v-6M0 34v6M-34 0h-6M34 0h6M24-24l4-4M-24 24l-4 4M24 24l4 4M-24-24l-4-4"/></g></g>
+                            <rect x="30" y="190" width="180" height="8" rx="4" fill="#5a22a8"/>
+                        </svg>
+                        <h3>Siap Industri</h3>
+                        <span class="value-tag text-brand-purple">Standar kerja</span>
+                        <p>Mengenalkan siswa pada proses kerja yang mendekati dunia industri.</p>
+                    </li>
                 </ul>
             </div>
         </section>
     </main>
 
     <script>
-        /* ===== Slider Program Keahlian (komponen Alpine) — TIDAK DIUBAH ===== */
+        /* ===== Slider Program Keahlian (komponen Alpine) — animasi dipaksa aktif ===== */
         function homeSlider() {
-            var reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-            var DURATION = 450;
+            var reduceMotion = false; // dipaksa: autoplay & transisi selalu jalan
+            var DURATION = 750;
+            var EASE = 'cubic-bezier(0.65, 0, 0.35, 1)'; // easeInOut halus
             var INTERVAL = 4000;
             var CLONES = 3;
 
@@ -593,6 +652,12 @@
 
                 init: function () {
                     this.addClones();
+
+                    /* Transisi dikontrol dari JS agar mulus (menimpa durasi/easing dari CSS partial). */
+                    var track = this.$refs.track;
+                    track.style.willChange = 'transform';
+                    track.style.backfaceVisibility = 'hidden';
+                    track.style.transition = 'transform ' + DURATION + 'ms ' + EASE;
 
                     if (!reduceMotion) {
                         this.start();
@@ -619,8 +684,14 @@
 
                 render: function (i, animate) {
                     this.index = i;
-                    this.$refs.track.classList.toggle('is-instant', !animate);
-                    this.$refs.track.style.setProperty('--index', i);
+                    var track = this.$refs.track;
+                    track.classList.toggle('is-instant', !animate);
+                    track.style.transition = animate ? 'transform ' + DURATION + 'ms ' + EASE : 'none';
+                    track.style.setProperty('--index', i);
+
+                    if (!animate) {
+                        void track.offsetWidth; // paksa reflow supaya lompatan instan tidak ikut beranimasi
+                    }
                 },
 
                 start: function () {
@@ -709,7 +780,7 @@
         (function () {
             document.documentElement.classList.add('js');
 
-            var reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+            var reduceMotion = false; // dipaksa: semua animasi selalu tampil, abaikan pengaturan perangkat
             var canHover = window.matchMedia('(hover: hover) and (pointer: fine)').matches;
 
             /* ---- Pecah judul [data-split] jadi kata-kata (aksen/span anak tetap utuh) ---- */
@@ -864,26 +935,19 @@
             function init() {
                 var sections = document.querySelectorAll('[data-scroll-reveal]');
 
-                if (!reduceMotion) {
-                    Array.prototype.forEach.call(document.querySelectorAll('[data-split]'), splitWords);
-                }
+                Array.prototype.forEach.call(document.querySelectorAll('[data-split]'), splitWords);
 
                 Array.prototype.forEach.call(sections, markStagger);
 
                 /* Kilau pada aksen biru judul "Mengapa". */
                 var accent = document.querySelector('[data-split] .text-brand-blue');
-                if (accent && !reduceMotion) {
+                if (accent) {
                     setTimeout(function () { accent.classList.add('shine-text'); }, 1600);
                 }
 
-                if (!reduceMotion) {
-                    setupScrollEffects();
-                } else {
-                    var bar = document.getElementById('scrollProgress');
-                    if (bar) { bar.style.display = 'none'; }
-                }
+                setupScrollEffects();
 
-                if (reduceMotion || !('IntersectionObserver' in window)) {
+                if (!('IntersectionObserver' in window)) {
                     Array.prototype.forEach.call(sections, reveal);
                     return;
                 }

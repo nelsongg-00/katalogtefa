@@ -186,7 +186,7 @@
     }
 
     .btn-accent {
-      background: #e3b75b;
+      background: var(--gold);
       color: #17203a;
       border: none;
       padding: 10px 20px;
@@ -265,7 +265,7 @@
         <span class="meta-label">Persentase Progress ({{ $project->progress }}%)</span>
         <div style="margin-top: 6px; display: flex; align-items: center; gap: 8px;">
           <div style="flex: 1; height: 8px; background: #edf0f5; border-radius: 99px; overflow: hidden;">
-            <div style="height: 100%; width: {{ $project->progress }}%; background: linear-gradient(90deg, #4d78ff, #2563eb); border-radius: 99px;"></div>
+            <div style="height: 100%; width: {{ $project->progress }}%; background: linear-gradient(90deg, #0a4aa6, #00357f); border-radius: 99px;"></div>
           </div>
           <span style="font-size: 12px; font-weight: 800; color: #475569;">{{ $project->progress }}%</span>
         </div>
@@ -337,7 +337,7 @@
       <div class="panel-card">
         <div class="panel-head">
           <h2 class="panel-title">Riwayat Lini Masa Progres (Timeline Feed)</h2>
-          <span style="font-size: 11.5px; font-weight: 700; color: #2563eb;">{{ $logs->count() }} Aktivitas</span>
+          <span style="font-size: 11.5px; font-weight: 700; color: var(--blue);">{{ $logs->count() }} Aktivitas</span>
         </div>
         <div class="panel-body">
           @include('components.timeline-log', ['logs' => $logs])

@@ -160,7 +160,7 @@
     </div>
     <div class="card-body">
       @php
-        $barColors = ['#2b6cdb','#fbbf24','#16a870','#7c4ddb','#e0484f','#0284c7'];
+        $barColors = ['#0a4aa6','#f2b630','#16a34a','#7c3aed','#e53935','#1f3a8a'];
       @endphp
       @forelse($revenuePerJurusan as $idx => $rev)
         @php
@@ -202,7 +202,7 @@
             <span>{{ $totalAdmin }} akun ({{ round(($totalAdmin / $userTotalDivider) * 100) }}%)</span>
           </div>
           <div class="track">
-            <div class="fill" style="width: {{ ($totalAdmin / $userTotalDivider) * 100 }}%; background: #2b6cdb"></div>
+            <div class="fill" style="width: {{ ($totalAdmin / $userTotalDivider) * 100 }}%; background: #0a4aa6"></div>
           </div>
         </div>
 
@@ -212,7 +212,7 @@
             <span>{{ $totalWorker }} akun ({{ round(($totalWorker / $userTotalDivider) * 100) }}%)</span>
           </div>
           <div class="track">
-            <div class="fill" style="width: {{ ($totalWorker / $userTotalDivider) * 100 }}%; background: #fbbf24"></div>
+            <div class="fill" style="width: {{ ($totalWorker / $userTotalDivider) * 100 }}%; background: #f2b630"></div>
           </div>
         </div>
 
@@ -222,7 +222,7 @@
             <span>{{ $totalClient }} akun ({{ round(($totalClient / $userTotalDivider) * 100) }}%)</span>
           </div>
           <div class="track">
-            <div class="fill" style="width: {{ ($totalClient / $userTotalDivider) * 100 }}%; background: #16a870"></div>
+            <div class="fill" style="width: {{ ($totalClient / $userTotalDivider) * 100 }}%; background: #16a34a"></div>
           </div>
         </div>
       </div>

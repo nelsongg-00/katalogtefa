@@ -30,7 +30,7 @@
         padding: 15px;
       }
       .no-print {
-        background: #16224a;
+        background: #0a215e;
         color: #fff;
         padding: 12px 20px;
         display: flex;
@@ -43,8 +43,8 @@
         display: inline-flex;
         align-items: center;
         gap: 6px;
-        background: #fbbf24;
-        color: #16224a;
+        background: #f2b630;
+        color: #0a215e;
         font-weight: 700;
         font-size: 13px;
         padding: 8px 16px;
@@ -75,8 +75,8 @@
         width: 60px;
         height: 60px;
         border-radius: 12px;
-        background: #16224a;
-        color: #fbbf24;
+        background: #0a215e;
+        color: #f2b630;
         display: flex;
         align-items: center;
         justify-content: center;

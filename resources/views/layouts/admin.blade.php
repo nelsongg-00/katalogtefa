@@ -15,28 +15,28 @@
   <link href="https://cdn.jsdelivr.net/fontsource/css/open-sauce-sans@5.3.0/900.css" rel="stylesheet">
   <style>
     :root {
-      --navy-950: #16234a;
-      --navy-900: #1e2e5e;
-      --navy-800: #253a72;
-      --navy-700: #2f4884;
-      --gold: #f5b431;
-      --gold-dark: #e0a01c;
-      --gold-soft: #fef3d6;
-      --bg: #f4f6fb;
+      --navy-950: #0a215e;
+      --navy-900: #0b1a6b;
+      --navy-800: #16357a;
+      --navy-700: #1f3a8a;
+      --gold: #f2b630;
+      --gold-dark: #d99a06;
+      --gold-soft: #fef3c7;
+      --bg: #f5f8fc;
       --card: #ffffff;
-      --border: #e5e9f2;
-      --text: #1b2340;
-      --muted: #7a839c;
-      --blue: #2f6fdb;
-      --green: #1fa971;
-      --amber: #e8a723;
-      --red: #e5484d;
+      --border: #e6eaef;
+      --text: #0f172a;
+      --muted: #64748b;
+      --blue: #0a4aa6;
+      --green: #16a34a;
+      --amber: #f2b630;
+      --red: #e53935;
       --radius-sm: 8px;
       --radius-md: 12px;
-      --radius-lg: 16px;
-      --shadow-sm: 0 1px 2px rgba(22, 35, 74, 0.04);
-      --shadow-md: 0 4px 16px rgba(22, 35, 74, 0.06);
-      --shadow-lg: 0 12px 32px rgba(22, 35, 74, 0.08);
+      --radius-lg: 15px;
+      --shadow-sm: 0 1px 2px rgba(15, 23, 42, 0.04);
+      --shadow-md: 0 4px 16px rgba(15, 23, 42, 0.06);
+      --shadow-lg: 0 12px 32px rgba(15, 23, 42, 0.08);
     }
 
     * { box-sizing: border-box; }
@@ -556,10 +556,10 @@
     }
 
     .page-num.active {
-      background: #2563eb;
-      border-color: #2563eb;
+      background: var(--blue);
+      border-color: var(--blue);
       color: #fff;
-      box-shadow: 0 2px 6px rgba(37,99,235,0.3);
+      box-shadow: 0 2px 6px rgba(10, 74, 166, 0.3);
     }
 
     .page-num.dots {

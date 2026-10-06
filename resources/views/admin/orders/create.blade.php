@@ -6,12 +6,12 @@
   <div class="page-head" style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 24px; flex-wrap: wrap; gap: 16px;">
     <div>
       <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 4px;">
-        <h1 style="font-size: 22px; font-weight: 800; color: #16234a; margin: 0;">CATAT PESANAN WHATSAPP</h1>
+        <h1 style="font-size: 22px; font-weight: 800; color: var(--text); margin: 0;">CATAT PESANAN WHATSAPP</h1>
         <span style="background: #dcfce7; color: #15803d; font-size: 11px; font-weight: 700; padding: 4px 10px; border-radius: 999px;">
           💬 WhatsApp Workflow
         </span>
       </div>
-      <p style="color: #7a839c; font-size: 13.5px; margin: 0;">Input pesanan yang masuk dari WhatsApp pelanggan. Sistem akan otomatis men-generate Kode Pelacakan (TEFA-XXXX), membuat tugas projek untuk worker, dan menyiapkan link tracking publik.</p>
+      <p style="color: var(--muted); font-size: 13.5px; margin: 0;">Input pesanan yang masuk dari WhatsApp pelanggan. Sistem akan otomatis men-generate Kode Pelacakan (TEFA-XXXX), membuat tugas projek untuk worker, dan menyiapkan link tracking publik.</p>
     </div>
 
     <div>
@@ -23,7 +23,7 @@
 
   <div class="card" style="max-width: 820px; background: #fff; border-radius: 14px; border: 1px solid #e5e9f2; overflow: hidden; box-shadow: 0 2px 8px rgba(22,35,74,0.04);">
     <div style="padding: 16px 20px; border-bottom: 1px solid #e5e9f2; background: #f8fafd;">
-      <h3 style="margin: 0; font-size: 15px; font-weight: 700; color: #16234a;">Formulir Pemesanan Layanan Jasa</h3>
+      <h3 style="margin: 0; font-size: 15px; font-weight: 700; color: var(--text);">Formulir Pemesanan Layanan Jasa</h3>
     </div>
 
     <div style="padding: 24px 20px;">
