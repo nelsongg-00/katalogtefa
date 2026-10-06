@@ -143,6 +143,9 @@
     .produk-page .search {
         position: relative;
         width: 100%;
+        display: flex;
+        align-items: center;
+        gap: 8px;
     }
 
     .produk-page .search__icon {
@@ -153,10 +156,12 @@
         height: 14px;
         transform: translateY(-50%);
         pointer-events: none;
+        z-index: 1;
     }
 
     .produk-page .search__input {
-        width: 100%;
+        flex: 1;
+        min-width: 0;
         height: 38px;
         padding: 0 10px 0 34px;
         border: 1px solid #000000;
@@ -177,6 +182,27 @@
     .produk-page .search__input::placeholder {
         color: #777777;
         opacity: 1;
+    }
+
+    /* Tombol "Cari" — mengikuti pola halaman Layanan Jasa (public/jasa.blade.php) */
+    .produk-page .search__btn {
+        flex-shrink: 0;
+        height: 38px;
+        padding: 0 20px;
+        background: var(--color-primary);
+        color: var(--color-white);
+        border: none;
+        border-radius: var(--radius-pill);
+        font: inherit;
+        font-size: 13px;
+        font-weight: 700;
+        cursor: pointer;
+        transition: background-color 0.2s ease, transform 0.2s ease;
+    }
+
+    .produk-page .search__btn:hover {
+        background: var(--color-primary-dark);
+        transform: translateY(-1px);
     }
 
     /* ---------- PRODUCT GRID ---------- */
@@ -685,6 +711,7 @@
                        value="{{ request('q') }}"
                        placeholder="Cari di katalog produk..."
                        oninput="debounceProdukSearch()" />
+                <button type="submit" class="search__btn">Cari</button>
             </form>
         </div>
 

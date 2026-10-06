@@ -70,27 +70,26 @@ class UserController extends Controller
      */
     public function store(Request $request): RedirectResponse
     {
+        // Lapisan otorisasi tambahan: Super Admin hanya boleh membuat akun Admin Jurusan.
+        // (Lapisan utama sudah ditangani middleware `role:super_admin` pada route.)
+        abort_if(auth()->user()?->role !== 'super_admin', 403);
+
         $validated = $request->validate([
             'name' => ['required', 'string', 'max:255'],
             'email' => ['required', 'string', 'email', 'max:255', 'unique:users,email'],
-            'password' => ['required', 'string', 'min:6'],
-            'role' => ['required', 'string', Rule::in(['super_admin', 'admin_jurusan', 'worker', 'pelanggan'])],
-            'jurusan_id' => [
-                Rule::requiredIf(fn () => in_array($request->input('role'), ['admin_jurusan', 'worker'])),
-                'nullable',
-                'exists:jurusans,id',
-            ],
+            'password' => ['required', 'string', 'min:8', 'confirmed'],
+            // 'role' sengaja TIDAK ada di sini: tidak pernah dibaca dari request,
+            // selalu dipaksa ke 'admin_jurusan' di bawah.
+            'jurusan_id' => ['required', 'exists:jurusans,id'],
             'is_active' => ['nullable', 'boolean'],
         ]);
-
-        $jurusanId = in_array($validated['role'], ['admin_jurusan', 'worker']) ? $validated['jurusan_id'] : null;
 
         User::create([
             'name' => $validated['name'],
             'email' => strtolower(trim($validated['email'])),
             'password' => Hash::make($validated['password']),
-            'role' => $validated['role'],
-            'jurusan_id' => $jurusanId,
+            'role' => 'admin_jurusan',
+            'jurusan_id' => $validated['jurusan_id'],
             'is_active' => $request->boolean('is_active', true),
         ]);
 
@@ -106,7 +105,7 @@ class UserController extends Controller
         $validated = $request->validate([
             'name' => ['required', 'string', 'max:255'],
             'email' => ['required', 'string', 'email', 'max:255', Rule::unique('users', 'email')->ignore($user->id)],
-            'password' => ['nullable', 'string', 'min:6'],
+            'password' => ['nullable', 'string', 'min:8'],
             'role' => ['required', 'string', Rule::in(['super_admin', 'admin_jurusan', 'worker', 'pelanggan'])],
             'jurusan_id' => [
                 Rule::requiredIf(fn () => in_array($request->input('role'), ['admin_jurusan', 'worker'])),

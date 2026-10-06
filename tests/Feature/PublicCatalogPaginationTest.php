@@ -145,6 +145,19 @@ class PublicCatalogPaginationTest extends TestCase
         $byDesc->assertDontSee('Marker Kue Lapis Legit');
     }
 
+    public function test_produk_and_jasa_search_forms_both_expose_cari_submit_button(): void
+    {
+        $produk = $this->get(route('produk'));
+        $produk->assertStatus(200);
+        $produk->assertSee('action="'.route('produk').'"', false);
+        $produk->assertSee('<button type="submit" class="search__btn">Cari</button>', false);
+
+        $jasa = $this->get(route('jasa'));
+        $jasa->assertStatus(200);
+        $jasa->assertSee('action="'.route('jasa').'"', false);
+        $jasa->assertSee('<button type="submit" class="search__btn">Cari</button>', false);
+    }
+
     public function test_produk_pagination_links_preserve_jurusan_and_search_query(): void
     {
         foreach (range(0, 12) as $i) {

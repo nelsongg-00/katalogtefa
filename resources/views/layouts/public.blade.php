@@ -10,6 +10,14 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Anton&display=swap" rel="stylesheet">
 
+    {{-- Open Sauce One (judul hero). Tidak tersedia di Google Fonts — diambil dari
+         Fontsource CDN (npm @fontsource/open-sauce-one, lisensi OFL-1.1).
+         Hanya dipakai di .tefa-hero h1, bukan global. --}}
+    <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
+    <link href="https://cdn.jsdelivr.net/fontsource/css/open-sauce-one@5.3.0/400.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/fontsource/css/open-sauce-one@5.3.0/600.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/fontsource/css/open-sauce-one@5.3.0/700.css" rel="stylesheet">
+
     {{-- Tailwind + Alpine. Harus sebelum <style> di bawah: Tailwind v3 tidak memakai CSS
          native layer (outputnya CSS biasa), jadi layout sengaja TIDAK dibungkus @layer —
          spesifisitas dan urutan dokumen yang menentukan: preflight (selector element)

@@ -98,7 +98,6 @@
     .card__subtitle { margin-top: 8px; font-size: var(--fs-base); line-height: 1.3; }
     .card__divider { height: 0; margin: 17px 0 0; border: 0; border-top: 1px solid #000000; }
     .section__title { margin: 30px 0 0; font-size: var(--fs-base); font-weight: 700; line-height: 20px; }
-    .section__title--danger { color: var(--color-danger); }
     .section__desc { margin-top: 6px; font-size: var(--fs-sm); color: var(--color-muted); }
 
     /* ==========================================================
@@ -141,6 +140,34 @@
         color: var(--color-muted);
         text-decoration: underline;
         cursor: pointer;
+    }
+
+    .info__action--link { color: var(--color-action); }
+
+    /* Dua mode biodata: lihat (default) vs ubah. Digerakkan data-editing. */
+    .biodata-form[data-editing="false"] [data-edit] { display: none; }
+    .biodata-form[data-editing="true"] [data-view] { display: none; }
+
+    .info__text { line-height: 1.35; }
+    .info__text--muted { color: var(--color-muted); }
+
+    .info__badge {
+        display: inline-flex;
+        align-items: center;
+        padding: 2px 10px;
+        border: 1px solid #a7f3d0;
+        border-radius: 999px;
+        background: #ecfdf5;
+        font-size: var(--fs-xs);
+        font-weight: 700;
+        color: #059669;
+        white-space: nowrap;
+    }
+
+    .btn--cancel {
+        border: 1px solid var(--color-border);
+        background: var(--color-white);
+        color: var(--color-text);
     }
 
     .photo { width: 212px; justify-self: start; text-align: center; }
@@ -187,18 +214,7 @@
         cursor: pointer;
     }
 
-    .btn--biodata { margin-top: 24px; }
     .btn--password { margin-top: 15px; }
-
-    .btn--danger {
-        height: auto;
-        padding: 9px 16px;
-        border: 1px solid #fecaca;
-        background: #fee2e2;
-        color: var(--color-danger);
-        font-size: var(--fs-sm);
-        font-weight: 700;
-    }
 
     .save-status { font-size: var(--fs-sm); font-weight: 700; color: #16a34a; }
 
@@ -206,8 +222,7 @@
        5. UBAH KATA SANDI
        ========================================================== */
     .password { margin-top: 93px; }
-    .password .card__divider,
-    .danger .card__divider { margin-top: 0; }
+    .password .card__divider { margin-top: 0; }
     .password__form { margin-top: 34px; max-width: 416px; }
     .field { margin-bottom: 30px; }
     .field__label { display: block; margin-bottom: 9px; font-size: var(--fs-md); line-height: 20px; }
@@ -226,12 +241,7 @@
     .field__input::placeholder { color: var(--color-muted); opacity: 1; }
 
     /* ==========================================================
-       6. HAPUS AKUN (bagian tambahan di luar desain asli)
-       ========================================================== */
-    .danger { margin-top: 40px; }
-
-    /* ==========================================================
-       7. BREAKPOINT >= 640px (tablet)
+       6. BREAKPOINT >= 640px (tablet)
        ========================================================== */
     @media (min-width: 640px) {
         .profile-page { padding: 1.5rem 2rem 5rem; }
@@ -242,7 +252,7 @@
     }
 
     /* ==========================================================
-       8. BREAKPOINT >= 1024px (desktop)
+       7. BREAKPOINT >= 1024px (desktop)
        ========================================================== */
     @media (min-width: 1024px) {
         .profile-page { padding-top: 40px; }
@@ -258,6 +268,5 @@
 
         @include('profile.partials.update-profile-information-form')
         @include('profile.partials.update-password-form')
-        @include('profile.partials.delete-user-form')
     </section>
 </div>

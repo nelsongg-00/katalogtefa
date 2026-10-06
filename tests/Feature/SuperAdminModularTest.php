@@ -146,30 +146,30 @@ class SuperAdminModularTest extends TestCase
         $response->assertSee('MANAJEMEN DATA MASTER USER');
         $response->assertSee($this->superAdmin->name);
 
-        // Store new user
+        // Store new Admin Jurusan (satu-satunya role yang boleh dibuat Super Admin)
         $postResponse = $this->actingAs($this->superAdmin)->post('/superadmin/users', [
-            'name' => 'New Worker DKV',
-            'email' => 'newworker@example.com',
+            'name' => 'Admin Jurusan Baru',
+            'email' => 'newadmin@example.com',
             'password' => 'password123',
-            'role' => 'worker',
+            'password_confirmation' => 'password123',
             'jurusan_id' => $this->jurusan->id,
             'is_active' => 1,
         ]);
         $postResponse->assertRedirect(route('superadmin.users.index'));
-        $this->assertDatabaseHas('users', ['email' => 'newworker@example.com', 'role' => 'worker']);
+        $this->assertDatabaseHas('users', ['email' => 'newadmin@example.com', 'role' => 'admin_jurusan']);
 
-        $createdUser = User::where('email', 'newworker@example.com')->first();
+        $createdUser = User::where('email', 'newadmin@example.com')->first();
 
         // Update user
         $putResponse = $this->actingAs($this->superAdmin)->put("/superadmin/users/{$createdUser->id}", [
-            'name' => 'Updated Worker DKV',
-            'email' => 'newworker@example.com',
-            'role' => 'worker',
+            'name' => 'Admin Jurusan Updated',
+            'email' => 'newadmin@example.com',
+            'role' => 'admin_jurusan',
             'jurusan_id' => $this->jurusan->id,
             'is_active' => 1,
         ]);
         $putResponse->assertRedirect(route('superadmin.users.index'));
-        $this->assertDatabaseHas('users', ['name' => 'Updated Worker DKV']);
+        $this->assertDatabaseHas('users', ['name' => 'Admin Jurusan Updated']);
 
         // Delete user
         $deleteResponse = $this->actingAs($this->superAdmin)->delete("/superadmin/users/{$createdUser->id}");
@@ -180,6 +180,63 @@ class SuperAdminModularTest extends TestCase
         $selfDeleteResponse = $this->actingAs($this->superAdmin)->delete("/superadmin/users/{$this->superAdmin->id}");
         $selfDeleteResponse->assertRedirect(route('superadmin.users.index'));
         $this->assertDatabaseHas('users', ['id' => $this->superAdmin->id]);
+    }
+
+    public function test_superadmin_store_forces_admin_jurusan_role(): void
+    {
+        // Role yang dikirim client selalu diabaikan dan dipaksa ke admin_jurusan.
+        foreach (['super_admin', 'worker', 'pelanggan'] as $spoofedRole) {
+            $email = 'spoofed-'.strtolower($spoofedRole).'@example.com';
+
+            $this->actingAs($this->superAdmin)->post('/superadmin/users', [
+                'name' => 'Spoofed '.ucfirst($spoofedRole),
+                'email' => $email,
+                'password' => 'password123',
+                'password_confirmation' => 'password123',
+                'role' => $spoofedRole,
+                'jurusan_id' => $this->jurusan->id,
+                'is_active' => 1,
+            ])->assertRedirect(route('superadmin.users.index'));
+
+            $this->assertDatabaseHas('users', ['email' => $email, 'role' => 'admin_jurusan']);
+        }
+    }
+
+    public function test_superadmin_store_requires_jurusan_and_strong_password(): void
+    {
+        // jurusan_id wajib karena role yang dibuat selalu admin_jurusan.
+        $this->actingAs($this->superAdmin)->post('/superadmin/users', [
+            'name' => 'Tanpa Jurusan',
+            'email' => 'tanpa.jurusan@example.com',
+            'password' => 'password123',
+            'password_confirmation' => 'password123',
+            'is_active' => 1,
+        ])->assertSessionHasErrors('jurusan_id');
+
+        $this->assertDatabaseMissing('users', ['email' => 'tanpa.jurusan@example.com']);
+
+        // Password minimal 8 karakter.
+        $this->actingAs($this->superAdmin)->post('/superadmin/users', [
+            'name' => 'Password Pendek',
+            'email' => 'password.pendek@example.com',
+            'password' => 'short',
+            'password_confirmation' => 'short',
+            'jurusan_id' => $this->jurusan->id,
+            'is_active' => 1,
+        ])->assertSessionHasErrors('password');
+
+        $this->assertDatabaseMissing('users', ['email' => 'password.pendek@example.com']);
+
+        // Password wajib dikonfirmasi.
+        $this->actingAs($this->superAdmin)->post('/superadmin/users', [
+            'name' => 'Tanpa Konfirmasi',
+            'email' => 'tanpa.konfirmasi@example.com',
+            'password' => 'password123',
+            'jurusan_id' => $this->jurusan->id,
+            'is_active' => 1,
+        ])->assertSessionHasErrors('password');
+
+        $this->assertDatabaseMissing('users', ['email' => 'tanpa.konfirmasi@example.com']);
     }
 
     public function test_superadmin_can_view_and_filter_reports_and_print(): void

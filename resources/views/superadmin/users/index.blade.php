@@ -180,9 +180,6 @@
           <label for="add_u_role">Role / Peran</label>
           <select class="sel" id="add_u_role" name="role" required onchange="handleRoleChange('add')">
             <option value="admin_jurusan">Admin Jurusan</option>
-            <option value="worker">Worker</option>
-            <option value="pelanggan">Pelanggan</option>
-            <option value="super_admin">Super Admin</option>
           </select>
         </div>
         <div class="field">
@@ -196,8 +193,13 @@
         </div>
         <div class="field full">
           <label for="add_u_password">Password Awal</label>
-          <input class="inp" id="add_u_password" type="text" name="password" required minlength="6" value="password">
+          <input class="inp" id="add_u_password" type="text" name="password" required minlength="8" value="password">
           <div class="hint">Default: "password" (bisa diubah sesuai kebutuhan).</div>
+        </div>
+        <div class="field full">
+          <label for="add_u_password_confirmation">Ulangi Password</label>
+          <input class="inp" id="add_u_password_confirmation" type="text" name="password_confirmation" required minlength="8" value="password">
+          <div class="hint">Wajib sama dengan password di atas, minimal 8 karakter.</div>
         </div>
         <div class="field full">
           <label for="add_u_active">Status Akun</label>
@@ -287,7 +289,7 @@
       <p id="resetModalDesc" style="margin-bottom:14px; font-size:13.5px; color:var(--ink)"></p>
       <div class="field full">
         <label for="rp_password">Password Baru</label>
-        <input class="inp" id="rp_password" type="password" name="password" required minlength="6" placeholder="Minimal 6 karakter">
+        <input class="inp" id="rp_password" type="password" name="password" required minlength="8" placeholder="Minimal 8 karakter">
       </div>
     </div>
     <footer>

@@ -188,8 +188,14 @@
 
           <div class="form-group">
             <label class="form-label">Password Akun <span style="color: var(--red);">*</span></label>
-            <input type="password" name="password" class="form-control" required minlength="6" placeholder="Minimal 6 karakter">
+            <input type="password" name="password" class="form-control" required minlength="8" placeholder="Minimal 8 karakter">
             <small style="color: var(--muted); font-size: 11px;">Password untuk login siswa ke dashboard worker.</small>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label">Ulangi Password <span style="color: var(--red);">*</span></label>
+            <input type="password" name="password_confirmation" class="form-control" required minlength="8" placeholder="Ulangi password">
+            <small style="color: var(--muted); font-size: 11px;">Wajib sama dengan password di atas.</small>
           </div>
         </div>
         <div style="padding: 16px 24px; background: #fafbfd; border-top: 1px solid var(--border); display: flex; justify-content: flex-end; gap: 10px;">

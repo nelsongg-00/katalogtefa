@@ -31,6 +31,126 @@
             transform: none;
         }
 
+        /* ================= HERO (desain baru) =================
+           Token hero di-scope ke .tefa-hero (bukan :root) supaya tidak bocor ke halaman lain.
+           Gradient 5 stop sama persis dengan desain: #6c9ddd -> #0b60cf. */
+        .tefa-hero {
+            --color-hero-top: #6c9ddd;
+            --color-hero-bottom: #0b60cf;
+            /* Tinggi gelombang di dasar hero (fraksi tinggi hero). Dinaikkan ~50%
+               (39% -> 58%); SVG memakai preserveAspectRatio="none" jadi ikut meregang. */
+            --hero-wave-height: 58%;
+
+            position: relative;
+            min-height: 600px;
+            overflow: hidden;
+            isolation: isolate;
+            background: linear-gradient(
+                to bottom,
+                var(--color-hero-top) 0%,
+                #5c91da 18%,
+                #3c79d5 42%,
+                #1c6bd2 68%,
+                var(--color-hero-bottom) 100%
+            );
+        }
+
+        /* Siluet gelombang di dasar hero; mengisi ruang ke warna surface (#fafafa). */
+        .tefa-hero__wave {
+            position: absolute;
+            inset: auto 0 0 0;
+            width: 100%;
+            height: var(--hero-wave-height);
+            z-index: 1;
+            pointer-events: none;
+        }
+
+        .tefa-hero__wave svg {
+            display: block;
+            width: 100%;
+            height: 100%;
+        }
+
+        .tefa-hero__content {
+            position: relative;
+            z-index: 2;
+            width: auto;
+            max-width: 815px;
+            margin: 0 0 0 8%;
+            padding-top: 66px;
+        }
+
+        .tefa-hero h1 {
+            margin: 0;
+            width: 430px;
+            max-width: 100%;
+            color: #ffffff;
+            font-family: 'Open Sauce One', 'Plus Jakarta Sans', sans-serif;
+            font-size: 40px;
+            line-height: 0.96;
+            font-weight: 700;
+            letter-spacing: -1.05px;
+            text-transform: uppercase;
+        }
+
+        .tefa-hero__actions {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-top: 25px;
+        }
+
+        /* Ukuran tombol diadaptasi dari mockup (10px/26px terlalu kecil) agar tetap
+           nyaman disentuh, sambil mempertahankan bentuk pil dan warna desain. */
+        .tefa-hero__btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 34px;
+            padding: 0 16px;
+            border-radius: 999px;
+            font-size: 13px;
+            font-weight: 600;
+            line-height: 1;
+            text-decoration: none;
+            white-space: nowrap;
+        }
+
+        .tefa-hero__btn--primary {
+            background: #ffffff;
+            color: #111111;
+        }
+
+        .tefa-hero__btn--outline {
+            color: #ffffff;
+            border: 1px solid #ffffff;
+            background: transparent;
+        }
+
+        /* Tablet: judul sedikit lebih kecil dari desktop. */
+        @media (min-width: 601px) and (max-width: 1023px) {
+            .tefa-hero h1 {
+                font-size: 34px;
+            }
+        }
+
+        @media (max-width: 600px) {
+            .tefa-hero {
+                min-height: 100vh;
+                --hero-wave-height: 50%;
+            }
+
+            .tefa-hero__content {
+                width: calc(100% - 44px);
+                margin: 0 auto;
+                padding-top: 68px;
+            }
+
+            .tefa-hero h1 {
+                font-size: clamp(26px, 7vw, 30px);
+            }
+        }
+
         /* Fokus keyboard mengikuti aksen kuning dari desain. */
         main a:focus-visible,
         main button:focus-visible {
@@ -50,16 +170,40 @@
     </style>
 
     <main class="bg-surface font-body">
-        {{-- ================= HERO ================= --}}
-        <section class="min-h-[420px] bg-brand py-12 text-white sm:min-h-[520px] sm:pb-12 sm:pt-20" data-scroll-reveal>
-            <div class="mx-auto w-full max-w-shell px-4 sm:px-8">
-                <h1 class="max-w-[14em] text-[clamp(1.75rem,5vw,3.25rem)] font-bold uppercase leading-[1.15]">
-                    Selamat Datang di Katalog TEFA SMKN 4 Tanjungpinang
+        {{-- ================= HERO =================
+             Tidak diberi data-scroll-reveal: hero ada di atas fold dan harus tampil langsung. --}}
+        <section class="tefa-hero" aria-label="Hero">
+            <div class="tefa-hero__content">
+                <h1>
+                    SELAMAT DATANG DI<br>
+                    KATALOG TEFA SMKN 4<br>
+                    TANJUNGPINANG
                 </h1>
-                <div class="mt-6 flex flex-wrap gap-3">
-                    <a href="{{ route('produk') }}" class="inline-block rounded-pill border border-white bg-white px-4 py-2 text-sm font-semibold text-ink transition-colors hover:bg-slate-100">Jelajahi Produk</a>
-                    <a href="{{ route('jasa') }}" class="inline-block rounded-pill border border-white px-4 py-2 text-sm font-semibold text-white transition-colors hover:bg-white hover:text-ink">Lihat Layanan Jasa</a>
+
+                <div class="tefa-hero__actions">
+                    <a href="{{ route('produk') }}" class="tefa-hero__btn tefa-hero__btn--primary">Jelajahi Produk</a>
+                    <a href="{{ route('jasa') }}" class="tefa-hero__btn tefa-hero__btn--outline">Lihat Layanan Jasa</a>
                 </div>
+            </div>
+
+            <div class="tefa-hero__wave" aria-hidden="true">
+                <svg viewBox="0 0 815 145" preserveAspectRatio="none">
+                    <path
+                        fill="#fafafa"
+                        d="
+                            M 0 75
+                            C 28 89, 58 93, 91 92
+                            C 143 90, 193 75, 235 54
+                            C 285 29, 336 19, 376 19
+                            C 416 19, 472 28, 516 51
+                            C 579 84, 652 82, 712 72
+                            C 754 65, 786 54, 815 30
+                            L 815 145
+                            L 0 145
+                            Z
+                        "
+                    />
+                </svg>
             </div>
         </section>
 

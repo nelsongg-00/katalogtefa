@@ -145,6 +145,75 @@ class AdminModularAndProductCrudTest extends TestCase
         ]);
     }
 
+    public function test_admin_can_create_worker_scoped_to_own_jurusan(): void
+    {
+        // File ini tidak memakai RefreshDatabase: bersihkan dulu supaya idempoten.
+        User::where('email', 'worker.baru@example.com')->delete();
+
+        $this->actingAs($this->admin);
+
+        $response = $this->post(route('admin.workers.store'), [
+            'name' => 'Siswa Worker Baru',
+            'email' => 'worker.baru@example.com',
+            'password' => 'password123',
+            'password_confirmation' => 'password123',
+        ]);
+
+        $response->assertRedirect(route('admin.workers.index'));
+        $this->assertNotNull($this->admin->jurusan_id);
+        $this->assertDatabaseHas('users', [
+            'email' => 'worker.baru@example.com',
+            'role' => 'worker',
+            'jurusan_id' => $this->admin->jurusan_id,
+        ]);
+    }
+
+    public function test_admin_worker_store_forces_role_and_rejects_weak_password(): void
+    {
+        User::whereIn('email', [
+            'siswa.super@example.com',
+            'siswa.pendek@example.com',
+            'siswa.konfirmasi@example.com',
+        ])->delete();
+
+        $this->actingAs($this->admin);
+
+        // Role & jurusan dari request diabaikan: selalu worker + jurusan pembuat.
+        $this->post(route('admin.workers.store'), [
+            'name' => 'Siswa Super',
+            'email' => 'siswa.super@example.com',
+            'password' => 'password123',
+            'password_confirmation' => 'password123',
+            'role' => 'super_admin',
+            'jurusan_id' => 999999,
+        ])->assertRedirect(route('admin.workers.index'));
+
+        $this->assertDatabaseHas('users', [
+            'email' => 'siswa.super@example.com',
+            'role' => 'worker',
+            'jurusan_id' => $this->admin->jurusan_id,
+        ]);
+
+        // Password minimal 8 karakter.
+        $this->post(route('admin.workers.store'), [
+            'name' => 'Siswa Pendek',
+            'email' => 'siswa.pendek@example.com',
+            'password' => 'short',
+            'password_confirmation' => 'short',
+        ])->assertSessionHasErrors('password');
+
+        $this->assertDatabaseMissing('users', ['email' => 'siswa.pendek@example.com']);
+
+        // Password wajib dikonfirmasi.
+        $this->post(route('admin.workers.store'), [
+            'name' => 'Siswa Tanpa Konfirmasi',
+            'email' => 'siswa.konfirmasi@example.com',
+            'password' => 'password123',
+        ])->assertSessionHasErrors('password');
+
+        $this->assertDatabaseMissing('users', ['email' => 'siswa.konfirmasi@example.com']);
+    }
+
     public function test_admin_can_update_product_when_real_path_is_false_on_windows(): void
     {
         Storage::fake('public');

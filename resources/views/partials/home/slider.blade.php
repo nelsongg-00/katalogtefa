@@ -67,7 +67,7 @@
             data-stagger-group
             x-ref="track">
             <li class="px-[0.75rem]">
-                <a href="#" class="relative block aspect-[9/16] overflow-hidden rounded-card bg-card-blue">
+                <a href="#" class="relative block aspect-[3/4] overflow-hidden rounded-card bg-card-blue">
                     <span class="absolute left-4 top-3 font-display text-5xl leading-none text-white">GIM</span>
                     <span class="sr-only">Program keahlian Pengembangan GIM</span>
                     <!-- TODO: add image (asset/img/program-1.jpg) -->
@@ -75,7 +75,7 @@
             </li>
 
             <li class="px-[0.75rem]">
-                <a href="#" class="relative block aspect-[9/16] overflow-hidden rounded-card bg-card-orange">
+                <a href="#" class="relative block aspect-[3/4] overflow-hidden rounded-card bg-card-orange">
                     <span class="absolute left-4 top-3 font-display text-5xl leading-none text-white">RPL</span>
                     <span class="sr-only">Program keahlian Rekayasa Perangkat Lunak</span>
                     <!-- TODO: add image (asset/img/program-2.jpg) -->
@@ -83,7 +83,7 @@
             </li>
 
             <li class="px-[0.75rem]">
-                <a href="#" class="relative block aspect-[9/16] overflow-hidden rounded-card bg-card-red">
+                <a href="#" class="relative block aspect-[3/4] overflow-hidden rounded-card bg-card-red">
                     <span class="absolute left-4 top-3 font-display text-5xl leading-none text-white">DKV</span>
                     <span class="sr-only">Program keahlian Desain Komunikasi dan Visual</span>
                     <!-- TODO: add image (asset/img/program-3.jpg) -->
@@ -91,26 +91,26 @@
             </li>
 
             <li class="px-[0.75rem]">
-                <a href="#" class="relative block aspect-[9/16] overflow-hidden rounded-card bg-card-blue">
-                    {{-- TODO: verify from design (label for card 4; design only shows GIM, RPL, DKV) --}}
-                    <span class="sr-only">Program keahlian 4</span>
-                    <!-- TODO: add image (asset/img/program-4.jpg) + label -->
+                <a href="#" class="relative block aspect-[3/4] overflow-hidden rounded-card bg-card-blue">
+                    <span class="absolute left-4 top-3 font-display text-5xl leading-none text-white">PSPT</span>
+                    <span class="sr-only">Program keahlian Produksi dan Siaran Program Televisi</span>
+                    <!-- TODO: add image (asset/img/program-4.jpg) -->
                 </a>
             </li>
 
             <li class="px-[0.75rem]">
-                <a href="#" class="relative block aspect-[9/16] overflow-hidden rounded-card bg-card-orange">
-                    {{-- TODO: verify from design (label for card 5) --}}
-                    <span class="sr-only">Program keahlian 5</span>
-                    <!-- TODO: add image (asset/img/program-5.jpg) + label -->
+                <a href="#" class="relative block aspect-[3/4] overflow-hidden rounded-card bg-card-orange">
+                    <span class="absolute left-4 top-3 font-display text-5xl leading-none text-white">TKJ</span>
+                    <span class="sr-only">Program keahlian Teknik Komputer dan Jaringan</span>
+                    <!-- TODO: add image (asset/img/program-5.jpg) -->
                 </a>
             </li>
 
             <li class="px-[0.75rem]">
-                <a href="#" class="relative block aspect-[9/16] overflow-hidden rounded-card bg-card-red">
-                    {{-- TODO: verify from design (label for card 6) --}}
-                    <span class="sr-only">Program keahlian 6</span>
-                    <!-- TODO: add image (asset/img/program-6.jpg) + label -->
+                <a href="#" class="relative block aspect-[3/4] overflow-hidden rounded-card bg-card-red">
+                    <span class="absolute left-4 top-3 font-display text-5xl leading-none text-white">ANM</span>
+                    <span class="sr-only">Program keahlian Animasi</span>
+                    <!-- TODO: add image (asset/img/program-6.jpg) -->
                 </a>
             </li>
         </ul>

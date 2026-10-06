@@ -34,17 +34,23 @@ class WorkerController extends Controller
      */
     public function store(Request $request): RedirectResponse
     {
-        $request->validate([
+        // Lapisan otorisasi tambahan: hanya Admin Jurusan yang boleh membuat akun Worker.
+        // (Lapisan utama sudah ditangani middleware `role:admin_jurusan` pada route.)
+        abort_if(auth()->user()?->role !== 'admin_jurusan', 403);
+
+        $validated = $request->validate([
             'name' => 'required|string|max:255',
             'email' => 'required|email|unique:users,email',
-            'password' => 'required|string|min:6',
+            'password' => 'required|string|min:8|confirmed',
         ]);
 
         User::create([
-            'name' => $request->name,
-            'email' => $request->email,
-            'password' => Hash::make($request->password),
+            'name' => $validated['name'],
+            'email' => strtolower(trim($validated['email'])),
+            'password' => Hash::make($validated['password']),
             'role' => 'worker',
+            // Jurusan diwarisi dari pembuat, bukan dari request — Admin Jurusan
+            // tidak pernah bisa membuat akun di luar jurusannya sendiri.
             'jurusan_id' => auth()->user()->jurusan_id,
         ]);
 

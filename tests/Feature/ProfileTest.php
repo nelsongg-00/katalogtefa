@@ -6,6 +6,7 @@ use App\Models\Jurusan;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Http\UploadedFile;
+use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Storage;
 use Tests\TestCase;
 
@@ -62,42 +63,6 @@ class ProfileTest extends TestCase
             ->assertRedirect('/profile');
 
         $this->assertNotNull($user->refresh()->email_verified_at);
-    }
-
-    public function test_user_can_delete_their_account(): void
-    {
-        $user = User::factory()->create();
-
-        $response = $this
-            ->actingAs($user)
-            ->delete('/profile', [
-                'password' => 'password',
-            ]);
-
-        $response
-            ->assertSessionHasNoErrors()
-            ->assertRedirect('/');
-
-        $this->assertGuest();
-        $this->assertNull($user->fresh());
-    }
-
-    public function test_correct_password_must_be_provided_to_delete_account(): void
-    {
-        $user = User::factory()->create();
-
-        $response = $this
-            ->actingAs($user)
-            ->from('/profile')
-            ->delete('/profile', [
-                'password' => 'wrong-password',
-            ]);
-
-        $response
-            ->assertSessionHasErrorsIn('userDeletion', 'password')
-            ->assertRedirect('/profile');
-
-        $this->assertNotNull($user->fresh());
     }
 
     public function test_profile_photo_can_be_uploaded(): void
@@ -239,6 +204,114 @@ class ProfileTest extends TestCase
         $this->assertSame('081234567890', $user->refresh()->phone);
     }
 
+    public function test_verified_email_shows_a_terverifikasi_badge_instead_of_a_verification_link(): void
+    {
+        $user = User::factory()->create(['email_verified_at' => now()]);
+
+        $response = $this
+            ->actingAs($user)
+            ->get('/profile');
+
+        $response
+            ->assertOk()
+            ->assertSee('Terverifikasi')
+            ->assertDontSee('form="send-verification"', false);
+    }
+
+    public function test_unverified_email_shows_a_verification_link_instead_of_the_badge(): void
+    {
+        $user = User::factory()->unverified()->create();
+
+        $response = $this
+            ->actingAs($user)
+            ->get('/profile');
+
+        $response
+            ->assertOk()
+            ->assertSee('form="send-verification"', false)
+            ->assertDontSee('Terverifikasi');
+    }
+
+    public function test_empty_phone_shows_a_tambah_link(): void
+    {
+        $user = User::factory()->create(['phone' => null]);
+
+        $this
+            ->actingAs($user)
+            ->get('/profile')
+            ->assertOk()
+            ->assertSee('tambah');
+    }
+
+    public function test_filled_phone_shows_the_number_without_a_tambah_link(): void
+    {
+        $user = User::factory()->create(['phone' => '0895600555970']);
+
+        $this
+            ->actingAs($user)
+            ->get('/profile')
+            ->assertOk()
+            ->assertSee('0895600555970')
+            ->assertDontSee('tambah');
+    }
+
+    public function test_biodata_starts_in_view_mode_with_an_ubah_link(): void
+    {
+        $user = User::factory()->create();
+
+        $this
+            ->actingAs($user)
+            ->get('/profile')
+            ->assertOk()
+            ->assertSee('data-editing="false"', false)
+            ->assertSee('ubah');
+    }
+
+    public function test_profile_page_does_not_show_the_delete_account_section(): void
+    {
+        $user = User::factory()->create();
+
+        $this
+            ->actingAs($user)
+            ->get('/profile')
+            ->assertOk()
+            ->assertDontSee('Hapus Akun');
+    }
+
+    public function test_profile_account_deletion_route_no_longer_exists(): void
+    {
+        $user = User::factory()->create();
+
+        $this->assertFalse(Route::has('profile.destroy'));
+
+        $this
+            ->actingAs($user)
+            ->delete('/profile', ['password' => 'password'])
+            ->assertStatus(405);
+
+        $this->assertNotNull($user->fresh());
+    }
+
+    public function test_biodata_form_opens_in_edit_mode_when_validation_fails(): void
+    {
+        $user = User::factory()->create();
+
+        $response = $this
+            ->followingRedirects()
+            ->actingAs($user)
+            ->from('/profile')
+            ->patch('/profile', [
+                'name' => '',
+                'email' => 'not-an-email',
+            ]);
+
+        $response
+            ->assertOk()
+            ->assertSee('data-editing="true"', false)
+            ->assertSee('Simpan')
+            ->assertSee('Batal');
+    }
+
     public function test_profile_page_shows_the_photo_upload_form(): void
     {
         $user = User::factory()->create();
@@ -252,6 +325,23 @@ class ProfileTest extends TestCase
             ->assertSee('Profile Saya')
             ->assertSee('Ubah Kata Sandi')
             ->assertSee('Pilih Foto');
+    }
+
+    public function test_biodata_toggle_renders_for_every_role_layout(): void
+    {
+        // Partial biodata dipakai bersama; toggle harus ada di layout role
+        // yang tidak memuat app.js/Alpine (superadmin, admin, worker) juga.
+        foreach (['pelanggan', 'super_admin', 'admin_jurusan', 'worker'] as $role) {
+            $user = User::factory()->create(['role' => $role]);
+
+            $this
+                ->actingAs($user)
+                ->get('/profile')
+                ->assertOk()
+                ->assertSee('id="biodataForm"', false)
+                ->assertSee('data-editing="false"', false)
+                ->assertSee('data-edit-trigger', false);
+        }
     }
 
     public function test_profile_page_uses_the_layout_of_each_role(): void
