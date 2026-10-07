@@ -4,1002 +4,607 @@
 
 @section('content')
 <style>
-    /* Custom Scoped Styling for Profil TEFA Page */
-    .profil-hero {
-        background: linear-gradient(135deg, #0a215e 0%, #1e3a8a 100%);
-        color: #ffffff;
-        padding: 70px 20px 80px;
-        text-align: center;
-        position: relative;
-        overflow: hidden;
-    }
-    
-    .profil-hero::before {
-        content: '';
-        position: absolute;
-        top: -50%;
-        left: -20%;
-        width: 140%;
-        height: 200%;
-        background: radial-gradient(circle, rgba(255,255,255,0.05) 0%, rgba(255,255,255,0) 70%);
-        pointer-events: none;
+    /* Halaman Profil TEFA — biru #0b60cf, aksen kuning #f2b630. */
+    .pf {
+        --blue: #0b60cf;
+        --blue-soft: #6c9ddd;
+        --blue-deep: #08306b;
+        --yellow: #f2b630;
+        --ink: #0f1b33;
+        --muted: #5b6678;
+        --surface: #fafafa;
+        --line: #e4e9f2;
+        color: var(--ink);
+        overflow-x: clip;
     }
 
-    .profil-badge-pill {
-        display: inline-flex;
-        align-items: center;
-        gap: 8px;
-        background: rgba(255, 183, 3, 0.15);
-        color: #ffb703;
-        padding: 6px 18px;
-        border-radius: 999px;
-        font-size: 13px;
-        font-weight: 700;
-        letter-spacing: 0.5px;
-        border: 1px solid rgba(255, 183, 3, 0.3);
-        margin-bottom: 20px;
+    .pf-shell { width: 100%; max-width: 1120px; margin: 0 auto; padding: 0 20px; }
+
+    /* ================= SCROLL PROGRESS ================= */
+    .scroll-progress {
+        position: fixed; inset: 0 0 auto 0; height: 3px; z-index: 100;
+        background: linear-gradient(90deg, #f2b630, #ffd873, #0b60cf);
+        transform-origin: 0 50%; transform: scaleX(0); pointer-events: none;
     }
 
-    .profil-hero h1 {
-        font-size: 2.75rem;
-        font-weight: 800;
-        letter-spacing: -0.5px;
-        margin-bottom: 16px;
-        line-height: 1.25;
+    /* ================= REVEAL ================= */
+    .js [data-reveal] {
+        opacity: 0; transform: translateY(44px);
+        transition: opacity .8s ease, transform .95s cubic-bezier(.16,1,.3,1), filter .8s ease, clip-path 1.1s cubic-bezier(.77,0,.175,1);
+        transition-delay: var(--d, 0ms);
     }
+    .js [data-reveal="left"]  { transform: translateX(-70px); }
+    .js [data-reveal="right"] { transform: translateX(70px); }
+    .js [data-reveal="zoom"]  { transform: scale(.88); }
+    .js [data-reveal="blur"]  { transform: translateY(24px) scale(.98); filter: blur(12px); }
+    .js [data-reveal="mask"]  { opacity: 1; transform: none; clip-path: inset(0 0 100% 0); }
+    .js .is-visible [data-reveal] { opacity: 1; transform: none; filter: none; }
+    .js .is-visible [data-reveal="mask"] { clip-path: inset(0 0 0 0); }
 
-    .profil-hero p {
-        color: #cbd5e1;
-        font-size: 1.1rem;
-        max-width: 700px;
-        margin: 0 auto;
-        line-height: 1.7;
+    [data-parallax-img] { transform: translate3d(0,0,0) scale(1.18); will-change: transform; }
+
+    .js .split-word { display: inline-block; overflow: hidden; vertical-align: top; padding-bottom: .12em; margin-bottom: -.12em; }
+    .js .split-word > span {
+        display: inline-block; opacity: 0; transform: translateY(110%) rotate(5deg); filter: blur(6px); transform-origin: 0 100%;
+        transition: transform .9s cubic-bezier(.16,1,.3,1), opacity .7s ease, filter .7s ease;
+        transition-delay: calc(var(--w, 0) * 70ms + var(--d, 0ms));
     }
+    .js .is-visible .split-word > span { opacity: 1; transform: none; filter: none; }
 
-    /* Stats Quick Bar */
-    .stats-bar-wrapper {
-        margin-top: -40px;
-        position: relative;
-        z-index: 10;
+    .shine-text {
+        background: linear-gradient(100deg, currentColor 30%, #7fb2ff 50%, currentColor 70%);
+        background-size: 220% 100%; -webkit-background-clip: text; background-clip: text;
+        -webkit-text-fill-color: transparent; animation: shine 4.5s ease-in-out infinite;
     }
+    @keyframes shine { 0% { background-position: 120% 0; } 60%, 100% { background-position: -120% 0; } }
 
-    .stats-grid {
-        display: grid;
-        grid-template-columns: repeat(4, 1fr);
-        gap: 20px;
-        background: #ffffff;
-        padding: 24px 30px;
-        border-radius: 20px;
-        box-shadow: 0 15px 35px -5px rgba(15, 23, 42, 0.1);
-        border: 1px solid #e2e8f0;
+    .js [data-stagger-item] {
+        opacity: 0; transform: translateY(48px) scale(.86); filter: blur(8px);
+        transition: opacity .7s ease, transform .9s cubic-bezier(.16,1,.3,1), filter .7s ease;
+        transition-delay: calc(var(--stagger-index, 0) * 120ms);
     }
+    .js [data-stagger-item].is-visible { opacity: 1; transform: none; filter: none; }
 
-    .stat-item {
-        display: flex;
-        align-items: center;
-        gap: 16px;
-        padding: 10px;
+    /* ================= HERO (banner persegi panjang) ================= */
+    .pf-hero {
+        position: relative; min-height: 540px; display: flex; align-items: center; overflow: hidden; isolation: isolate;
+        background: linear-gradient(120deg, #08306b 0%, #0b60cf 55%, #3c79d5 100%);
+        background-size: 160% 160%; animation: heroShift 16s ease-in-out infinite alternate;
     }
+    @keyframes heroShift { from { background-position: 0% 50%; } to { background-position: 100% 50%; } }
 
-    .stat-icon-box {
-        width: 52px;
-        height: 52px;
-        border-radius: 14px;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        font-size: 24px;
-        flex-shrink: 0;
+    .pf-hero__grid {
+        position: absolute; inset: 0; z-index: 0; pointer-events: none; opacity: .4;
+        background-image: linear-gradient(rgba(255,255,255,.14) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,.14) 1px, transparent 1px);
+        background-size: 48px 48px;
+        -webkit-mask-image: radial-gradient(ellipse at 70% 40%, #000 0%, transparent 72%);
+        mask-image: radial-gradient(ellipse at 70% 40%, #000 0%, transparent 72%);
+        animation: gridMove 20s linear infinite;
     }
+    @keyframes gridMove { to { background-position: 48px 48px, 48px 48px; } }
 
-    .stat-val {
-        font-size: 1.75rem;
-        font-weight: 800;
-        color: #0f172a;
-        line-height: 1.1;
+    .pf-hero__sheen {
+        position: absolute; inset: -20% auto -20% -40%; width: 40%; z-index: 0; pointer-events: none;
+        background: linear-gradient(100deg, transparent, rgba(255,255,255,.12), transparent); transform: skewX(-18deg);
+        animation: sheen 7s ease-in-out infinite;
     }
+    @keyframes sheen { 0% { left: -45%; } 60%, 100% { left: 125%; } }
 
-    .stat-lbl {
-        font-size: 13px;
-        color: #64748b;
-        font-weight: 600;
-        margin-top: 2px;
+    .pf-orb { position: absolute; z-index: 0; border-radius: 50%; filter: blur(40px); pointer-events: none; will-change: transform; }
+    .pf-orb > i { display: block; width: 100%; height: 100%; border-radius: 50%; animation: float 9s ease-in-out infinite alternate; }
+    .pf-orb--1 { width: 300px; height: 300px; top: 4%; right: 6%; background: radial-gradient(circle, rgba(255,255,255,.45), transparent 70%); }
+    .pf-orb--2 { width: 240px; height: 240px; bottom: 6%; right: 30%; background: radial-gradient(circle, rgba(242,182,48,.45), transparent 70%); }
+    .pf-orb--3 { width: 360px; height: 360px; top: -14%; left: -8%; background: radial-gradient(circle, rgba(140,190,255,.5), transparent 70%); }
+    .pf-orb--2 > i { animation-duration: 11s; animation-delay: -3s; }
+    .pf-orb--3 > i { animation-duration: 13s; animation-delay: -6s; }
+    @keyframes float { from { transform: translate3d(-18px,14px,0) scale(.95); } to { transform: translate3d(22px,-20px,0) scale(1.08); } }
+
+    .pf-hero__inner { position: relative; z-index: 2; width: 100%; display: grid; grid-template-columns: 1.15fr .85fr; gap: 40px; align-items: center; padding-top: 70px; padding-bottom: 70px; }
+    .pf-hero__content { will-change: transform, opacity; }
+
+    .pf-pill {
+        display: inline-flex; align-items: center; gap: 8px; padding: 7px 16px; margin-bottom: 20px;
+        font-size: 12px; font-weight: 700; letter-spacing: 1.4px; text-transform: uppercase; color: #fff;
+        background: rgba(255,255,255,.14); border: 1px solid rgba(255,255,255,.4); border-radius: 999px;
+        backdrop-filter: blur(8px); opacity: 0; transform: translateY(14px); animation: fadeUp .8s cubic-bezier(.16,1,.3,1) .1s forwards;
     }
+    .pf-pill::before { content: ''; width: 8px; height: 8px; border-radius: 50%; background: var(--yellow); box-shadow: 0 0 0 0 rgba(242,182,48,.7); animation: ping 2s infinite; }
+    @keyframes ping { 70% { box-shadow: 0 0 0 9px rgba(242,182,48,0); } 100% { box-shadow: 0 0 0 0 rgba(242,182,48,0); } }
 
-    /* Section Component Styles */
-    .section-tag {
-        color: #f59e0b;
-        font-weight: 800;
-        font-size: 13px;
-        letter-spacing: 2px;
-        text-transform: uppercase;
-        display: inline-block;
-        margin-bottom: 8px;
+    .pf-hero h1 {
+        margin: 0; color: #fff; font-family: 'Open Sauce One', 'Plus Jakarta Sans', sans-serif;
+        font-size: clamp(30px, 5vw, 52px); line-height: 1; font-weight: 800; letter-spacing: -1.1px; text-transform: uppercase;
     }
+    .pf-hero h1 em { font-style: normal; color: var(--yellow); }
+    .pf-hero__line { display: block; overflow: hidden; padding-bottom: .1em; margin-bottom: -.1em; }
+    .js .pf-hero__line > span { display: block; transform: translateY(115%); animation: lineUp 1s cubic-bezier(.16,1,.3,1) forwards; animation-delay: calc(var(--i,0) * 130ms + 250ms); }
+    @keyframes lineUp { to { transform: none; } }
 
-    .section-heading {
-        color: #0a215e;
-        font-weight: 800;
-        font-size: 2.1rem;
-        margin-bottom: 16px;
-        letter-spacing: -0.5px;
+    .pf-hero__lead {
+        max-width: 520px; margin: 18px 0 0; color: rgba(255,255,255,.88); font-size: 15px; line-height: 1.7;
+        opacity: 0; transform: translateY(18px); animation: fadeUp .9s cubic-bezier(.16,1,.3,1) .75s forwards;
     }
+    .pf-hero__actions { display: flex; align-items: center; gap: 12px; margin-top: 26px; flex-wrap: wrap; opacity: 0; transform: translateY(18px); animation: fadeUp .9s cubic-bezier(.16,1,.3,1) .95s forwards; }
+    @keyframes fadeUp { to { opacity: 1; transform: none; } }
 
-    .section-lead {
-        color: #64748b;
-        font-size: 1.05rem;
-        line-height: 1.7;
+    /* kartu kaca + chip melayang di sisi kanan */
+    .pf-hero__visual { position: relative; height: 340px; opacity: 0; animation: fadeUp 1s cubic-bezier(.16,1,.3,1) .8s forwards; }
+    .pf-glass {
+        position: absolute; inset: 30px 10px; display: grid; place-items: center; text-align: center; padding: 24px;
+        background: rgba(255,255,255,.12); border: 1px solid rgba(255,255,255,.35); border-radius: 28px;
+        backdrop-filter: blur(14px); box-shadow: 0 30px 60px -24px rgba(0,0,0,.45);
     }
-
-    /* About TEFA Card */
-    .about-card-box {
-        background: #ffffff;
-        border-radius: 24px;
-        border: 1px solid #e2e8f0;
-        padding: 40px;
-        box-shadow: 0 10px 30px rgba(0,0,0,0.03);
-        display: grid;
-        grid-template-columns: 1fr 1.2fr;
-        gap: 40px;
-        align-items: center;
+    .pf-glass::before { content: ''; position: absolute; inset: 10px; border-radius: 20px; border: 1px dashed rgba(255,255,255,.3); }
+    .pf-glass__ico { font-size: 54px; animation: bob 4s ease-in-out infinite alternate; }
+    .pf-glass b { display: block; margin-top: 10px; color: #fff; font-size: 1.15rem; font-weight: 800; letter-spacing: .3px; }
+    .pf-glass span { display: block; margin-top: 4px; color: rgba(255,255,255,.8); font-size: 12.5px; font-weight: 600; }
+    .pf-chip {
+        position: absolute; z-index: 2; padding: 8px 14px; font-size: 12px; font-weight: 800; letter-spacing: 1px; color: #fff;
+        background: rgba(8,48,107,.72); border: 1px solid rgba(255,255,255,.35); border-radius: 12px; backdrop-filter: blur(8px);
+        box-shadow: 0 14px 24px -12px rgba(0,0,0,.5); animation: bob 5s ease-in-out infinite alternate; will-change: transform;
     }
+    .pf-chip i { font-style: normal; color: var(--yellow); margin-right: 6px; }
+    .pf-chip--a { top: 0; left: 6%; }
+    .pf-chip--b { top: 14%; right: -2%; animation-delay: -1.5s; }
+    .pf-chip--c { bottom: 16%; left: -4%; animation-delay: -3s; }
+    .pf-chip--d { bottom: 0; right: 10%; animation-delay: -2.2s; }
+    @keyframes bob { from { transform: translateY(-7px) rotate(-1.5deg); } to { transform: translateY(9px) rotate(1.5deg); } }
 
-    .about-img-container {
-        position: relative;
-        border-radius: 18px;
-        overflow: hidden;
-        height: 380px;
-        background: linear-gradient(135deg, #0a215e, #1e3a8a);
-        box-shadow: 0 12px 25px rgba(15, 23, 42, 0.15);
+    /* garis aksen bawah banner */
+    .pf-hero__bar { position: absolute; inset: auto 0 0 0; height: 5px; z-index: 3; background: linear-gradient(90deg, transparent, var(--yellow), #ffd873, var(--yellow), transparent); background-size: 200% 100%; animation: barRun 4s linear infinite; }
+    @keyframes barRun { to { background-position: -200% 0; } }
+
+    .pf-btn {
+        position: relative; display: inline-flex; align-items: center; justify-content: center; gap: 8px;
+        min-height: 38px; padding: 0 20px; border-radius: 999px; font-size: 13px; font-weight: 600; line-height: 1;
+        text-decoration: none; white-space: nowrap; overflow: hidden; cursor: pointer; border: 1px solid transparent;
+        transition: transform .25s ease, box-shadow .25s ease, background .25s ease, color .25s ease;
     }
-
-    .about-img-container img {
-        width: 100%;
-        height: 100%;
-        object-fit: cover;
-        display: block;
-        transition: transform 0.5s ease;
+    .pf-btn:hover { transform: translateY(-2px); box-shadow: 0 10px 22px -8px rgba(0,0,0,.45); }
+    .pf-btn::after {
+        content: ''; position: absolute; top: 0; left: -80%; width: 50%; height: 100%;
+        background: linear-gradient(100deg, transparent, rgba(255,255,255,.65), transparent); transform: skewX(-20deg); transition: left .6s ease;
     }
+    .pf-btn:hover::after { left: 130%; }
+    .pf-btn--primary { background: #fff; color: #111; }
+    .pf-btn--outline { color: #fff; border-color: #fff; background: transparent; }
+    .pf-btn--outline:hover { background: #fff; color: var(--blue); }
+    .pf-btn--blue { background: var(--blue); color: #fff; }
+    .pf-btn--ghost { background: #eef3fb; color: #2a3a56; }
 
-    .about-img-container:hover img {
-        transform: scale(1.03);
+    /* ================= SECTION HELPERS ================= */
+    .pf-section { padding: 90px 0 30px; }
+    .pf-tag { display: inline-flex; align-items: center; gap: 10px; font-size: 12.5px; font-weight: 800; letter-spacing: 2px; text-transform: uppercase; color: #c98f00; margin-bottom: 10px; }
+    .pf-tag::before { content: ''; width: 28px; height: 3px; border-radius: 3px; background: linear-gradient(90deg, var(--yellow), #ffd873); }
+    .pf-title { margin: 0 0 14px; font-size: clamp(1.6rem, 3.2vw, 2.2rem); line-height: 1.15; font-weight: 800; letter-spacing: -.5px; }
+    .pf-title .accent { color: var(--blue); }
+    .pf-lead { margin: 0; color: var(--muted); font-size: 1.02rem; line-height: 1.75; }
+
+    /* ================= ABOUT ================= */
+    .pf-about { display: grid; grid-template-columns: 1.05fr 1fr; gap: 64px; align-items: center; }
+    .pf-about__media { position: relative; }
+    .pf-about__media::before {
+        content: ''; position: absolute; inset: 22px -18px -18px 22px; border-radius: 28px; z-index: 0;
+        background: linear-gradient(135deg, var(--yellow), #ffd873); opacity: .9;
     }
-
-    .about-location-badge {
-        position: absolute;
-        bottom: 16px;
-        left: 16px;
-        background: rgba(15, 23, 42, 0.85);
-        backdrop-filter: blur(8px);
-        color: #ffffff;
-        padding: 8px 16px;
-        border-radius: 12px;
-        font-size: 13px;
-        font-weight: 600;
-        display: flex;
-        align-items: center;
-        gap: 8px;
-        border: 1px solid rgba(255, 255, 255, 0.15);
+    .pf-about__frame { position: relative; z-index: 1; height: 400px; overflow: hidden; border-radius: 28px; background: #ddd; box-shadow: 0 30px 50px -24px rgba(8,48,107,.55); }
+    .pf-about__frame img { width: 100%; height: 100%; object-fit: cover; display: block; }
+    .pf-about__badge {
+        position: absolute; z-index: 2; left: 18px; bottom: 18px; display: flex; align-items: center; gap: 10px; padding: 10px 16px;
+        font-size: 13px; font-weight: 700; color: #fff; background: rgba(8,48,107,.78); backdrop-filter: blur(10px);
+        border: 1px solid rgba(255,255,255,.25); border-radius: 14px;
     }
-
-    /* Pillars of TEFA */
-    .tefa-pillars-grid {
-        display: grid;
-        grid-template-columns: repeat(4, 1fr);
-        gap: 20px;
-        margin-top: 40px;
+    .pf-about__float {
+        position: absolute; z-index: 2; top: -18px; right: -14px; padding: 14px 18px; text-align: center; border-radius: 18px;
+        background: #fff; box-shadow: 0 18px 34px -14px rgba(11,96,207,.5); animation: bob 5s ease-in-out infinite alternate;
     }
+    .pf-about__float b { display: block; font-size: 1.6rem; line-height: 1; color: var(--blue); }
+    .pf-about__float span { font-size: 11px; font-weight: 700; color: var(--muted); letter-spacing: .5px; }
+    .pf-about p.body { margin: 0 0 24px; color: #46536a; font-size: 15px; line-height: 1.8; }
+    .pf-about__actions { display: flex; gap: 12px; flex-wrap: wrap; }
 
-    .pillar-card {
-        background: #ffffff;
-        border-radius: 18px;
-        border: 1px solid #e2e8f0;
-        padding: 28px 22px;
-        box-shadow: 0 4px 15px rgba(0,0,0,0.03);
-        text-align: center;
-        transition: all 0.3s ease;
+    /* ================= MARQUEE ================= */
+    .pf-marquee { margin-top: 80px; padding: 18px 0; overflow: hidden; background: linear-gradient(90deg, #0b60cf, #1c6bd2 50%, #0b60cf); transform: rotate(-1.2deg); box-shadow: 0 18px 34px -20px rgba(11,96,207,.7); }
+    .pf-marquee__track { display: flex; width: max-content; animation: marquee 28s linear infinite; }
+    .pf-marquee:hover .pf-marquee__track { animation-play-state: paused; }
+    .pf-marquee__item { display: inline-flex; align-items: center; gap: 22px; padding-right: 22px; font-size: 15px; font-weight: 800; letter-spacing: 1.5px; text-transform: uppercase; color: #fff; white-space: nowrap; }
+    .pf-marquee__item i { font-style: normal; color: var(--yellow); }
+    @keyframes marquee { to { transform: translateX(-50%); } }
+
+    /* ================= JEMBATAN TEKNOLOGI ================= */
+    .pf-bridge-wrap { padding: 100px 0 20px; }
+    .pf-bridge {
+        position: relative; overflow: hidden; isolation: isolate; padding: 72px 40px 60px; color: #fff; text-align: center; border-radius: 36px;
+        background: linear-gradient(135deg, #08306b 0%, #0b60cf 60%, #1c6bd2 100%); box-shadow: 0 40px 70px -34px rgba(8,48,107,.9);
     }
+    .pf-bridge .pf-orb { z-index: -1; }
+    .pf-bridge__grid { position: absolute; inset: 0; z-index: -1; opacity: .22; background-image: linear-gradient(rgba(255,255,255,.2) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,.2) 1px, transparent 1px); background-size: 42px 42px; -webkit-mask-image: radial-gradient(ellipse at center, #000, transparent 75%); mask-image: radial-gradient(ellipse at center, #000, transparent 75%); }
+    .pf-bridge .pf-tag { color: var(--yellow); justify-content: center; }
+    .pf-bridge .pf-title { color: #fff; max-width: 720px; margin: 0 auto 16px; }
+    .pf-bridge .pf-title .accent { color: var(--yellow); }
+    .pf-bridge__text { max-width: 760px; margin: 0 auto; color: rgba(255,255,255,.88); font-size: 1.02rem; line-height: 1.85; }
 
-    .pillar-card:hover {
-        transform: translateY(-6px);
-        border-color: #93c5fd;
-        box-shadow: 0 15px 30px rgba(37, 99, 235, 0.1);
+    .pf-bridge__viz { display: grid; grid-template-columns: 190px 1fr 190px; align-items: center; gap: 10px; max-width: 880px; margin: 48px auto 36px; }
+    .pf-node {
+        position: relative; padding: 22px 14px; border-radius: 22px; background: rgba(255,255,255,.12); border: 1px solid rgba(255,255,255,.35);
+        backdrop-filter: blur(10px); box-shadow: 0 20px 34px -18px rgba(0,0,0,.5);
     }
+    .pf-node::after { content: ''; position: absolute; inset: -6px; border-radius: 26px; border: 1px solid rgba(242,182,48,.6); animation: pulseRing 2.6s ease-out infinite; }
+    .pf-node--b::after { animation-delay: 1.3s; }
+    @keyframes pulseRing { 0% { transform: scale(.94); opacity: .9; } 100% { transform: scale(1.18); opacity: 0; } }
+    .pf-node__ico { font-size: 38px; display: block; margin-bottom: 8px; animation: bob 4s ease-in-out infinite alternate; }
+    .pf-node b { display: block; font-size: 14px; font-weight: 800; letter-spacing: .4px; }
+    .pf-node span { display: block; margin-top: 3px; font-size: 11.5px; color: rgba(255,255,255,.75); font-weight: 600; }
 
-    .pillar-icon {
-        width: 56px;
-        height: 56px;
-        border-radius: 16px;
-        margin: 0 auto 18px;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        font-size: 26px;
+    .pf-span { width: 100%; height: 150px; overflow: visible; }
+    .pf-span .road { fill: none; stroke: rgba(255,255,255,.25); stroke-width: 6; stroke-linecap: round; }
+    .pf-span .flow { fill: none; stroke: var(--yellow); stroke-width: 3; stroke-linecap: round; stroke-dasharray: 8 12; animation: flow 1.4s linear infinite; }
+    .pf-span .post { stroke: rgba(255,255,255,.35); stroke-width: 2; }
+    @keyframes flow { to { stroke-dashoffset: -20; } }
+
+    .pf-bridge__chips { display: flex; justify-content: center; flex-wrap: wrap; gap: 14px; list-style: none; margin: 0; padding: 0; }
+    .pf-bridge__chips li {
+        display: inline-flex; align-items: center; gap: 10px; padding: 12px 22px; font-size: 14px; font-weight: 800; letter-spacing: .5px;
+        background: rgba(255,255,255,.14); border: 1px solid rgba(255,255,255,.35); border-radius: 999px; backdrop-filter: blur(8px);
+        transition: transform .3s ease, background .3s ease, color .3s ease;
     }
+    .pf-bridge__chips li:hover { transform: translateY(-4px); background: #fff; color: var(--blue); }
 
-    .pillar-card h4 {
-        font-size: 1.1rem;
-        font-weight: 800;
-        color: #0f172a;
-        margin-bottom: 10px;
+    /* ================= CTA ================= */
+    .pf-cta-wrap { padding: 90px 0 100px; }
+    .pf-cta {
+        position: relative; overflow: hidden; isolation: isolate; padding: 64px 32px; text-align: center; color: #fff; border-radius: 32px;
+        background: linear-gradient(135deg, #6c9ddd 0%, #1c6bd2 45%, #0b60cf 100%); box-shadow: 0 34px 60px -28px rgba(11,96,207,.8);
     }
+    .pf-cta .pf-orb { z-index: -1; }
+    .pf-cta__grid { position: absolute; inset: 0; z-index: -1; opacity: .25; background-image: linear-gradient(rgba(255,255,255,.2) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,.2) 1px, transparent 1px); background-size: 40px 40px; -webkit-mask-image: radial-gradient(ellipse at center, #000, transparent 75%); mask-image: radial-gradient(ellipse at center, #000, transparent 75%); }
+    .pf-cta h2 { margin: 10px 0 12px; font-size: clamp(1.6rem, 3.4vw, 2.3rem); font-weight: 800; letter-spacing: -.5px; line-height: 1.15; }
+    .pf-cta p { max-width: 560px; margin: 0 auto 28px; color: rgba(255,255,255,.88); font-size: 15px; line-height: 1.7; }
+    .pf-cta .pf-pill { opacity: 1; transform: none; animation: none; }
+    .pf-cta__actions { display: flex; justify-content: center; flex-wrap: wrap; gap: 12px; }
 
-    .pillar-card p {
-        font-size: 13.5px;
-        color: #64748b;
-        line-height: 1.6;
-        margin: 0;
-    }
+    :focus-visible { outline: 3px solid #f2b630; outline-offset: 2px; }
 
-    /* 6 Jurusan Grid & Cards */
-    .jurusan-grid-6 {
-        display: grid;
-        grid-template-columns: repeat(3, 1fr);
-        gap: 24px;
-        margin-top: 36px;
-    }
-
-    .jurusan-card-clean {
-        background: #ffffff;
-        border-radius: 18px;
-        border: 1px solid #e2e8f0;
-        padding: 26px 22px;
-        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.02);
-        transition: all 0.25s ease;
-        display: flex;
-        flex-direction: column;
-        cursor: pointer;
-        text-align: left;
-    }
-
-    .jurusan-card-clean:hover {
-        transform: translateY(-4px);
-        border-color: #93c5fd;
-        box-shadow: 0 14px 28px rgba(37, 99, 235, 0.08);
-    }
-
-    .jurusan-card-top {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        margin-bottom: 16px;
-    }
-
-    .jurusan-icon-pill {
-        width: 46px;
-        height: 46px;
-        border-radius: 12px;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        font-size: 22px;
-    }
-
-    .jurusan-unit-badge {
-        font-size: 11px;
-        font-weight: 700;
-        color: #475569;
-        background: #f1f5f9;
-        padding: 3px 10px;
-        border-radius: 999px;
-        letter-spacing: 0.5px;
-    }
-
-    .jurusan-card-title {
-        font-size: 1.15rem;
-        font-weight: 800;
-        color: #0f172a;
-        margin-bottom: 8px;
-    }
-
-    .jurusan-card-desc {
-        font-size: 13.5px;
-        color: #64748b;
-        line-height: 1.6;
-        margin-bottom: 16px;
-        flex-grow: 1;
-    }
-
-    .jurusan-tags-row {
-        display: flex;
-        flex-wrap: wrap;
-        gap: 6px;
-        margin-bottom: 18px;
-    }
-
-    .jurusan-tag-clean {
-        background: #f8fafc;
-        border: 1px solid #e2e8f0;
-        color: #475569;
-        font-size: 11px;
-        font-weight: 600;
-        padding: 3px 8px;
-        border-radius: 6px;
-    }
-
-    .jurusan-action-link {
-        font-size: 13px;
-        font-weight: 700;
-        color: #2563eb;
-        display: inline-flex;
-        align-items: center;
-        gap: 6px;
-        transition: gap 0.2s ease;
-    }
-
-    .jurusan-card-clean:hover .jurusan-action-link {
-        gap: 10px;
-        color: #1d4ed8;
-    }
-
-    /* Upgraded Pop-up Modal */
-    .modal-backdrop-custom {
-        position: fixed;
-        inset: 0;
-        background: rgba(15, 23, 42, 0.75);
-        backdrop-filter: blur(8px);
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        z-index: 99999;
-        opacity: 0;
-        visibility: hidden;
-        transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
-        padding: 20px;
-    }
-
-    .modal-backdrop-custom.active {
-        opacity: 1;
-        visibility: visible;
-    }
-
-    .modal-dialog-custom {
-        background: #ffffff;
-        width: 100%;
-        max-width: 620px;
-        border-radius: 24px;
-        overflow: hidden;
-        position: relative;
-        transform: scale(0.92) translateY(20px);
-        transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
-        box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.35);
-        max-height: 90vh;
-        display: flex;
-        flex-direction: column;
-    }
-
-    .modal-backdrop-custom.active .modal-dialog-custom {
-        transform: scale(1) translateY(0);
-    }
-
-    .modal-close-btn {
-        position: absolute;
-        top: 16px;
-        right: 16px;
-        background: rgba(255, 255, 255, 0.9);
-        color: #0f172a;
-        border: none;
-        width: 36px;
-        height: 36px;
-        border-radius: 50%;
-        font-size: 20px;
-        cursor: pointer;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        z-index: 10;
-        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
-        transition: all 0.2s ease;
-    }
-
-    .modal-close-btn:hover {
-        background: #ffffff;
-        transform: rotate(90deg);
-    }
-
-    .modal-header-banner {
-        height: 180px;
-        position: relative;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        padding: 20px;
-        flex-shrink: 0;
-    }
-
-    .modal-header-icon {
-        width: 76px;
-        height: 76px;
-        background: rgba(255, 255, 255, 0.25);
-        backdrop-filter: blur(8px);
-        border: 1px solid rgba(255, 255, 255, 0.4);
-        border-radius: 22px;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        color: #ffffff;
-        font-size: 38px;
-        box-shadow: 0 10px 25px rgba(0,0,0,0.2);
-    }
-
-    .modal-body-scrollable {
-        padding: 30px;
-        overflow-y: auto;
-    }
-
-    .modal-badge-custom {
-        display: inline-block;
-        background: #eff6ff;
-        color: #2563eb;
-        padding: 5px 14px;
-        border-radius: 999px;
-        font-size: 12px;
-        font-weight: 800;
-        letter-spacing: 0.5px;
-        margin-bottom: 12px;
-        border: 1px solid #bfdbfe;
-    }
-
-    .modal-title-custom {
-        font-size: 1.65rem;
-        font-weight: 800;
-        color: #0f172a;
-        margin-bottom: 4px;
-    }
-
-    .modal-subtitle-custom {
-        font-size: 14px;
-        color: #64748b;
-        font-weight: 600;
-        margin-bottom: 20px;
-    }
-
-    .modal-output-box {
-        background: #f8fafc;
-        border: 1px solid #e2e8f0;
-        border-radius: 14px;
-        padding: 16px;
-        margin-top: 18px;
-        margin-bottom: 24px;
-    }
-
-    .modal-output-title {
-        font-size: 13px;
-        font-weight: 800;
-        color: #0a215e;
-        text-transform: uppercase;
-        letter-spacing: 0.5px;
-        margin-bottom: 10px;
-        display: flex;
-        align-items: center;
-        gap: 6px;
-    }
-
-    .modal-output-list {
-        display: grid;
-        grid-template-columns: 1fr 1fr;
-        gap: 8px;
-        list-style: none;
-        padding: 0;
-        margin: 0;
-    }
-
-    .modal-output-list li {
-        font-size: 13px;
-        color: #334155;
-        font-weight: 600;
-        display: flex;
-        align-items: center;
-        gap: 6px;
-    }
-
-    .modal-actions {
-        display: flex;
-        gap: 12px;
-    }
-
-    .modal-btn-primary {
-        flex: 1;
-        background: #2563eb;
-        color: #ffffff;
-        text-align: center;
-        padding: 12px 20px;
-        border-radius: 12px;
-        text-decoration: none;
-        font-weight: 700;
-        font-size: 14px;
-        transition: background 0.2s ease;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        gap: 8px;
-    }
-
-    .modal-btn-primary:hover {
-        background: #1d4ed8;
-    }
-
-    .modal-btn-secondary {
-        background: #f1f5f9;
-        color: #475569;
-        text-align: center;
-        padding: 12px 20px;
-        border-radius: 12px;
-        text-decoration: none;
-        font-weight: 700;
-        font-size: 14px;
-        transition: all 0.2s ease;
-    }
-
-    .modal-btn-secondary:hover {
-        background: #e2e8f0;
-        color: #0f172a;
-    }
-
-    /* Responsive Adjustments */
+    /* ================= RESPONSIVE ================= */
     @media (max-width: 992px) {
-        .stats-grid { grid-template-columns: repeat(2, 1fr); }
-        .about-card-box { grid-template-columns: 1fr; }
-        .about-img-container { height: 300px; }
-        .tefa-pillars-grid { grid-template-columns: repeat(2, 1fr); }
-        .jurusan-grid-6 { grid-template-columns: repeat(2, 1fr); }
+        .pf-hero__inner { grid-template-columns: 1fr; }
+        .pf-hero__visual { display: none; }
+        .pf-about { grid-template-columns: 1fr; gap: 48px; }
     }
-
+    @media (max-width: 720px) {
+        .pf-bridge { padding: 52px 22px 44px; border-radius: 28px; }
+        .pf-bridge__viz { grid-template-columns: 1fr; gap: 6px; margin: 36px auto 28px; }
+        .pf-span { height: 90px; transform: rotate(90deg) scale(.55); }
+        .pf-bridge__viz .pf-span { margin: 20px 0; }
+    }
     @media (max-width: 640px) {
-        .profil-hero h1 { font-size: 2rem; }
-        .stats-grid { grid-template-columns: 1fr; gap: 12px; }
-        .tefa-pillars-grid { grid-template-columns: 1fr; }
-        .jurusan-grid-6 { grid-template-columns: 1fr; }
-        .modal-output-list { grid-template-columns: 1fr; }
-        .modal-actions { flex-direction: column; }
+        .pf-hero { min-height: 500px; }
+        .pf-hero__inner { padding-top: 60px; padding-bottom: 60px; }
+        .pf-about__frame { height: 300px; }
+        .pf-about__float { right: 6px; }
+        .pf-cta { padding: 48px 22px; }
+        .js [data-reveal="left"]  { transform: translateX(-36px); }
+        .js [data-reveal="right"] { transform: translateX(36px); }
     }
 </style>
 
-<!-- 1. HERO HEADER SECTION -->
-<div class="profil-hero">
-    <div class="profil-badge-pill">
-        <span>✨ PROFIL TEACHING FACTORY</span>
-    </div>
-    <h1>Teaching Factory SMKN 4 Tanjungpinang</h1>
-    <p>
-        Model pembelajaran berbasis produksi dan jasa nyata yang mengintegrasikan kurikulum sekolah kejuruan dengan standar operasional industri modern di 6 unit keahlian unggulan.
-    </p>
-</div>
+<div class="scroll-progress" id="scrollProgress" aria-hidden="true"></div>
 
-<!-- 2. QUICK STATS BAR -->
-<div class="container stats-bar-wrapper" style="padding-top: 0; padding-bottom: 40px;">
-    <div class="stats-grid">
-        <div class="stat-item">
-            <div class="stat-icon-box" style="background: #eff6ff; color: #2563eb;">
-                🏬
-            </div>
-            <div>
-                <div class="stat-val">6</div>
-                <div class="stat-lbl">Unit Produksi TEFA</div>
-            </div>
-        </div>
-        <div class="stat-item">
-            <div class="stat-icon-box" style="background: #f0fdf4; color: #16a34a;">
-                🏭
-            </div>
-            <div>
-                <div class="stat-val">100%</div>
-                <div class="stat-lbl">Standar Industri</div>
-            </div>
-        </div>
-        <div class="stat-item">
-            <div class="stat-icon-box" style="background: #fffbeb; color: #d97706;">
-                ⚡
-            </div>
-            <div>
-                <div class="stat-val">TEFA</div>
-                <div class="stat-lbl">Praktik Produksi Real</div>
-            </div>
-        </div>
-        <div class="stat-item">
-            <div class="stat-icon-box" style="background: #f3e8ff; color: #9333ea;">
-                📦
-            </div>
-            <div>
-                <div class="stat-val">24+</div>
-                <div class="stat-lbl">Produk & Layanan Aktif</div>
-            </div>
-        </div>
-    </div>
-</div>
+<main class="pf bg-surface font-body">
 
-<!-- 3. MAIN ABOUT TEFA SECTION -->
-<div class="container" style="padding-top: 20px; padding-bottom: 60px;">
-    <div class="about-card-box">
-        <!-- Visual Container -->
-        <div class="about-img-container">
-            <img src="{{ asset('asset/img/foto-sekolahmu.jpg') }}" alt="Teaching Factory SMKN 4 Tanjungpinang" 
-                 onerror="this.onerror=null; this.src='https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?q=80&w=800&auto=format&fit=crop';">
-            <div class="about-location-badge">
-                <span>📍</span> Unit TEFA — SMKN 4 Tanjungpinang
-            </div>
-        </div>
+    {{-- ================= HERO ================= --}}
+    <section class="pf-hero" id="hero" aria-label="Profil Teaching Factory">
+        <div class="pf-hero__grid" aria-hidden="true"></div>
+        <div class="pf-hero__sheen" aria-hidden="true"></div>
+        <div class="pf-orb pf-orb--3" data-parallax-y="0.18" data-mouse="14" aria-hidden="true"><i></i></div>
+        <div class="pf-orb pf-orb--1" data-parallax-y="0.32" data-mouse="-22" aria-hidden="true"><i></i></div>
+        <div class="pf-orb pf-orb--2" data-parallax-y="0.12" data-mouse="18" aria-hidden="true"><i></i></div>
 
-        <!-- Text Container -->
-        <div>
-            <span class="section-tag">— TENTANG TEACHING FACTORY</span>
-            <h2 class="section-heading">Pusat Inovasi & Produksi Vokasi</h2>
-            <p class="section-lead" style="margin-bottom: 16px;">
-                <strong>Teaching Factory (TEFA) SMKN 4 Tanjungpinang</strong> adalah sarana pembelajaran berbasis produksi barang dan penyediaan jasa nyata yang dirancang sesuai alur kerja industri profesional.
-            </p>
-            <p style="color: #475569; font-size: 15px; line-height: 1.7; margin-bottom: 24px;">
-                Melalui ekosistem TEFA, siswa tidak hanya belajar teori di kelas, melainkan langsung menangani project riil dari masyarakat, UMKM, instansi pemerintah, dan pelaku usaha. Setiap project dikerjakan dengan bimbingan instruktur ahli untuk memastikan kualitas terbaik berstandar industri.
-            </p>
-
-            <div style="display: flex; gap: 12px; flex-wrap: wrap;">
-                <a href="#jurusan-section" class="btn-blue" style="border-radius: 12px; padding: 12px 24px; font-weight: 700; display: inline-flex; align-items: center; gap: 8px;">
-                    <span>🚀</span> Jelajahi 6 Unit TEFA
-                </a>
-                <a href="{{ route('produk') }}" style="background: #f1f5f9; color: #334155; padding: 12px 20px; border-radius: 12px; text-decoration: none; font-weight: 700; font-size: 14px; display: inline-flex; align-items: center; gap: 8px; transition: 0.2s;">
-                    <span>🛒</span> Katalog Produk TEFA
-                </a>
-            </div>
-        </div>
-    </div>
-
-    <!-- 4. KEUNGGULAN TEACHING FACTORY (PILARS) -->
-    <div style="margin-top: 70px;">
-        <div class="text-center" style="max-width: 650px; margin: 0 auto 10px;">
-            <span class="section-tag">— KEUNGGULAN TEFA</span>
-            <h2 class="section-heading">4 Pilar Keunggulan TEFA</h2>
-            <p class="section-lead">Nilai tambah utama yang membuat produk dan layanan jasa TEFA SMKN 4 Tanjungpinang unggul dan terpercaya.</p>
-        </div>
-
-        <div class="tefa-pillars-grid">
-            <div class="pillar-card">
-                <div class="pillar-icon" style="background: #eff6ff; color: #2563eb;">
-                    🛠️
+        <div class="pf-shell">
+            <div class="pf-hero__inner">
+                <div class="pf-hero__content" id="heroContent">
+                    <div class="pf-pill">Profil Teaching Factory</div>
+                    <h1 aria-label="Teaching Factory SMKN 4 Tanjungpinang">
+                        <span class="pf-hero__line" style="--i:0" aria-hidden="true"><span>TEACHING <em>FACTORY</em></span></span>
+                        <span class="pf-hero__line" style="--i:1" aria-hidden="true"><span>SMKN 4</span></span>
+                        <span class="pf-hero__line" style="--i:2" aria-hidden="true"><span>TANJUNGPINANG</span></span>
+                    </h1>
+                    <p class="pf-hero__lead">
+                        Model pembelajaran berbasis produksi dan jasa nyata yang memadukan kurikulum kejuruan dengan standar operasional industri modern di 6 unit keahlian unggulan.
+                    </p>
+                    <div class="pf-hero__actions">
+                        <a href="#jembatan" class="pf-btn pf-btn--primary">Kenali TEFA Lebih Dekat</a>
+                        <a href="{{ route('produk') }}" class="pf-btn pf-btn--outline">Katalog Produk TEFA</a>
+                    </div>
                 </div>
-                <h4>Peralatan Standar Industri</h4>
-                <p>Laboratorium & workshop dilengkapi perangkat komputasi, kamera, serta alat produksi industri modern.</p>
-            </div>
 
-            <div class="pillar-card">
-                <div class="pillar-icon" style="background: #f0fdf4; color: #16a34a;">
-                    💼
+                <div class="pf-hero__visual" aria-hidden="true">
+                    <div class="pf-glass" data-mouse="-10">
+                        <div>
+                            <div class="pf-glass__ico">🏭</div>
+                            <b>Belajar dari Produksi Nyata</b>
+                            <span>Standar industri · Project riil</span>
+                        </div>
+                    </div>
+                    <div class="pf-chip pf-chip--a" data-mouse="26"><i>✦</i>RPL</div>
+                    <div class="pf-chip pf-chip--b" data-mouse="-30"><i>✦</i>TKJ</div>
+                    <div class="pf-chip pf-chip--c" data-mouse="34"><i>✦</i>DKV</div>
+                    <div class="pf-chip pf-chip--d" data-mouse="-24"><i>✦</i>ANIMASI</div>
                 </div>
-                <h4>Pengalaman Project Real</h4>
-                <p>Siswa menggarap pesanan nyata dari klien masyarakat, UMKM, instansi, dan dunia usaha.</p>
             </div>
+        </div>
 
-            <div class="pillar-card">
-                <div class="pillar-icon" style="background: #fffbeb; color: #d97706;">
-                    👨‍🏫
-                </div>
-                <h4>Mentor & Guru Sertifikasi</h4>
-                <p>Setiap tahapan didampingi oleh instruktur profesional berpengalaman di bidangnya.</p>
-            </div>
+        <div class="pf-hero__bar" aria-hidden="true"></div>
+    </section>
 
-            <div class="pillar-card">
-                <div class="pillar-icon" style="background: #f3e8ff; color: #9333ea;">
-                    ✨
+    {{-- ================= TENTANG ================= --}}
+    <section class="pf-section" data-scroll-reveal>
+        <div class="pf-shell">
+            <div class="pf-about">
+                <div class="pf-about__media" data-reveal="mask" style="--d:100ms">
+                    <div class="pf-about__frame">
+                        <img data-parallax-img="0.08"
+                             src="{{ asset('asset/img/foto-sekolahmu.jpg') }}"
+                             alt="Teaching Factory SMKN 4 Tanjungpinang"
+                             onerror="this.onerror=null; this.src='https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?q=80&w=800&auto=format&fit=crop';">
+                    </div>
+                    <div class="pf-about__badge">📍 Unit TEFA — SMKN 4 Tanjungpinang</div>
+                    <div class="pf-about__float"><b>6</b><span>UNIT KEAHLIAN</span></div>
                 </div>
-                <h4>Quality Assurance Presisi</h4>
-                <p>Hasil pengerjaan dipastikan memenuhi spesifikasi kebutuhan pemesan dengan harga kompetitif.</p>
+
+                <div>
+                    <span class="pf-tag" data-reveal="left" style="--d:0ms">Tentang Teaching Factory</span>
+                    <h2 class="pf-title" data-split>Pusat <span class="accent">Inovasi</span> &amp; Produksi Vokasi</h2>
+                    <p class="pf-lead" data-reveal="left" style="margin-bottom:14px;--d:200ms">
+                        <strong>Teaching Factory (TEFA) SMKN 4 Tanjungpinang</strong> adalah sarana pembelajaran berbasis produksi barang dan penyediaan jasa nyata yang dirancang sesuai alur kerja industri profesional.
+                    </p>
+                    <p class="body" data-reveal="left" style="--d:300ms">
+                        Melalui ekosistem TEFA, siswa tidak hanya belajar teori di kelas, melainkan langsung menangani project riil dari masyarakat, UMKM, instansi pemerintah, dan pelaku usaha. Setiap project dikerjakan dengan bimbingan instruktur ahli untuk memastikan kualitas terbaik berstandar industri.
+                    </p>
+                    <div class="pf-about__actions" data-reveal style="--d:400ms">
+                        <a href="{{ route('jasa') }}" class="pf-btn pf-btn--blue">🚀 Lihat Layanan Jasa</a>
+                        <a href="{{ route('produk') }}" class="pf-btn pf-btn--ghost">🛒 Katalog Produk TEFA</a>
+                    </div>
+                </div>
             </div>
+        </div>
+    </section>
+
+    {{-- ================= MARQUEE ================= --}}
+    <div class="pf-marquee" aria-hidden="true">
+        <div class="pf-marquee__track">
+            @for ($i = 0; $i < 2; $i++)
+                <div class="pf-marquee__item">
+                    <span>RPL</span><i>✦</i><span>TKJ</span><i>✦</i><span>DKV</span><i>✦</i><span>Broadcasting</span><i>✦</i><span>Animasi</span><i>✦</i><span>Gim</span><i>✦</i>
+                    <span>Kreatif</span><i>✦</i><span>Kompeten</span><i>✦</i><span>Kolaboratif</span><i>✦</i><span>Siap Industri</span><i>✦</i>
+                </div>
+            @endfor
         </div>
     </div>
 
-    <!-- 5. 6 PROGRAM KEAHLIAN (JURUSAN) GRID -->
-    <div id="jurusan-section" style="margin-top: 90px; scroll-margin-top: 100px;">
-        <div class="text-center" style="max-width: 700px; margin: 0 auto 10px;">
-            <span class="section-tag">— UNIT PRODUKSI TEFA</span>
-            <h2 class="section-heading">6 Unit Produksi TEFA Unggulan</h2>
-            <p class="section-lead">Setiap program keahlian memiliki unit bisnis Teaching Factory terintegrasi yang siap melayani berbagai kebutuhan solusi teknologi dan industri kreatif Anda.</p>
-        </div>
+    {{-- ================= JEMBATAN MELALUI TEKNOLOGI ================= --}}
+    <section class="pf-bridge-wrap" id="jembatan" style="scroll-margin-top:90px" data-scroll-reveal>
+        <div class="pf-shell">
+            <div class="pf-bridge" data-reveal="zoom" style="--d:0ms">
+                <div class="pf-bridge__grid" aria-hidden="true"></div>
+                <div class="pf-orb pf-orb--1" aria-hidden="true"><i></i></div>
+                <div class="pf-orb pf-orb--3" aria-hidden="true" style="top:auto;bottom:-35%;left:-6%"><i></i></div>
 
-        <div class="jurusan-grid-6">
-            
-            <!-- KARTU 1: RPL -->
-            <div class="jurusan-card-clean" onclick="openModal('rpl')">
-                <div class="jurusan-card-top">
-                    <div class="jurusan-icon-pill" style="background: #eff6ff; color: #2563eb;">💻</div>
-                    <span class="jurusan-unit-badge">TEFA RPL</span>
-                </div>
-                <h3 class="jurusan-card-title">Rekayasa Perangkat Lunak</h3>
-                <p class="jurusan-card-desc">Pembuatan website company profile, sistem informasi manajemen, aplikasi mobile Android/iOS, dan software custom.</p>
-                <div class="jurusan-tags-row">
-                    <span class="jurusan-tag-clean">Web App</span>
-                    <span class="jurusan-tag-clean">Mobile Dev</span>
-                    <span class="jurusan-tag-clean">Database</span>
-                </div>
-                <div class="jurusan-action-link">
-                    <span>Lihat Detail Unit TEFA</span>
-                    <svg width="15" height="15" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M14 5l7 7m0 0l-7 7m7-7H3"/></svg>
-                </div>
-            </div>
+                <span class="pf-tag" data-reveal style="--d:100ms">Tentang Platform Ini</span>
+                <h2 class="pf-title" data-split>Menjadi <span class="accent">Jembatan</span> Melalui Teknologi</h2>
+                <p class="pf-bridge__text" data-reveal="blur" style="--d:350ms">
+                    Platform katalog digital ini hadir sebagai jembatan melalui teknologi yang mempertemukan potensi talenta vokasi dengan kebutuhan dunia usaha. Dengan menyalurkan keahlian teknis siswa pada pengerjaan project secara riil, kami tidak hanya mencetak lulusan yang kompeten, tetapi juga siap hadir membantu pertumbuhan UMKM dan perusahaan melalui solusi yang praktis, kreatif, dan inovatif.
+                </p>
 
-            <!-- KARTU 2: TKJ -->
-            <div class="jurusan-card-clean" onclick="openModal('tkj')">
-                <div class="jurusan-card-top">
-                    <div class="jurusan-icon-pill" style="background: #f0fdf4; color: #16a34a;">🌐</div>
-                    <span class="jurusan-unit-badge">TEFA TKJ</span>
-                </div>
-                <h3 class="jurusan-card-title">Teknik Komputer Jaringan</h3>
-                <p class="jurusan-card-desc">Instalasi jaringan LAN/Fiber Optic/WiFi, perakitan komputer PC, maintenance server, dan troubleshoot IT.</p>
-                <div class="jurusan-tags-row">
-                    <span class="jurusan-tag-clean">Infrastruktur</span>
-                    <span class="jurusan-tag-clean">Server</span>
-                    <span class="jurusan-tag-clean">Repair Hardware</span>
-                </div>
-                <div class="jurusan-action-link">
-                    <span>Lihat Detail Unit TEFA</span>
-                    <svg width="15" height="15" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M14 5l7 7m0 0l-7 7m7-7H3"/></svg>
-                </div>
-            </div>
+                <div class="pf-bridge__viz" aria-hidden="true" data-reveal="zoom" style="--d:500ms">
+                    <div class="pf-node">
+                        <span class="pf-node__ico">🎓</span>
+                        <b>Talenta Vokasi</b>
+                        <span>Siswa SMKN 4</span>
+                    </div>
 
-            <!-- KARTU 3: DKV -->
-            <div class="jurusan-card-clean" onclick="openModal('dkv')">
-                <div class="jurusan-card-top">
-                    <div class="jurusan-icon-pill" style="background: #fdf2f8; color: #db2777;">🎨</div>
-                    <span class="jurusan-unit-badge">TEFA DKV</span>
-                </div>
-                <h3 class="jurusan-card-title">Desain Komunikasi Visual</h3>
-                <p class="jurusan-card-desc">Jasa pembuatan logo, desain identitas branding UMKM, kemasan (packaging), poster, banner, dan barang merchandise.</p>
-                <div class="jurusan-tags-row">
-                    <span class="jurusan-tag-clean">Brand Logo</span>
-                    <span class="jurusan-tag-clean">Packaging</span>
-                    <span class="jurusan-tag-clean">Merchandise</span>
-                </div>
-                <div class="jurusan-action-link">
-                    <span>Lihat Detail Unit TEFA</span>
-                    <svg width="15" height="15" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M14 5l7 7m0 0l-7 7m7-7H3"/></svg>
-                </div>
-            </div>
+                    <svg class="pf-span" viewBox="0 0 600 150" preserveAspectRatio="none">
+                        <line class="post" x1="150" y1="150" x2="150" y2="52"/>
+                        <line class="post" x1="300" y1="150" x2="300" y2="26"/>
+                        <line class="post" x1="450" y1="150" x2="450" y2="52"/>
+                        <path id="bridgePath" class="road" d="M 0 128 C 120 128, 170 22, 300 22 C 430 22, 480 128, 600 128"/>
+                        <path class="flow" d="M 0 128 C 120 128, 170 22, 300 22 C 430 22, 480 128, 600 128"/>
+                        <circle r="6" fill="#f2b630"><animateMotion dur="3.2s" repeatCount="indefinite"><mpath href="#bridgePath"/></animateMotion></circle>
+                        <circle r="5" fill="#fff"><animateMotion dur="3.2s" begin="-1.6s" repeatCount="indefinite" keyPoints="1;0" keyTimes="0;1" calcMode="linear"><mpath href="#bridgePath"/></animateMotion></circle>
+                    </svg>
 
-            <!-- KARTU 4: BROADCASTING -->
-            <div class="jurusan-card-clean" onclick="openModal('bc')">
-                <div class="jurusan-card-top">
-                    <div class="jurusan-icon-pill" style="background: #fff7ed; color: #ea580c;">📹</div>
-                    <span class="jurusan-unit-badge">TEFA BROADCASTING</span>
+                    <div class="pf-node pf-node--b">
+                        <span class="pf-node__ico">🏢</span>
+                        <b>Dunia Usaha</b>
+                        <span>UMKM &amp; Perusahaan</span>
+                    </div>
                 </div>
-                <h3 class="jurusan-card-title">Produksi Siaran Televisi</h3>
-                <p class="jurusan-card-desc">Jasa videografi liputan event, pembuatan video profil perusahaan, video iklan produk, dan editing video profesional.</p>
-                <div class="jurusan-tags-row">
-                    <span class="jurusan-tag-clean">Videografi</span>
-                    <span class="jurusan-tag-clean">Video Profile</span>
-                    <span class="jurusan-tag-clean">Post Production</span>
-                </div>
-                <div class="jurusan-action-link">
-                    <span>Lihat Detail Unit TEFA</span>
-                    <svg width="15" height="15" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M14 5l7 7m0 0l-7 7m7-7H3"/></svg>
-                </div>
-            </div>
 
-            <!-- KARTU 5: ANIMASI -->
-            <div class="jurusan-card-clean" onclick="openModal('animasi')">
-                <div class="jurusan-card-top">
-                    <div class="jurusan-icon-pill" style="background: #f5f3ff; color: #7c3aed;">🎬</div>
-                    <span class="jurusan-unit-badge">TEFA ANIMASI</span>
-                </div>
-                <h3 class="jurusan-card-title">Animasi 2D & 3D</h3>
-                <p class="jurusan-card-desc">Pembuatan aset karakter 2D/3D, motion graphic untuk media promosi, video explainer interaktif, dan animasi edukasi.</p>
-                <div class="jurusan-tags-row">
-                    <span class="jurusan-tag-clean">2D/3D Asset</span>
-                    <span class="jurusan-tag-clean">Motion Graphic</span>
-                    <span class="jurusan-tag-clean">Explainer</span>
-                </div>
-                <div class="jurusan-action-link">
-                    <span>Lihat Detail Unit TEFA</span>
-                    <svg width="15" height="15" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M14 5l7 7m0 0l-7 7m7-7H3"/></svg>
-                </div>
-            </div>
-
-            <!-- KARTU 6: GIM -->
-            <div class="jurusan-card-clean" onclick="openModal('gim')">
-                <div class="jurusan-card-top">
-                    <div class="jurusan-icon-pill" style="background: #f0f9ff; color: #0284c7;">🎮</div>
-                    <span class="jurusan-unit-badge">TEFA GIM</span>
-                </div>
-                <h3 class="jurusan-card-title">Pengembangan Gim</h3>
-                <p class="jurusan-card-desc">Desain karakter game, environment 3D/2D, perancangan game edukasi interaktif, dan game berbasis Unity/Unreal Engine.</p>
-                <div class="jurusan-tags-row">
-                    <span class="jurusan-tag-clean">Game Design</span>
-                    <span class="jurusan-tag-clean">Interactive Media</span>
-                    <span class="jurusan-tag-clean">Asset 3D</span>
-                </div>
-                <div class="jurusan-action-link">
-                    <span>Lihat Detail Unit TEFA</span>
-                    <svg width="15" height="15" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M14 5l7 7m0 0l-7 7m7-7H3"/></svg>
-                </div>
-            </div>
-
-        </div>
-    </div>
-
-    <!-- 6. AJAKAN KERJASAMA / KONSULTASI TEFA (TASTEFUL) -->
-    <div style="margin-top: 80px; background: linear-gradient(135deg, #0a215e 0%, #1e3a8a 100%); border-radius: 24px; padding: 45px 35px; color: #ffffff; text-align: center;">
-        <span class="section-tag" style="color: #ffb703; background: rgba(255, 183, 3, 0.15); padding: 4px 14px; border-radius: 999px; font-size: 12px; border: 1px solid rgba(255, 183, 3, 0.3);">✨ KEMITRAAN & KONSULTASI</span>
-        <h2 style="font-size: 1.9rem; font-weight: 800; color: #ffffff; margin: 12px 0 10px;">Siap Bekerjasama dengan Unit TEFA Kami?</h2>
-        <p style="color: #cbd5e1; font-size: 14.5px; max-width: 620px; margin: 0 auto 25px; line-height: 1.6;">
-            Dapatkan hasil pengerjaan berkualitas standar industri dengan harga yang kompetitif untuk kebutuhan bisnis, instansi, atau UMKM Anda.
-        </p>
-        <div style="display: flex; justify-content: center; gap: 14px; flex-wrap: wrap;">
-            <a href="{{ route('jasa') }}" class="btn btn-primary" style="padding: 12px 26px; font-size: 14px; font-weight: 700; border-radius: 999px; text-decoration: none;">
-                Lihat Layanan Jasa
-            </a>
-            <a href="{{ route('produk') }}" class="btn btn-outline" style="padding: 12px 26px; font-size: 14px; font-weight: 700; border-radius: 999px; text-decoration: none;">
-                Jelajahi Produk
-            </a>
-        </div>
-    </div>
-</div>
-
-<!-- 6. UPGRADED POP-UP MODAL OVERLAY -->
-<div class="modal-backdrop-custom" id="detailModalCustom">
-    <div class="modal-dialog-custom">
-        <button class="modal-close-btn" onclick="closeModalCustom()" title="Tutup Modal">&times;</button>
-
-        <div class="modal-header-banner" id="modalHeaderBg">
-            <div class="modal-header-icon" id="modalHeaderIcon">
-                💻
-            </div>
-        </div>
-
-        <div class="modal-body-scrollable">
-            <span class="modal-badge-custom" id="modalBadge">TEFA RPL</span>
-            <h3 class="modal-title-custom" id="modalTitle">Rekayasa Perangkat Lunak</h3>
-            <div class="modal-subtitle-custom" id="modalSubtitle">Unit Produksi & Pengembangan Perangkat Lunak</div>
-            
-            <div id="modalDesc" style="color: #475569; font-size: 14.5px; line-height: 1.7;"></div>
-
-            <div class="modal-output-box">
-                <div class="modal-output-title">
-                    <span>✨ Layanan & Produk Utama TEFA</span>
-                </div>
-                <ul class="modal-output-list" id="modalOutputList">
-                    <!-- Populated via Javascript -->
+                <ul class="pf-bridge__chips" data-stagger-group>
+                    <li>💡 Praktis</li>
+                    <li>🎨 Kreatif</li>
+                    <li>🚀 Inovatif</li>
                 </ul>
             </div>
+        </div>
+    </section>
 
-            <div class="modal-actions">
-                <a href="{{ route('jasa') }}" class="modal-btn-primary" id="modalBtnJasa">
-                    <span>Pesan Layanan Jasa</span>
-                    <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M14 5l7 7m0 0l-7 7m7-7H3"/></svg>
-                </a>
-                <a href="{{ route('produk') }}" class="modal-btn-secondary" id="modalBtnProduk">
-                    Katalog Produk
-                </a>
+    {{-- ================= CTA ================= --}}
+    <section class="pf-cta-wrap" data-scroll-reveal>
+        <div class="pf-shell">
+            <div class="pf-cta" data-reveal="zoom" style="--d:0ms">
+                <div class="pf-cta__grid" aria-hidden="true"></div>
+                <div class="pf-orb pf-orb--1" aria-hidden="true"><i></i></div>
+                <div class="pf-orb pf-orb--3" aria-hidden="true" style="top:auto;bottom:-30%;left:-4%"><i></i></div>
+                <span class="pf-pill">Kemitraan &amp; Konsultasi</span>
+                <h2>Siap Bekerjasama dengan Unit TEFA Kami?</h2>
+                <p>Dapatkan hasil pengerjaan berkualitas standar industri dengan harga yang kompetitif untuk kebutuhan bisnis, instansi, atau UMKM Anda.</p>
+                <div class="pf-cta__actions">
+                    <a href="{{ route('jasa') }}" class="pf-btn pf-btn--primary">Lihat Layanan Jasa</a>
+                    <a href="{{ route('produk') }}" class="pf-btn pf-btn--outline">Jelajahi Produk</a>
+                </div>
             </div>
         </div>
-    </div>
-</div>
+    </section>
+</main>
 
-<!-- JAVASCRIPT LOGIC FOR MODAL -->
 <script>
-    const dataJurusanModal = {
-        'rpl': {
-            badge: 'TEFA RPL',
-            title: 'Rekayasa Perangkat Lunak',
-            subtitle: 'Software Development & Web Systems',
-            icon: '💻',
-            gradient: 'linear-gradient(135deg, #1e3a8a 0%, #3b82f6 100%)',
-            desc: '<p>Unit Teaching Factory RPL fokus pada perancangan dan pengembangan perangkat lunak sesuai kebutuhan pasar. Dikerjakan langsung oleh siswa berprestasi di bawah bimbingan programmer profesional, kami siap membantu digitalisasi bisnis Anda.</p>',
-            outputs: [
-                '🌐 Website Company Profile',
-                '📱 Aplikasi Mobile Android/iOS',
-                '📊 Sistem Informasi Manajemen',
-                '🛒 Toko Online / E-Commerce'
-            ]
-        },
-        'tkj': {
-            badge: 'TEFA TKJ',
-            title: 'Teknik Komputer & Jaringan',
-            subtitle: 'Network Infrastructure & Hardware Repair',
-            icon: '🌐',
-            gradient: 'linear-gradient(135deg, #065f46 0%, #10b981 100%)',
-            desc: '<p>TEFA TKJ memberikan solusi infrastruktur teknologi informasi secara menyeluruh. Mulai dari penarikan kabel LAN/Fiber Optic, konfigurasi Router/Mikrotik, setup server, hingga perakitan dan perawatan PC kantor/sekolah.</p>',
-            outputs: [
-                '🔌 Instalasi LAN & WiFi',
-                '🖥️ Perakitan & Repair PC',
-                '🖥️ Maintenance Server & Cloud',
-                '🔒 Setup Firewall & Network'
-            ]
-        },
-        'dkv': {
-            badge: 'TEFA DKV',
-            title: 'Desain Komunikasi Visual',
-            subtitle: 'Creative Design & Visual Branding',
-            icon: '🎨',
-            gradient: 'linear-gradient(135deg, #9d174d 0%, #ec4899 100%)',
-            desc: '<p>Pusat kreativitas desain visual! TEFA DKV melayani perancangan identitas merek, desain grafis promosi, packaging produk UMKM, hingga cetak merchandise yang meningkatkan nilai jual bisnis Anda.</p>',
-            outputs: [
-                '🎨 Desain Logo & Brand Identity',
-                '📦 Kemasan Produk (Packaging)',
-                '🖼️ Poster, Banner & Spanduk',
-                '☕ Custom Merchandise & Mug'
-            ]
-        },
-        'bc': {
-            badge: 'TEFA BROADCASTING',
-            title: 'Produksi Program Siaran TV',
-            subtitle: 'Cinematography & Event Coverage',
-            icon: '📹',
-            gradient: 'linear-gradient(135deg, #9a3412 0%, #f97316 100%)',
-            desc: '<p>Layanan dokumentasi dan produksi video profesional. Dilengkapi dengan kamera standar siaran TV dan tim kreatif yang siap menangkap momen penting acara Anda secara cinematik.</p>',
-            outputs: [
-                '📹 Video Profile Perusahaan',
-                '🎬 Dokumentasi Liputan Event',
-                '📺 Video Iklan Komersial',
-                '✂️ Jasa Editing Video & Coloring'
-            ]
-        },
-        'animasi': {
-            badge: 'TEFA ANIMASI',
-            title: 'Animasi 2D & 3D',
-            subtitle: 'Digital Animation & Motion Graphics',
-            icon: '🎬',
-            gradient: 'linear-gradient(135deg, #5b21b6 0%, #8b5cf6 100%)',
-            desc: '<p>Mengubah ide dan cerita menjadi karya visual bergerak yang menarik. Kami memproduksi aset animasi 2D/3D, motion graphics untuk presentasi, hingga video penjelasan (explainer video) edukatif.</p>',
-            outputs: [
-                '✨ Motion Graphics Promosi',
-                '💡 Video Explainer Edukatif',
-                '🧸 Desain Aset Karakter 3D/2D',
-                '📽️ Short Animation Project'
-            ]
-        },
-        'gim': {
-            badge: 'TEFA GIM',
-            title: 'Pengembangan Gim',
-            subtitle: 'Interactive Media & Game Development',
-            icon: '🎮',
-            gradient: 'linear-gradient(135deg, #075985 0%, #0284c7 100%)',
-            desc: '<p>Unit TEFA Game Development berfokus pada rancang bangun media interaktif dan game edukasi/hiburan. Menggunakan game engine populer seperti Unity dan Unreal Engine.</p>',
-            outputs: [
-                '🎮 Game Edukasi Interaktif',
-                '🕹️ Asset Character & Environment',
-                '📱 Game Mobile 2D/3D',
-                '🕶️ VR/AR Interactive App'
-            ]
+    (function () {
+        document.documentElement.classList.add('js');
+
+        var canHover = window.matchMedia('(hover: hover) and (pointer: fine)').matches;
+
+        function splitWords(root) {
+            var label = root.textContent.replace(/\s+/g, ' ').trim();
+            var counter = 0;
+
+            function walk(node) {
+                Array.prototype.slice.call(node.childNodes).forEach(function (child) {
+                    if (child.nodeType === 3) {
+                        var frag = document.createDocumentFragment();
+                        child.textContent.split(/(\s+)/).forEach(function (part) {
+                            if (!part) { return; }
+                            if (/^\s+$/.test(part)) { frag.appendChild(document.createTextNode(' ')); return; }
+                            var outer = document.createElement('span');
+                            var inner = document.createElement('span');
+                            outer.className = 'split-word';
+                            outer.style.setProperty('--w', counter++);
+                            inner.textContent = part;
+                            outer.appendChild(inner);
+                            frag.appendChild(outer);
+                        });
+                        node.replaceChild(frag, child);
+                    } else if (child.nodeType === 1) {
+                        walk(child);
+                    }
+                });
+            }
+
+            walk(root);
+            root.setAttribute('aria-label', label);
+            Array.prototype.forEach.call(root.children, function (c) { c.setAttribute('aria-hidden', 'true'); });
         }
-    };
 
-    const modalBackdrop = document.getElementById('detailModalCustom');
-
-    function openModal(id) {
-        const item = dataJurusanModal[id];
-        if (!item) return;
-
-        document.getElementById('modalBadge').textContent = item.badge;
-        document.getElementById('modalTitle').textContent = item.title;
-        document.getElementById('modalSubtitle').textContent = item.subtitle;
-        document.getElementById('modalDesc').innerHTML = item.desc;
-        document.getElementById('modalHeaderIcon').textContent = item.icon;
-        document.getElementById('modalHeaderBg').style.background = item.gradient;
-
-        // Render Output List
-        const listEl = document.getElementById('modalOutputList');
-        listEl.innerHTML = '';
-        item.outputs.forEach(out => {
-            const li = document.createElement('li');
-            li.textContent = out;
-            listEl.appendChild(li);
-        });
-
-        modalBackdrop.classList.add('active');
-        document.body.style.overflow = 'hidden';
-    }
-
-    function closeModalCustom() {
-        modalBackdrop.classList.remove('active');
-        document.body.style.overflow = 'auto';
-    }
-
-    window.addEventListener('click', function(e) {
-        if (e.target === modalBackdrop) {
-            closeModalCustom();
+        function markStagger(section) {
+            Array.prototype.forEach.call(section.querySelectorAll('[data-stagger-group]'), function (group) {
+                Array.prototype.forEach.call(group.children, function (child, i) {
+                    child.setAttribute('data-stagger-item', '');
+                    child.style.setProperty('--stagger-index', Math.min(i + 4, 8));
+                });
+            });
         }
-    });
 
-    document.addEventListener('keydown', function(e) {
-        if (e.key === 'Escape' && modalBackdrop.classList.contains('active')) {
-            closeModalCustom();
+        function reveal(section) {
+            section.classList.add('is-visible');
+            Array.prototype.forEach.call(section.querySelectorAll('[data-stagger-item]'), function (item) {
+                item.classList.add('is-visible');
+            });
         }
-    });
+
+        /* Parallax saat scroll + progress bar */
+        function setupScrollEffects() {
+            var bar = document.getElementById('scrollProgress');
+            var hero = document.getElementById('hero');
+            var heroContent = document.getElementById('heroContent');
+            var layers = document.querySelectorAll('[data-parallax-y]');
+            var imgs = document.querySelectorAll('[data-parallax-img]');
+            var ticking = false;
+
+            function update() {
+                ticking = false;
+                var y = window.pageYOffset;
+                var vh = window.innerHeight;
+                var max = document.documentElement.scrollHeight - vh;
+
+                if (bar) { bar.style.transform = 'scaleX(' + (max > 0 ? Math.min(y / max, 1) : 0) + ')'; }
+
+                if (hero && y < hero.offsetHeight + 100) {
+                    Array.prototype.forEach.call(layers, function (el) {
+                        el.style.translate = '0 ' + (y * parseFloat(el.getAttribute('data-parallax-y'))).toFixed(1) + 'px';
+                    });
+                    if (heroContent) {
+                        heroContent.style.transform = 'translate3d(0,' + (y * 0.22).toFixed(1) + 'px,0)';
+                        heroContent.style.opacity = Math.max(0, 1 - y / (hero.offsetHeight * 0.75));
+                    }
+                }
+
+                Array.prototype.forEach.call(imgs, function (img) {
+                    var wrap = img.parentNode.getBoundingClientRect();
+                    if (wrap.bottom < 0 || wrap.top > vh) { return; }
+                    var offset = (wrap.top + wrap.height / 2 - vh / 2) * parseFloat(img.getAttribute('data-parallax-img'));
+                    img.style.transform = 'translate3d(0,' + offset.toFixed(1) + 'px,0) scale(1.18)';
+                });
+            }
+
+            function onScroll() {
+                if (!ticking) { ticking = true; window.requestAnimationFrame(update); }
+            }
+
+            window.addEventListener('scroll', onScroll, { passive: true });
+            window.addEventListener('resize', onScroll);
+            update();
+        }
+
+        /* Parallax mengikuti mouse di banner (orb, kartu, chip) */
+        function setupMouseParallax() {
+            var hero = document.getElementById('hero');
+            if (!hero || !canHover) { return; }
+            var items = hero.querySelectorAll('[data-mouse]');
+            var raf = null, nx = 0, ny = 0;
+
+            function apply() {
+                raf = null;
+                Array.prototype.forEach.call(items, function (el) {
+                    var k = parseFloat(el.getAttribute('data-mouse'));
+                    el.style.marginLeft = (nx * k).toFixed(1) + 'px';
+                    el.style.marginTop = (ny * k).toFixed(1) + 'px';
+                });
+            }
+
+            hero.addEventListener('pointermove', function (e) {
+                var r = hero.getBoundingClientRect();
+                nx = (e.clientX - r.left) / r.width - 0.5;
+                ny = (e.clientY - r.top) / r.height - 0.5;
+                if (!raf) { raf = window.requestAnimationFrame(apply); }
+            });
+            hero.addEventListener('pointerleave', function () {
+                nx = 0; ny = 0;
+                if (!raf) { raf = window.requestAnimationFrame(apply); }
+            });
+            Array.prototype.forEach.call(items, function (el) { el.style.transition = 'margin .6s cubic-bezier(.16,1,.3,1)'; });
+        }
+
+        function init() {
+            var sections = document.querySelectorAll('[data-scroll-reveal]');
+
+            Array.prototype.forEach.call(document.querySelectorAll('[data-split]'), splitWords);
+            Array.prototype.forEach.call(sections, markStagger);
+
+            var accents = document.querySelectorAll('[data-split] .accent');
+            Array.prototype.forEach.call(accents, function (a) { setTimeout(function () { a.classList.add('shine-text'); }, 1600); });
+
+            setupScrollEffects();
+            setupMouseParallax();
+
+            if (!('IntersectionObserver' in window)) {
+                Array.prototype.forEach.call(sections, reveal);
+                return;
+            }
+
+            var io = new IntersectionObserver(function (entries) {
+                entries.forEach(function (entry) {
+                    if (entry.isIntersecting) { reveal(entry.target); io.unobserve(entry.target); }
+                });
+            }, { threshold: 0.2, rootMargin: '0px 0px -8% 0px' });
+
+            Array.prototype.forEach.call(sections, function (s) { io.observe(s); });
+        }
+
+        if (document.readyState === 'loading') {
+            document.addEventListener('DOMContentLoaded', init);
+        } else {
+            init();
+        }
+    })();
 </script>
 @endsection
