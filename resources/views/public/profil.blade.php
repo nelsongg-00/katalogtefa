@@ -65,16 +65,20 @@
     }
     .js [data-stagger-item].is-visible { opacity: 1; transform: none; filter: none; }
 
+    /* titik berlian kecil (pengganti simbol/emoji) */
+    .pf-dot { display: inline-block; width: 8px; height: 8px; background: var(--yellow); transform: rotate(45deg); flex: none; }
+
     /* ================= HERO (banner persegi panjang) ================= */
     .pf-hero {
         position: relative; min-height: 540px; display: flex; align-items: center; overflow: hidden; isolation: isolate;
-        background: linear-gradient(120deg, #08306b 0%, #0b60cf 55%, #3c79d5 100%);
-        background-size: 160% 160%; animation: heroShift 16s ease-in-out infinite alternate;
+        background:
+            linear-gradient(120deg, rgba(8,48,107,.9) 0%, rgba(11,96,207,.74) 55%, rgba(60,121,213,.5) 100%),
+            var(--hero-img) center / cover no-repeat;
+        background-color: #08306b;
     }
-    @keyframes heroShift { from { background-position: 0% 50%; } to { background-position: 100% 50%; } }
 
     .pf-hero__grid {
-        position: absolute; inset: 0; z-index: 0; pointer-events: none; opacity: .4;
+        position: absolute; inset: 0; z-index: 0; pointer-events: none; opacity: .35;
         background-image: linear-gradient(rgba(255,255,255,.14) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,.14) 1px, transparent 1px);
         background-size: 48px 48px;
         -webkit-mask-image: radial-gradient(ellipse at 70% 40%, #000 0%, transparent 72%);
@@ -121,7 +125,7 @@
     @keyframes lineUp { to { transform: none; } }
 
     .pf-hero__lead {
-        max-width: 520px; margin: 18px 0 0; color: rgba(255,255,255,.88); font-size: 15px; line-height: 1.7;
+        max-width: 520px; margin: 18px 0 0; color: rgba(255,255,255,.9); font-size: 15px; line-height: 1.7;
         opacity: 0; transform: translateY(18px); animation: fadeUp .9s cubic-bezier(.16,1,.3,1) .75s forwards;
     }
     .pf-hero__actions { display: flex; align-items: center; gap: 12px; margin-top: 26px; flex-wrap: wrap; opacity: 0; transform: translateY(18px); animation: fadeUp .9s cubic-bezier(.16,1,.3,1) .95s forwards; }
@@ -135,15 +139,15 @@
         backdrop-filter: blur(14px); box-shadow: 0 30px 60px -24px rgba(0,0,0,.45);
     }
     .pf-glass::before { content: ''; position: absolute; inset: 10px; border-radius: 20px; border: 1px dashed rgba(255,255,255,.3); }
-    .pf-glass__ico { font-size: 54px; animation: bob 4s ease-in-out infinite alternate; }
-    .pf-glass b { display: block; margin-top: 10px; color: #fff; font-size: 1.15rem; font-weight: 800; letter-spacing: .3px; }
+    .pf-glass__ico { width: 58px; height: 58px; margin: 0 auto; color: var(--yellow); animation: bob 4s ease-in-out infinite alternate; }
+    .pf-glass__ico svg { width: 100%; height: 100%; display: block; }
+    .pf-glass b { display: block; margin-top: 12px; color: #fff; font-size: 1.15rem; font-weight: 800; letter-spacing: .3px; }
     .pf-glass span { display: block; margin-top: 4px; color: rgba(255,255,255,.8); font-size: 12.5px; font-weight: 600; }
     .pf-chip {
-        position: absolute; z-index: 2; padding: 8px 14px; font-size: 12px; font-weight: 800; letter-spacing: 1px; color: #fff;
+        position: absolute; z-index: 2; display: inline-flex; align-items: center; gap: 8px; padding: 8px 14px; font-size: 12px; font-weight: 800; letter-spacing: 1px; color: #fff;
         background: rgba(8,48,107,.72); border: 1px solid rgba(255,255,255,.35); border-radius: 12px; backdrop-filter: blur(8px);
         box-shadow: 0 14px 24px -12px rgba(0,0,0,.5); animation: bob 5s ease-in-out infinite alternate; will-change: transform;
     }
-    .pf-chip i { font-style: normal; color: var(--yellow); margin-right: 6px; }
     .pf-chip--a { top: 0; left: 6%; }
     .pf-chip--b { top: 14%; right: -2%; animation-delay: -1.5s; }
     .pf-chip--c { bottom: 16%; left: -4%; animation-delay: -3s; }
@@ -208,7 +212,6 @@
     .pf-marquee__track { display: flex; width: max-content; animation: marquee 28s linear infinite; }
     .pf-marquee:hover .pf-marquee__track { animation-play-state: paused; }
     .pf-marquee__item { display: inline-flex; align-items: center; gap: 22px; padding-right: 22px; font-size: 15px; font-weight: 800; letter-spacing: 1.5px; text-transform: uppercase; color: #fff; white-space: nowrap; }
-    .pf-marquee__item i { font-style: normal; color: var(--yellow); }
     @keyframes marquee { to { transform: translateX(-50%); } }
 
     /* ================= JEMBATAN TEKNOLOGI ================= */
@@ -222,27 +225,58 @@
     .pf-bridge .pf-tag { color: var(--yellow); justify-content: center; }
     .pf-bridge .pf-title { color: #fff; max-width: 720px; margin: 0 auto 16px; }
     .pf-bridge .pf-title .accent { color: var(--yellow); }
-    .pf-bridge__text { max-width: 760px; margin: 0 auto; color: rgba(255,255,255,.88); font-size: 1.02rem; line-height: 1.85; }
+    .pf-bridge__text { max-width: 800px; margin: 0 auto; color: rgba(255,255,255,.9); font-size: 1.02rem; line-height: 1.85; }
 
-    .pf-bridge__viz { display: grid; grid-template-columns: 190px 1fr 190px; align-items: center; gap: 10px; max-width: 880px; margin: 48px auto 36px; }
-    .pf-node {
+    /* alur: Karya & layanan TEFA -> Platform katalog -> Pasar lebih luas */
+    .pf-flow { display: grid; grid-template-columns: 1fr 110px 1.15fr 110px 1fr; align-items: center; max-width: 960px; margin: 52px auto 0; }
+    .pf-fnode {
         position: relative; padding: 22px 14px; border-radius: 22px; background: rgba(255,255,255,.12); border: 1px solid rgba(255,255,255,.35);
         backdrop-filter: blur(10px); box-shadow: 0 20px 34px -18px rgba(0,0,0,.5);
     }
-    .pf-node::after { content: ''; position: absolute; inset: -6px; border-radius: 26px; border: 1px solid rgba(242,182,48,.6); animation: pulseRing 2.6s ease-out infinite; }
-    .pf-node--b::after { animation-delay: 1.3s; }
-    @keyframes pulseRing { 0% { transform: scale(.94); opacity: .9; } 100% { transform: scale(1.18); opacity: 0; } }
-    .pf-node__ico { font-size: 38px; display: block; margin-bottom: 8px; animation: bob 4s ease-in-out infinite alternate; }
-    .pf-node b { display: block; font-size: 14px; font-weight: 800; letter-spacing: .4px; }
-    .pf-node span { display: block; margin-top: 3px; font-size: 11.5px; color: rgba(255,255,255,.75); font-weight: 600; }
+    .pf-fnode__ico { display: block; width: 40px; height: 40px; margin: 0 auto 10px; color: var(--yellow); animation: bob 4s ease-in-out infinite alternate; }
+    .pf-fnode__ico svg { width: 100%; height: 100%; display: block; }
+    .pf-fnode b { display: block; font-size: 14px; font-weight: 800; letter-spacing: .4px; }
+    .pf-fnode > span:last-child { display: block; margin-top: 3px; font-size: 11.5px; color: rgba(255,255,255,.78); font-weight: 600; }
+    .pf-fnode--core { padding: 28px 16px; background: #fff; color: var(--blue-deep); border-color: #fff; box-shadow: 0 26px 44px -18px rgba(0,0,0,.55); }
+    .pf-fnode--core .pf-fnode__ico { color: var(--blue); }
+    .pf-fnode--core > span:last-child { color: var(--muted); }
+    .pf-fnode--core::after { content: ''; position: absolute; inset: -7px; border-radius: 28px; border: 2px solid rgba(242,182,48,.7); animation: pulseRing 2.6s ease-out infinite; }
+    @keyframes pulseRing { 0% { transform: scale(.94); opacity: .9; } 100% { transform: scale(1.14); opacity: 0; } }
 
-    .pf-span { width: 100%; height: 150px; overflow: visible; }
-    .pf-span .road { fill: none; stroke: rgba(255,255,255,.25); stroke-width: 6; stroke-linecap: round; }
-    .pf-span .flow { fill: none; stroke: var(--yellow); stroke-width: 3; stroke-linecap: round; stroke-dasharray: 8 12; animation: flow 1.4s linear infinite; }
-    .pf-span .post { stroke: rgba(255,255,255,.35); stroke-width: 2; }
-    @keyframes flow { to { stroke-dashoffset: -20; } }
+    /* jalur penghubung dengan paket yang bergerak */
+    .pf-link { position: relative; height: 4px; margin: 0 6px; border-radius: 4px; background: rgba(255,255,255,.22); }
+    .pf-link::after {
+        content: ''; position: absolute; right: -2px; top: 50%; width: 10px; height: 10px; border-top: 3px solid var(--yellow); border-right: 3px solid var(--yellow);
+        transform: translateY(-50%) rotate(45deg);
+    }
+    .pf-link i {
+        position: absolute; top: 50%; left: 0; width: 12px; height: 12px; margin-top: -6px; border-radius: 3px; background: var(--yellow);
+        box-shadow: 0 0 12px rgba(242,182,48,.9); opacity: 0; animation: packet 2.4s ease-in-out infinite;
+    }
+    .pf-link i:nth-child(2) { animation-delay: .8s; background: #fff; box-shadow: 0 0 12px rgba(255,255,255,.9); }
+    .pf-link i:nth-child(3) { animation-delay: 1.6s; }
+    .pf-flow .pf-link:last-of-type i { animation-delay: .4s; }
+    @keyframes packet { 0% { left: 0; opacity: 0; transform: scale(.6); } 15% { opacity: 1; transform: scale(1); } 85% { opacity: 1; } 100% { left: calc(100% - 12px); opacity: 0; transform: scale(.6); } }
+    @keyframes packetY { 0% { top: 0; opacity: 0; transform: scale(.6); } 15% { opacity: 1; transform: scale(1); } 85% { opacity: 1; } 100% { top: calc(100% - 12px); opacity: 0; transform: scale(.6); } }
 
-    .pf-bridge__chips { display: flex; justify-content: center; flex-wrap: wrap; gap: 14px; list-style: none; margin: 0; padding: 0; }
+    /* jalur umpan balik: pengalaman proyek riil mengasah kompetensi siswa */
+    .pf-loop { position: relative; max-width: 780px; margin: 30px auto 0; padding: 14px 0 0; }
+    .pf-loop__line { position: relative; height: 22px; border: 2px dashed rgba(255,255,255,.4); border-top: 0; border-radius: 0 0 22px 22px; }
+    .pf-loop__line::before {
+        content: ''; position: absolute; left: -2px; top: -2px; width: 3px; height: 14px; background: var(--yellow);
+        border-radius: 3px; box-shadow: 0 0 10px rgba(242,182,48,.9);
+    }
+    .pf-loop__dot {
+        position: absolute; bottom: -7px; right: 0; width: 12px; height: 12px; border-radius: 50%; background: var(--yellow); box-shadow: 0 0 12px rgba(242,182,48,.9);
+        animation: loopRun 4.5s ease-in-out infinite;
+    }
+    @keyframes loopRun { 0% { right: 0; opacity: 0; } 10% { opacity: 1; } 90% { opacity: 1; } 100% { right: calc(100% - 12px); opacity: 0; } }
+    .pf-loop__label {
+        display: inline-flex; align-items: center; gap: 10px; margin-top: 14px; padding: 9px 20px; font-size: 13px; font-weight: 700; letter-spacing: .3px;
+        background: rgba(255,255,255,.14); border: 1px solid rgba(255,255,255,.35); border-radius: 999px; backdrop-filter: blur(8px);
+    }
+
+    .pf-bridge__chips { display: flex; justify-content: center; flex-wrap: wrap; gap: 14px; list-style: none; margin: 34px 0 0; padding: 0; }
     .pf-bridge__chips li {
         display: inline-flex; align-items: center; gap: 10px; padding: 12px 22px; font-size: 14px; font-weight: 800; letter-spacing: .5px;
         background: rgba(255,255,255,.14); border: 1px solid rgba(255,255,255,.35); border-radius: 999px; backdrop-filter: blur(8px);
@@ -271,11 +305,13 @@
         .pf-hero__visual { display: none; }
         .pf-about { grid-template-columns: 1fr; gap: 48px; }
     }
-    @media (max-width: 720px) {
+    @media (max-width: 760px) {
         .pf-bridge { padding: 52px 22px 44px; border-radius: 28px; }
-        .pf-bridge__viz { grid-template-columns: 1fr; gap: 6px; margin: 36px auto 28px; }
-        .pf-span { height: 90px; transform: rotate(90deg) scale(.55); }
-        .pf-bridge__viz .pf-span { margin: 20px 0; }
+        .pf-flow { grid-template-columns: 1fr; margin-top: 38px; }
+        .pf-link { width: 4px; height: 56px; margin: 8px auto; }
+        .pf-link::after { right: 50%; top: auto; bottom: -2px; transform: translateX(50%) rotate(135deg); }
+        .pf-link i { left: 50%; top: 0; margin: 0 0 0 -6px; animation-name: packetY; }
+        .pf-loop { display: none; }
     }
     @media (max-width: 640px) {
         .pf-hero { min-height: 500px; }
@@ -293,7 +329,8 @@
 <main class="pf bg-surface font-body">
 
     {{-- ================= HERO ================= --}}
-    <section class="pf-hero" id="hero" aria-label="Profil Teaching Factory">
+    <section class="pf-hero" id="hero" aria-label="Profil Teaching Factory"
+             style="--hero-img: url('{{ asset('asset/img/waka.webp') }}');">
         <div class="pf-hero__grid" aria-hidden="true"></div>
         <div class="pf-hero__sheen" aria-hidden="true"></div>
         <div class="pf-orb pf-orb--3" data-parallax-y="0.18" data-mouse="14" aria-hidden="true"><i></i></div>
@@ -321,15 +358,17 @@
                 <div class="pf-hero__visual" aria-hidden="true">
                     <div class="pf-glass" data-mouse="-10">
                         <div>
-                            <div class="pf-glass__ico">🏭</div>
+                            <div class="pf-glass__ico">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round" stroke-linecap="round"><path d="M3 21V10l6 4v-4l6 4V5h3v16z"/><path d="M7 21v-3m4 3v-3m4 3v-3"/></svg>
+                            </div>
                             <b>Belajar dari Produksi Nyata</b>
                             <span>Standar industri · Project riil</span>
                         </div>
                     </div>
-                    <div class="pf-chip pf-chip--a" data-mouse="26"><i>✦</i>RPL</div>
-                    <div class="pf-chip pf-chip--b" data-mouse="-30"><i>✦</i>TKJ</div>
-                    <div class="pf-chip pf-chip--c" data-mouse="34"><i>✦</i>DKV</div>
-                    <div class="pf-chip pf-chip--d" data-mouse="-24"><i>✦</i>ANIMASI</div>
+                    <div class="pf-chip pf-chip--a" data-mouse="26"><i class="pf-dot"></i>RPL</div>
+                    <div class="pf-chip pf-chip--b" data-mouse="-30"><i class="pf-dot"></i>TKJ</div>
+                    <div class="pf-chip pf-chip--c" data-mouse="34"><i class="pf-dot"></i>DKV</div>
+                    <div class="pf-chip pf-chip--d" data-mouse="-24"><i class="pf-dot"></i>ANIMASI</div>
                 </div>
             </div>
         </div>
@@ -348,7 +387,7 @@
                              alt="Teaching Factory SMKN 4 Tanjungpinang"
                              onerror="this.onerror=null; this.src='https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?q=80&w=800&auto=format&fit=crop';">
                     </div>
-                    <div class="pf-about__badge">📍 Unit TEFA — SMKN 4 Tanjungpinang</div>
+                    <div class="pf-about__badge"><i class="pf-dot"></i>Unit TEFA — SMKN 4 Tanjungpinang</div>
                     <div class="pf-about__float"><b>6</b><span>UNIT KEAHLIAN</span></div>
                 </div>
 
@@ -362,8 +401,8 @@
                         Melalui ekosistem TEFA, siswa tidak hanya belajar teori di kelas, melainkan langsung menangani project riil dari masyarakat, UMKM, instansi pemerintah, dan pelaku usaha. Setiap project dikerjakan dengan bimbingan instruktur ahli untuk memastikan kualitas terbaik berstandar industri.
                     </p>
                     <div class="pf-about__actions" data-reveal style="--d:400ms">
-                        <a href="{{ route('jasa') }}" class="pf-btn pf-btn--blue">🚀 Lihat Layanan Jasa</a>
-                        <a href="{{ route('produk') }}" class="pf-btn pf-btn--ghost">🛒 Katalog Produk TEFA</a>
+                        <a href="{{ route('jasa') }}" class="pf-btn pf-btn--blue">Lihat Layanan Jasa</a>
+                        <a href="{{ route('produk') }}" class="pf-btn pf-btn--ghost">Katalog Produk TEFA</a>
                     </div>
                 </div>
             </div>
@@ -375,8 +414,8 @@
         <div class="pf-marquee__track">
             @for ($i = 0; $i < 2; $i++)
                 <div class="pf-marquee__item">
-                    <span>RPL</span><i>✦</i><span>TKJ</span><i>✦</i><span>DKV</span><i>✦</i><span>Broadcasting</span><i>✦</i><span>Animasi</span><i>✦</i><span>Gim</span><i>✦</i>
-                    <span>Kreatif</span><i>✦</i><span>Kompeten</span><i>✦</i><span>Kolaboratif</span><i>✦</i><span>Siap Industri</span><i>✦</i>
+                    <span>RPL</span><i class="pf-dot"></i><span>TKJ</span><i class="pf-dot"></i><span>DKV</span><i class="pf-dot"></i><span>PSPT</span><i class="pf-dot"></i><span>Animasi</span><i class="pf-dot"></i><span>Gim</span><i class="pf-dot"></i>
+                    <span>Kreatif</span><i class="pf-dot"></i><span>Kompeten</span><i class="pf-dot"></i><span>Kolaboratif</span><i class="pf-dot"></i><span>Siap Industri</span><i class="pf-dot"></i>
                 </div>
             @endfor
         </div>
@@ -393,37 +432,48 @@
                 <span class="pf-tag" data-reveal style="--d:100ms">Tentang Platform Ini</span>
                 <h2 class="pf-title" data-split>Menjadi <span class="accent">Jembatan</span> Melalui Teknologi</h2>
                 <p class="pf-bridge__text" data-reveal="blur" style="--d:350ms">
-                    Platform katalog digital ini hadir sebagai jembatan melalui teknologi yang mempertemukan potensi talenta vokasi dengan kebutuhan dunia usaha. Dengan menyalurkan keahlian teknis siswa pada pengerjaan project secara riil, kami tidak hanya mencetak lulusan yang kompeten, tetapi juga siap hadir membantu pertumbuhan UMKM dan perusahaan melalui solusi yang praktis, kreatif, dan inovatif.
+                    Platform katalog digital ini hadir sebagai jembatan teknologi yang menghubungkan karya dan layanan Teaching Factory (TEFA) setiap jurusan di SMK dengan pasar yang lebih luas. Dengan menyalurkan keahlian teknis siswa melalui pengerjaan proyek riil, platform ini tidak hanya menjadi wadah promosi dan penjualan hasil karya TEFA, tetapi juga sarana untuk mengasah kompetensi siswa agar siap bersaing dan berkontribusi secara nyata
                 </p>
 
-                <div class="pf-bridge__viz" aria-hidden="true" data-reveal="zoom" style="--d:500ms">
-                    <div class="pf-node">
-                        <span class="pf-node__ico">🎓</span>
-                        <b>Talenta Vokasi</b>
-                        <span>Siswa SMKN 4</span>
+                <div class="pf-flow" aria-hidden="true" data-reveal="zoom" style="--d:500ms">
+                    <div class="pf-fnode">
+                        <span class="pf-fnode__ico">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round" stroke-linecap="round"><path d="M3 21V10l6 4v-4l6 4V5h3v16z"/><path d="M7 21v-3m4 3v-3m4 3v-3"/></svg>
+                        </span>
+                        <b>Karya &amp; Layanan TEFA</b>
+                        <span>Setiap jurusan SMK</span>
                     </div>
 
-                    <svg class="pf-span" viewBox="0 0 600 150" preserveAspectRatio="none">
-                        <line class="post" x1="150" y1="150" x2="150" y2="52"/>
-                        <line class="post" x1="300" y1="150" x2="300" y2="26"/>
-                        <line class="post" x1="450" y1="150" x2="450" y2="52"/>
-                        <path id="bridgePath" class="road" d="M 0 128 C 120 128, 170 22, 300 22 C 430 22, 480 128, 600 128"/>
-                        <path class="flow" d="M 0 128 C 120 128, 170 22, 300 22 C 430 22, 480 128, 600 128"/>
-                        <circle r="6" fill="#f2b630"><animateMotion dur="3.2s" repeatCount="indefinite"><mpath href="#bridgePath"/></animateMotion></circle>
-                        <circle r="5" fill="#fff"><animateMotion dur="3.2s" begin="-1.6s" repeatCount="indefinite" keyPoints="1;0" keyTimes="0;1" calcMode="linear"><mpath href="#bridgePath"/></animateMotion></circle>
-                    </svg>
+                    <div class="pf-link"><i></i><i></i><i></i></div>
 
-                    <div class="pf-node pf-node--b">
-                        <span class="pf-node__ico">🏢</span>
-                        <b>Dunia Usaha</b>
-                        <span>UMKM &amp; Perusahaan</span>
+                    <div class="pf-fnode pf-fnode--core">
+                        <span class="pf-fnode__ico">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round" stroke-linecap="round"><rect x="3" y="3" width="7.5" height="7.5" rx="1.5"/><rect x="13.5" y="3" width="7.5" height="7.5" rx="1.5"/><rect x="3" y="13.5" width="7.5" height="7.5" rx="1.5"/><rect x="13.5" y="13.5" width="7.5" height="7.5" rx="1.5"/></svg>
+                        </span>
+                        <b>Platform Katalog Digital</b>
+                        <span>Promosi &amp; penjualan hasil karya</span>
+                    </div>
+
+                    <div class="pf-link"><i></i><i></i><i></i></div>
+
+                    <div class="pf-fnode">
+                        <span class="pf-fnode__ico">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round" stroke-linecap="round"><circle cx="12" cy="12" r="9"/><path d="M3 12h18"/><path d="M12 3c2.8 3 2.8 15 0 18M12 3c-2.8 3-2.8 15 0 18"/></svg>
+                        </span>
+                        <b>Pasar yang Lebih Luas</b>
+                        <span>Masyarakat, UMKM &amp; industri</span>
                     </div>
                 </div>
 
+                <div class="pf-loop" aria-hidden="true">
+                    <div class="pf-loop__line"><span class="pf-loop__dot"></span></div>
+                    <span class="pf-loop__label"><i class="pf-dot"></i>Proyek riil mengasah kompetensi siswa</span>
+                </div>
+
                 <ul class="pf-bridge__chips" data-stagger-group>
-                    <li>💡 Praktis</li>
-                    <li>🎨 Kreatif</li>
-                    <li>🚀 Inovatif</li>
+                    <li><i class="pf-dot"></i>Wadah Promosi</li>
+                    <li><i class="pf-dot"></i>Penjualan Hasil Karya</li>
+                    <li><i class="pf-dot"></i>Asah Kompetensi Siswa</li>
                 </ul>
             </div>
         </div>
