@@ -8,7 +8,7 @@
       <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 4px;">
         <h1 class="page-title">EDIT PRODUK FISIK</h1>
         <span class="badge-dept">
-          ★ ID #{{ $product->id }}
+          ID #{{ $product->id }}
         </span>
       </div>
       <p class="page-sub">Perbarui rincian produk, harga, stok, atau perbarui foto produk.</p>
@@ -96,7 +96,7 @@
             Batal
           </a>
           <button type="submit" class="btn-gold" style="border-radius: 8px; padding: 10px 22px;">
-            ✓ Perbarui Produk
+            Perbarui Produk
           </button>
         </div>
       </form>

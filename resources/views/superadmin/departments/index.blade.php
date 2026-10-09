@@ -3,182 +3,177 @@
 @section('title', 'Data Jurusan')
 
 @section('content')
-<div class="page-head">
-  <div>
-    <h1>DATA MASTER JURUSAN</h1>
-    <p>Kelola data master 6 jurusan, unit produksi Teaching Factory, kepala program keahlian, dan status keaktifan.</p>
-  </div>
-  <div class="actions">
-    <button class="btn primary" onclick="openAddModal()">
-      <svg class="i" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg>
-      Tambah Jurusan
-    </button>
-  </div>
+<div class="stack-y">
+<x-sa-page-header
+    title="DATA MASTER JURUSAN"
+    subtitle="Kelola data master 6 jurusan, unit produksi Teaching Factory, kepala program keahlian, dan status keaktifan.">
+    <x-slot name="actions">
+        <x-sa-button variant="primary" icon="plus" onclick="openAddModal()">Tambah Jurusan</x-sa-button>
+    </x-slot>
+</x-sa-page-header>
+
+<x-sa-card body="none">
+    <x-sa-table>
+        <thead>
+            <tr>
+                <th>Kode</th>
+                <th>Nama Jurusan</th>
+                <th>Kepala Program</th>
+                <th>Admin</th>
+                <th>Worker</th>
+                <th>Transaksi</th>
+                <th>Status</th>
+                <th class="r">Aksi</th>
+            </tr>
+        </thead>
+        <tbody>
+            @forelse($departments as $dept)
+                <tr>
+                    <td>
+                        <x-sa-badge tone="blue">{{ $dept->kode }}</x-sa-badge>
+                    </td>
+                    <td>
+                        <strong>{{ $dept->nama_jurusan }}</strong>
+                        @if($dept->deskripsi)
+                            <br><small class="t-muted">{{ Str::limit($dept->deskripsi, 60) }}</small>
+                        @endif
+                    </td>
+                    <td>
+                        <strong>{{ $dept->kepala_jurusan ?: '—' }}</strong>
+                    </td>
+                    <td class="num-cell">{{ $dept->admin_count }}</td>
+                    <td class="num-cell">{{ $dept->worker_count }}</td>
+                    <td class="num-cell">{{ $dept->order_count }}</td>
+                    <td>
+                        @if($dept->status_aktif)
+                            <x-sa-badge tone="green">Aktif</x-sa-badge>
+                        @else
+                            <x-sa-badge tone="gray">Nonaktif</x-sa-badge>
+                        @endif
+                    </td>
+                    <td>
+                        <div class="row-actions">
+                            <button class="icon-btn" title="Ubah Data" onclick='openEditModal(@json($dept))'>
+                                <x-sa-icon name="pencil" />
+                            </button>
+
+                            <form method="POST" action="{{ route('superadmin.departments.toggle', $dept->id) }}" style="display:inline">
+                                @csrf
+                                @method('PATCH')
+                                <button type="submit" class="icon-btn" title="{{ $dept->status_aktif ? 'Nonaktifkan' : 'Aktifkan' }}">
+                                    <x-sa-icon name="power" />
+                                </button>
+                            </form>
+
+                            <form method="POST" action="{{ route('superadmin.departments.destroy', $dept->id) }}" style="display:inline" onsubmit="return confirm('Apakah Anda yakin ingin menghapus atau menonaktifkan jurusan {{ $dept->nama_jurusan }}?')">
+                                @csrf
+                                @method('DELETE')
+                                <button type="submit" class="icon-btn del" title="Hapus Jurusan">
+                                    <x-sa-icon name="trash" />
+                                </button>
+                            </form>
+                        </div>
+                    </td>
+                </tr>
+            @empty
+                <x-sa-empty
+                    icon="layers"
+                    title="Belum ada data jurusan"
+                    message='Klik tombol "Tambah Jurusan" untuk membuat data jurusan baru.'
+                    :colspan="8" />
+            @endforelse
+        </tbody>
+    </x-sa-table>
+</x-sa-card>
 </div>
-
-<section class="card">
-  <div class="tbl-wrap">
-    <table>
-      <thead>
-        <tr>
-          <th>Kode</th>
-          <th>Nama Jurusan</th>
-          <th>Kepala Program</th>
-          <th>Admin</th>
-          <th>Worker</th>
-          <th>Transaksi</th>
-          <th>Status</th>
-          <th class="r">Aksi</th>
-        </tr>
-      </thead>
-      <tbody>
-        @forelse($departments as $dept)
-          <tr>
-            <td>
-              <span class="badge b-blue">{{ $dept->kode }}</span>
-            </td>
-            <td>
-              <strong>{{ $dept->nama_jurusan }}</strong>
-              @if($dept->deskripsi)
-                <br><small class="t-muted">{{ Str::limit($dept->deskripsi, 60) }}</small>
-              @endif
-            </td>
-            <td>
-              <strong>{{ $dept->kepala_jurusan ?: '—' }}</strong>
-            </td>
-            <td>{{ $dept->admin_count }}</td>
-            <td>{{ $dept->worker_count }}</td>
-            <td>{{ $dept->order_count }}</td>
-            <td>
-              @if($dept->status_aktif)
-                <span class="badge b-green">Aktif</span>
-              @else
-                <span class="badge b-gray">Nonaktif</span>
-              @endif
-            </td>
-            <td>
-              <div class="row-actions">
-                <button class="icon-btn" title="Ubah Data" onclick='openEditModal(@json($dept))'>
-                  <svg class="i" viewBox="0 0 24 24"><path d="M12 20h9M16.5 3.5a2.1 2.1 0 013 3L7 19l-4 1 1-4z"/></svg>
-                </button>
-
-                <form method="POST" action="{{ route('superadmin.departments.toggle', $dept->id) }}" style="display:inline">
-                  @csrf
-                  @method('PATCH')
-                  <button type="submit" class="icon-btn" title="{{ $dept->status_aktif ? 'Nonaktifkan' : 'Aktifkan' }}">
-                    <svg class="i" viewBox="0 0 24 24"><path d="M18.36 6.64a9 9 0 11-12.73 0M12 2v10"/></svg>
-                  </button>
-                </form>
-
-                <form method="POST" action="{{ route('superadmin.departments.destroy', $dept->id) }}" style="display:inline" onsubmit="return confirm('Apakah Anda yakin ingin menghapus atau menonaktifkan jurusan {{ $dept->nama_jurusan }}?')">
-                  @csrf
-                  @method('DELETE')
-                  <button type="submit" class="icon-btn del" title="Hapus Jurusan">
-                    <svg class="i" viewBox="0 0 24 24"><path d="M3 6h18M8 6V4a1 1 0 011-1h6a1 1 0 011 1v2M19 6l-1 14a2 2 0 01-2 2H8a2 2 0 01-2-2L5 6M10 11v6M14 11v6"/></svg>
-                  </button>
-                </form>
-              </div>
-            </td>
-          </tr>
-        @empty
-          <tr>
-            <td colspan="8">
-              <div class="empty">
-                <b>Belum ada data jurusan</b>
-                Klik tombol "Tambah Jurusan" untuk membuat data jurusan baru.
-              </div>
-            </td>
-          </tr>
-        @endforelse
-      </tbody>
-    </table>
-  </div>
-</section>
 
 <!-- MODAL TAMBAH JURUSAN -->
-<div class="modal" id="addModal" role="dialog" aria-modal="true">
-  <form class="dialog" method="POST" action="{{ route('superadmin.departments.store') }}">
-    @csrf
-    <header>
-      <h3>Tambah Jurusan Baru</h3>
-      <button type="button" class="icon-btn" onclick="closeAddModal()"><svg class="i" viewBox="0 0 24 24"><path d="M18 6L6 18M6 6l12 12"/></svg></button>
-    </header>
-    <div class="body">
-      <div class="form-grid">
-        <div class="field">
-          <label for="add_kode">Kode Singkatan</label>
-          <input class="inp" id="add_kode" name="kode" maxlength="10" required placeholder="Contoh: RPL">
+<x-sa-dialog id="addModal" title="Tambah Jurusan Baru" :action="route('superadmin.departments.store')">
+    <x-slot name="close">
+        <button type="button" class="icon-btn" aria-label="Tutup" onclick="closeAddModal()"><x-sa-icon name="close" /></button>
+    </x-slot>
+
+    <x-slot name="body">
+        <div class="form-grid">
+            <div class="field {{ $errors->has('kode') ? 'has-error' : '' }}">
+                <label for="add_kode">Kode Singkatan</label>
+                <x-sa-input id="add_kode" name="kode" maxlength="10" required placeholder="Contoh: RPL" />
+                @error('kode')<div class="field-error">{{ $message }}</div>@enderror
+            </div>
+            <div class="field">
+                <label for="add_status">Status Keaktifan</label>
+                <x-sa-input as="select" id="add_status" name="status_aktif">
+                    <option value="1">Aktif</option>
+                    <option value="0">Nonaktif</option>
+                </x-sa-input>
+            </div>
+            <div class="field full {{ $errors->has('nama_jurusan') ? 'has-error' : '' }}">
+                <label for="add_nama">Nama Lengkap Jurusan</label>
+                <x-sa-input id="add_nama" name="nama_jurusan" required placeholder="Contoh: Rekayasa Perangkat Lunak" />
+                @error('nama_jurusan')<div class="field-error">{{ $message }}</div>@enderror
+            </div>
+            <div class="field full {{ $errors->has('kepala_jurusan') ? 'has-error' : '' }}">
+                <label for="add_kepala">Kepala Program Keahlian</label>
+                <x-sa-input id="add_kepala" name="kepala_jurusan" placeholder="Contoh: Bu Ratna Sari, S.Kom" />
+                @error('kepala_jurusan')<div class="field-error">{{ $message }}</div>@enderror
+            </div>
+            <div class="field full {{ $errors->has('deskripsi') ? 'has-error' : '' }}">
+                <label for="add_deskripsi">Deskripsi Singkat</label>
+                <x-sa-input as="textarea" id="add_deskripsi" name="deskripsi" :rows="3" placeholder="Fokus kompetensi dan unit produksi..."></x-sa-input>
+                @error('deskripsi')<div class="field-error">{{ $message }}</div>@enderror
+            </div>
         </div>
-        <div class="field">
-          <label for="add_status">Status Keaktifan</label>
-          <select class="sel" id="add_status" name="status_aktif">
-            <option value="1">Aktif</option>
-            <option value="0">Nonaktif</option>
-          </select>
-        </div>
-        <div class="field full">
-          <label for="add_nama">Nama Lengkap Jurusan</label>
-          <input class="inp" id="add_nama" name="nama_jurusan" required placeholder="Contoh: Rekayasa Perangkat Lunak">
-        </div>
-        <div class="field full">
-          <label for="add_kepala">Kepala Program Keahlian</label>
-          <input class="inp" id="add_kepala" name="kepala_jurusan" placeholder="Contoh: Bu Ratna Sari, S.Kom">
-        </div>
-        <div class="field full">
-          <label for="add_deskripsi">Deskripsi Singkat</label>
-          <textarea class="inp" id="add_deskripsi" name="deskripsi" rows="3" placeholder="Fokus kompetensi dan unit produksi..."></textarea>
-        </div>
-      </div>
-    </div>
-    <footer>
-      <button type="button" class="btn ghost" onclick="closeAddModal()">Batal</button>
-      <button type="submit" class="btn primary">Simpan Jurusan</button>
-    </footer>
-  </form>
-</div>
+    </x-slot>
+
+    <x-slot name="footer">
+        <button type="button" class="btn ghost" onclick="closeAddModal()">Batal</button>
+        <button type="submit" class="btn primary">Simpan Jurusan</button>
+    </x-slot>
+</x-sa-dialog>
 
 <!-- MODAL EDIT JURUSAN -->
-<div class="modal" id="editModal" role="dialog" aria-modal="true">
-  <form class="dialog" id="editForm" method="POST" action="">
-    @csrf
-    @method('PUT')
-    <header>
-      <h3 id="editModalTitle">Ubah Data Jurusan</h3>
-      <button type="button" class="icon-btn" onclick="closeEditModal()"><svg class="i" viewBox="0 0 24 24"><path d="M18 6L6 18M6 6l12 12"/></svg></button>
-    </header>
-    <div class="body">
-      <div class="form-grid">
-        <div class="field">
-          <label for="edit_kode">Kode Singkatan</label>
-          <input class="inp" id="edit_kode" name="kode" maxlength="10" required>
+<x-sa-dialog id="editModal" formId="editForm" title="Ubah Data Jurusan" titleId="editModalTitle" method="PUT">
+    <x-slot name="close">
+        <button type="button" class="icon-btn" aria-label="Tutup" onclick="closeEditModal()"><x-sa-icon name="close" /></button>
+    </x-slot>
+
+    <x-slot name="body">
+        <div class="form-grid">
+            <div class="field {{ $errors->has('kode') ? 'has-error' : '' }}">
+                <label for="edit_kode">Kode Singkatan</label>
+                <x-sa-input id="edit_kode" name="kode" maxlength="10" required />
+                @error('kode')<div class="field-error">{{ $message }}</div>@enderror
+            </div>
+            <div class="field">
+                <label for="edit_status">Status Keaktifan</label>
+                <x-sa-input as="select" id="edit_status" name="status_aktif">
+                    <option value="1">Aktif</option>
+                    <option value="0">Nonaktif</option>
+                </x-sa-input>
+            </div>
+            <div class="field full {{ $errors->has('nama_jurusan') ? 'has-error' : '' }}">
+                <label for="edit_nama">Nama Lengkap Jurusan</label>
+                <x-sa-input id="edit_nama" name="nama_jurusan" required />
+                @error('nama_jurusan')<div class="field-error">{{ $message }}</div>@enderror
+            </div>
+            <div class="field full {{ $errors->has('kepala_jurusan') ? 'has-error' : '' }}">
+                <label for="edit_kepala">Kepala Program Keahlian</label>
+                <x-sa-input id="edit_kepala" name="kepala_jurusan" />
+                @error('kepala_jurusan')<div class="field-error">{{ $message }}</div>@enderror
+            </div>
+            <div class="field full {{ $errors->has('deskripsi') ? 'has-error' : '' }}">
+                <label for="edit_deskripsi">Deskripsi Singkat</label>
+                <x-sa-input as="textarea" id="edit_deskripsi" name="deskripsi" :rows="3"></x-sa-input>
+                @error('deskripsi')<div class="field-error">{{ $message }}</div>@enderror
+            </div>
         </div>
-        <div class="field">
-          <label for="edit_status">Status Keaktifan</label>
-          <select class="sel" id="edit_status" name="status_aktif">
-            <option value="1">Aktif</option>
-            <option value="0">Nonaktif</option>
-          </select>
-        </div>
-        <div class="field full">
-          <label for="edit_nama">Nama Lengkap Jurusan</label>
-          <input class="inp" id="edit_nama" name="nama_jurusan" required>
-        </div>
-        <div class="field full">
-          <label for="edit_kepala">Kepala Program Keahlian</label>
-          <input class="inp" id="edit_kepala" name="kepala_jurusan">
-        </div>
-        <div class="field full">
-          <label for="edit_deskripsi">Deskripsi Singkat</label>
-          <textarea class="inp" id="edit_deskripsi" name="deskripsi" rows="3"></textarea>
-        </div>
-      </div>
-    </div>
-    <footer>
-      <button type="button" class="btn ghost" onclick="closeEditModal()">Batal</button>
-      <button type="submit" class="btn primary">Simpan Perubahan</button>
-    </footer>
-  </form>
-</div>
+    </x-slot>
+
+    <x-slot name="footer">
+        <button type="button" class="btn ghost" onclick="closeEditModal()">Batal</button>
+        <button type="submit" class="btn primary">Simpan Perubahan</button>
+    </x-slot>
+</x-sa-dialog>
 @endsection
 
 @push('scripts')

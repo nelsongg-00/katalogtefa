@@ -1,38 +1,26 @@
 @extends('layouts.admin')
 
-@section('title', 'RINGKASAN — Admin ' . ($jurusan->nama_jurusan ?? 'Jurusan'))
+@section('title', 'Ringkasan Dashboard')
 
 @section('content')
-  <div class="page-head">
+<div class="stack-y">
+
+<section class="hero">
     <div>
-      <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 4px;">
-        <h1 class="page-title">RINGKASAN DASHBOARD</h1>
-        <span class="badge-dept">
-          ★ Jurusan {{ $jurusan->nama_jurusan ?? 'TEFA' }}
-        </span>
-      </div>
-      <p class="page-sub">Ringkasan performa pesanan, tren aktivitas bulanan, dan statistik unit produksi TEFA.</p>
+        <span class="pill">Admin Jurusan &middot; {{ $jurusan->nama_jurusan ?? 'TEFA' }}</span>
+        <h1>RINGKASAN DASHBOARD</h1>
+        <p>Ringkasan performa pesanan, tren aktivitas bulanan, dan statistik unit produksi TEFA.</p>
     </div>
-
-    <div style="display: flex; gap: 10px; flex-wrap: wrap;">
-      <a href="{{ route('admin.products.index') }}" class="btn-gold" style="border-radius: 20px;">
-        <span>📦 Kelola Produk Fisik</span>
-      </a>
-      <a href="{{ route('admin.services.index') }}" class="btn-gold" style="background: var(--blue); color: #fff; border-radius: 20px; box-shadow: 0 3px 10px rgba(10, 74, 166, 0.35);">
-        <span>🤝 Kelola Layanan Jasa</span>
-      </a>
-      <a href="{{ route('produk') }}" target="_blank" class="btn-outline" style="background:#fff; border:1px solid var(--border); padding: 8px 16px; border-radius: 20px; font-weight:700; font-size:13px; color:var(--text); display:inline-flex; align-items:center; gap:6px;">
-        <span>Lihat Katalog Publik &rarr;</span>
-      </a>
+    <div class="acts">
+        <a href="{{ route('admin.products.index') }}" class="btn-w">Kelola Produk Fisik</a>
+        <a href="{{ route('admin.services.index') }}" class="btn-t">Kelola Layanan Jasa</a>
+        <a href="{{ route('produk') }}" target="_blank" class="btn-t">Lihat Katalog Publik</a>
     </div>
-  </div>
+</section>
 
-  <!-- 1. Stats Metrik -->
-  @include('admin.partials.stats')
+@include('admin.partials.stats')
+@include('admin.partials.charts')
+@include('admin.partials.table')
 
-  <!-- 2. Grafik Tren Aktivitas Bulanan -->
-  @include('admin.partials.charts')
-
-  <!-- 3. Tabel Daftar Pesanan Masuk -->
-  @include('admin.partials.table')
+</div>
 @endsection

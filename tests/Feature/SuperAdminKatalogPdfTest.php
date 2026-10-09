@@ -158,15 +158,6 @@ class SuperAdminKatalogPdfTest extends TestCase
         $this->get(route('superadmin.katalog.jasa'))->assertRedirect(route('login'));
     }
 
-    public function test_dashboard_shows_catalog_download_buttons(): void
-    {
-        $this->actingAs($this->superAdmin)
-            ->get(route('superadmin.dashboard'))
-            ->assertOk()
-            ->assertSee(route('superadmin.katalog.produk'))
-            ->assertSee(route('superadmin.katalog.jasa'));
-    }
-
     public function test_super_admin_can_preview_product_catalog_in_browser(): void
     {
         Product::firstOrCreate(

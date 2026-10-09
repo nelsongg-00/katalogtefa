@@ -1,62 +1,3 @@
-<style>
-  .project-progress-wrap {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    min-width: 140px;
-  }
-  .project-progress-bar {
-    flex: 1;
-    height: 8px;
-    background: #e9ecf4;
-    border-radius: 6px;
-    overflow: hidden;
-  }
-  .project-progress-fill {
-    height: 100%;
-    border-radius: 6px;
-    transition: width .3s ease;
-  }
-  .project-progress-pct {
-    font-size: 12px;
-    font-weight: 800;
-    min-width: 36px;
-    color: var(--text);
-  }
-
-  .btn-sm-edit {
-    background: #eef2fd;
-    color: var(--blue);
-    border: 1px solid #d3defa;
-    padding: 5px 12px;
-    border-radius: 8px;
-    font-size: 12px;
-    font-weight: 700;
-    cursor: pointer;
-    transition: all .15s;
-  }
-  .btn-sm-edit:hover {
-    background: var(--blue);
-    color: #fff;
-  }
-
-  .btn-sm-delete {
-    background: #fde3e4;
-    color: var(--red);
-    border: 1px solid #f9bec1;
-    padding: 5px 10px;
-    border-radius: 8px;
-    font-size: 12px;
-    font-weight: 700;
-    cursor: pointer;
-    transition: all .15s;
-  }
-  .btn-sm-delete:hover {
-    background: var(--red);
-    color: #fff;
-  }
-</style>
-
 <div class="card" id="projects-section">
   <div class="card-head">
     <div>
@@ -118,7 +59,7 @@
             <td>
               <div class="project-progress-wrap">
                 <div class="project-progress-bar">
-                  <div class="project-progress-fill" style="width: {{ $pct }}%; background: {{ $fillColor }};"></div>
+                  <div class="project-progress-fill" data-w="{{ $pct }}" style="background: {{ $fillColor }}"></div>
                 </div>
                 <span class="project-progress-pct">{{ $pct }}%</span>
               </div>
@@ -134,13 +75,13 @@
             <!-- 5. Status Badge -->
             <td>
               @if($project->status === 'in_progress')
-                <span class="badge badge-progress">⚙ Dikerjakan</span>
+                <span class="badge badge-progress">Dikerjakan</span>
               @elseif($project->status === 'completed')
-                <span class="badge badge-done">✓ Selesai</span>
+                <span class="badge badge-done">Selesai</span>
               @elseif($project->status === 'cancelled')
-                <span class="badge badge-cancel">✕ Dibatalkan</span>
+                <span class="badge badge-cancel">Dibatalkan</span>
               @else
-                <span class="badge badge-wait">⏳ Menunggu</span>
+                <span class="badge badge-wait">Menunggu</span>
               @endif
             </td>
 
@@ -153,7 +94,7 @@
                 <form method="POST" action="{{ route('admin.projects.destroy', $project->id) }}" onsubmit="return confirm('Hapus projek ini?');" style="margin: 0;">
                   @csrf
                   @method('DELETE')
-                  <button type="submit" class="btn-sm-delete" title="Hapus Projek">✕</button>
+                  <button type="submit" class="btn-sm-delete" title="Hapus Projek">Hapus</button>
                 </form>
               </div>
             </td>

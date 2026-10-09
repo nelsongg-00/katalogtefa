@@ -23,42 +23,54 @@
       }
       body {
         font-family: 'Open Sauce Sans', 'Plus Jakarta Sans', system-ui, sans-serif;
-        color: #111;
-        background: #fff;
+        color: #0f172a;
+        background: #f6f8fa;
         font-size: 11pt;
         line-height: 1.4;
         padding: 15px;
+        -webkit-font-smoothing: antialiased;
       }
+
+      /* Toolbar layar (tidak ikut tercetak) */
       .no-print {
-        background: #0a215e;
-        color: #fff;
-        padding: 12px 20px;
+        background: #ffffff;
+        color: #0f172a;
+        border: 1px solid #e2e8f0;
+        border-radius: 10px;
+        box-shadow: 0 1px 2px rgba(15, 23, 42, .04);
+        padding: 12px 16px;
         display: flex;
         justify-content: space-between;
         align-items: center;
-        border-radius: 8px;
+        gap: 12px;
+        flex-wrap: wrap;
         margin-bottom: 24px;
       }
+      .no-print strong { font-weight: 700; }
+      .no-print span { color: #64748b; font-size: 13px; }
+
       .btn {
         display: inline-flex;
         align-items: center;
         gap: 6px;
-        background: #f2b630;
-        color: #0a215e;
-        font-weight: 700;
+        background: linear-gradient(180deg, #0b60cf, #0a4fa8);
+        color: #ffffff;
+        font-weight: 600;
         font-size: 13px;
         padding: 8px 16px;
-        border-radius: 6px;
-        border: none;
+        border-radius: 8px;
+        border: 1px solid #0a4fa8;
         cursor: pointer;
         text-decoration: none;
+        transition: background .12s ease-out;
       }
-      .btn:hover { background: #f59e0b; }
+      .btn:hover { background: linear-gradient(180deg, #0a4fa8, #0c4284); }
       .btn-back {
-        background: rgba(255,255,255,0.15);
-        color: #fff;
+        background: #ffffff;
+        color: #0f172a;
+        border: 1px solid #cbd5e1;
       }
-      .btn-back:hover { background: rgba(255,255,255,0.25); }
+      .btn-back:hover { background: #f8fafc; }
 
       /* KOP SURAT */
       .kop {
@@ -70,18 +82,24 @@
         padding-bottom: 12px;
         margin-bottom: 16px;
         text-align: center;
+        background: #ffffff;
+        border-radius: 10px;
+        padding-top: 4px;
       }
       .kop-logo {
         width: 60px;
         height: 60px;
-        border-radius: 12px;
-        background: #0a215e;
-        color: #f2b630;
+        border-radius: 10px;
         display: flex;
         align-items: center;
         justify-content: center;
-        font-weight: 800;
-        font-size: 20px;
+        -webkit-print-color-adjust: exact;
+        print-color-adjust: exact;
+      }
+      .kop-logo img {
+        width: 60px;
+        height: 60px;
+        object-fit: contain;
       }
       .kop-text h1 {
         font-size: 16pt;
@@ -93,10 +111,11 @@
         font-size: 13pt;
         font-weight: 700;
         margin-top: 2px;
+        color: #0b60cf;
       }
       .kop-text p {
         font-size: 9.5pt;
-        color: #444;
+        color: #475569;
         margin-top: 2px;
       }
 
@@ -107,10 +126,14 @@
         align-items: flex-start;
         margin-bottom: 14px;
         font-size: 10pt;
+        background: #ffffff;
+        border: 1px solid #e2e8f0;
+        border-radius: 10px;
+        padding: 10px 12px;
+        -webkit-print-color-adjust: exact;
+        print-color-adjust: exact;
       }
-      .meta-left div {
-        margin-bottom: 3px;
-      }
+      .meta-left div { margin-bottom: 3px; }
       .meta-summary {
         display: grid;
         grid-template-columns: repeat(3, auto);
@@ -118,19 +141,24 @@
         text-align: right;
       }
       .summary-card {
-        border: 1px solid #ccc;
+        border: 1px solid #e2e8f0;
+        background: #f8fafc;
         padding: 6px 12px;
-        border-radius: 6px;
+        border-radius: 8px;
         text-align: left;
+        -webkit-print-color-adjust: exact;
+        print-color-adjust: exact;
       }
       .summary-card small {
         display: block;
         font-size: 8pt;
-        color: #555;
+        color: #64748b;
         text-transform: uppercase;
+        letter-spacing: .04em;
       }
       .summary-card strong {
         font-size: 12pt;
+        font-variant-numeric: tabular-nums;
       }
 
       /* TABEL */
@@ -141,20 +169,28 @@
         font-size: 9.5pt;
       }
       th, td {
-        border: 1px solid #777;
+        border: 1px solid #94a3b8;
         padding: 6px 9px;
         vertical-align: middle;
       }
       th {
-        background-color: #f1f3f7 !important;
+        background-color: #eef2f7 !important;
+        color: #0f172a;
         font-weight: 700;
         text-transform: uppercase;
         font-size: 8.5pt;
+        letter-spacing: .03em;
         -webkit-print-color-adjust: exact;
         print-color-adjust: exact;
       }
       tr:nth-child(even) td {
-        background-color: #fafbfd;
+        background-color: #f8fafc;
+        -webkit-print-color-adjust: exact;
+        print-color-adjust: exact;
+      }
+      tfoot th, tfoot td {
+        background-color: #eef4ff !important;
+        color: #0b2448;
         -webkit-print-color-adjust: exact;
         print-color-adjust: exact;
       }
@@ -186,6 +222,11 @@
         }
         body {
           padding: 0;
+          background: #ffffff;
+        }
+        .kop, .meta-box {
+          border-radius: 0;
+          background: #ffffff;
         }
       }
     </style>
@@ -194,17 +235,17 @@
 
 <div class="no-print">
   <div>
-    <strong>Mode Cetak Laporan Global TeFa</strong> — Format telah dioptimalkan untuk kertas A4.
+    <strong>Mode Cetak Laporan Global TeFa</strong> <span>— Format telah dioptimalkan untuk kertas A4.</span>
   </div>
-  <div style="display:flex; gap:10px">
-    <a href="{{ route('superadmin.reports.index') }}" class="btn btn-back">← Kembali</a>
+  <div style="display:flex; gap:8px">
+    <a href="{{ route('superadmin.reports.index') }}" class="btn btn-back">Kembali</a>
     <button onclick="window.print()" class="btn">Cetak Dokumen (Ctrl+P)</button>
   </div>
 </div>
 
 <!-- KOP RESMI -->
 <div class="kop">
-  <div class="kop-logo">DB</div>
+  <div class="kop-logo"><img src="{{ asset('asset/img/logo-smkn4.png') }}" alt="Logo SMK Negeri 4 Tanjungpinang"></div>
   <div class="kop-text">
     <h1>TEACHING FACTORY (TeFa) SMK NEGERI 4</h1>
     <h2>LAPORAN REKAPITULASI TRANSAKSI GLOBAL</h2>
@@ -228,7 +269,7 @@
     </div>
     <div class="summary-card">
       <small>Total Omzet Selesai</small>
-      <strong style="color:#059669">Rp {{ number_format($totalRevenue, 0, ',', '.') }}</strong>
+      <strong style="color:#15803d">Rp {{ number_format($totalRevenue, 0, ',', '.') }}</strong>
     </div>
   </div>
 </div>

@@ -3,150 +3,12 @@
 @section('title', 'MANAJEMEN PROJEK — Admin ' . ($jurusan->nama_jurusan ?? 'Jurusan'))
 
 @section('content')
-  <style>
-    .project-progress-wrap {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      min-width: 140px;
-    }
-    .project-progress-bar {
-      flex: 1;
-      height: 8px;
-      background: #e9ecf4;
-      border-radius: 6px;
-      overflow: hidden;
-    }
-    .project-progress-fill {
-      height: 100%;
-      border-radius: 6px;
-      transition: width .3s ease;
-    }
-    .project-progress-pct {
-      font-size: 12px;
-      font-weight: 800;
-      min-width: 36px;
-      color: var(--text);
-    }
-    .btn-sm-edit {
-      background: #eef2fd;
-      color: var(--blue);
-      border: 1px solid #d3defa;
-      padding: 6px 12px;
-      border-radius: 8px;
-      font-size: 12px;
-      font-weight: 700;
-      cursor: pointer;
-      transition: all .15s;
-    }
-    .btn-sm-edit:hover {
-      background: var(--blue);
-      color: #fff;
-    }
-    .btn-sm-delete {
-      background: #fde3e4;
-      color: var(--red);
-      border: 1px solid #f9bec1;
-      padding: 6px 10px;
-      border-radius: 8px;
-      font-size: 12px;
-      font-weight: 700;
-      cursor: pointer;
-      transition: all .15s;
-    }
-    .btn-sm-delete:hover {
-      background: var(--red);
-      color: #fff;
-    }
-    .filter-bar {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      padding: 14px 22px;
-      border-bottom: 1px solid var(--border);
-      background: #fafbfd;
-      flex-wrap: wrap;
-    }
-    .filter-btn {
-      padding: 6px 14px;
-      border-radius: 20px;
-      font-size: 12.5px;
-      font-weight: 700;
-      color: var(--muted);
-      background: #fff;
-      border: 1px solid var(--border);
-      text-decoration: none;
-      transition: all .15s;
-    }
-    .filter-btn:hover {
-      border-color: var(--blue);
-      color: var(--blue);
-    }
-    .filter-btn.active {
-      background: var(--blue);
-      color: #fff;
-      border-color: var(--blue);
-    }
-    .badge-status {
-      padding: 4px 10px;
-      border-radius: 12px;
-      font-size: 11.5px;
-      font-weight: 700;
-      display: inline-flex;
-      align-items: center;
-      gap: 4px;
-    }
-    .badge-progress { background: #e8f0fe; color: var(--blue); }
-    .badge-done { background: #e4f7ee; color: var(--green); }
-    .badge-wait { background: #fef3d6; color: var(--amber); }
-    .badge-cancel { background: #fde3e4; color: var(--red); }
-
-    table.order-table {
-      width: 100%;
-      border-collapse: collapse;
-      font-size: 13px;
-    }
-    table.order-table th {
-      background: #fafbfd;
-      padding: 12px 18px;
-      text-align: left;
-      font-size: 11.5px;
-      text-transform: uppercase;
-      letter-spacing: 0.5px;
-      color: var(--muted);
-      border-bottom: 1px solid var(--border);
-    }
-    table.order-table td {
-      padding: 14px 18px;
-      border-bottom: 1px solid var(--border);
-      vertical-align: middle;
-    }
-    table.order-table tbody tr:hover {
-      background: #f8fafc;
-    }
-    .cust {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-    }
-    .cust-av {
-      width: 32px;
-      height: 32px;
-      border-radius: 50%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-weight: 800;
-      font-size: 12px;
-    }
-  </style>
-
   <div class="page-head">
     <div>
       <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 4px;">
         <h1 class="page-title">MANAJEMEN PROJEK</h1>
         <span class="badge-dept">
-          ★ Jurusan {{ $jurusan->nama_jurusan ?? 'TEFA' }}
+          Jurusan {{ $jurusan->nama_jurusan ?? 'TEFA' }}
         </span>
       </div>
       <p class="page-sub">Pantau alur pengerjaan projek, filter status pengerjaan, dan tugaskan worker.</p>
@@ -167,16 +29,16 @@
         Semua
       </a>
       <a href="{{ route('admin.projects.index', ['status' => 'in_progress']) }}" class="filter-btn {{ $statusFilter === 'in_progress' ? 'active' : '' }}">
-        ⚙ Dikerjakan
+        Dikerjakan
       </a>
       <a href="{{ route('admin.projects.index', ['status' => 'completed']) }}" class="filter-btn {{ $statusFilter === 'completed' ? 'active' : '' }}">
-        ✓ Selesai
+        Selesai
       </a>
       <a href="{{ route('admin.projects.index', ['status' => 'pending']) }}" class="filter-btn {{ $statusFilter === 'pending' ? 'active' : '' }}">
-        ⏳ Menunggu
+        Menunggu
       </a>
       <a href="{{ route('admin.projects.index', ['status' => 'cancelled']) }}" class="filter-btn {{ $statusFilter === 'cancelled' ? 'active' : '' }}">
-        ✕ Dibatalkan
+        Dibatalkan
       </a>
     </div>
 
@@ -225,7 +87,7 @@
               <td>
                 <div class="project-progress-wrap">
                   <div class="project-progress-bar">
-                    <div class="project-progress-fill" style="width: {{ $pct }}%; background: {{ $fillColor }};"></div>
+                    <div class="project-progress-fill" data-w="{{ $pct }}" style="background: {{ $fillColor }}"></div>
                   </div>
                   <span class="project-progress-pct">{{ $pct }}%</span>
                 </div>
@@ -237,13 +99,13 @@
               </td>
               <td>
                 @if($project->status === 'in_progress')
-                  <span class="badge-status badge-progress">⚙ Dikerjakan</span>
+                  <span class="badge-status badge-progress">Dikerjakan</span>
                 @elseif($project->status === 'completed')
-                  <span class="badge-status badge-done">✓ Selesai</span>
+                  <span class="badge-status badge-done">Selesai</span>
                 @elseif($project->status === 'cancelled')
-                  <span class="badge-status badge-cancel">✕ Dibatalkan</span>
+                  <span class="badge-status badge-cancel">Dibatalkan</span>
                 @else
-                  <span class="badge-status badge-wait">⏳ Menunggu</span>
+                  <span class="badge-status badge-wait">Menunggu</span>
                 @endif
               </td>
               <td>
@@ -254,7 +116,7 @@
                   <form method="POST" action="{{ route('admin.projects.destroy', $project->id) }}" onsubmit="return confirm('Hapus projek ini?');" style="margin: 0;">
                     @csrf
                     @method('DELETE')
-                    <button type="submit" class="btn-sm-delete" title="Hapus Projek">✕</button>
+                    <button type="submit" class="btn-sm-delete" title="Hapus Projek">Hapus</button>
                   </form>
                 </div>
               </td>
@@ -262,7 +124,6 @@
           @empty
             <tr>
               <td colspan="6" style="text-align: center; padding: 48px 20px; color: var(--muted);">
-                <div style="font-size: 32px; margin-bottom: 8px;">📋</div>
                 <div style="font-weight: 700; color: var(--text);">Tidak ada data projek ditemukan</div>
                 <div style="font-size: 12px; margin-top: 4px;">Tambahkan projek baru atau ubah filter status di atas.</div>
               </td>

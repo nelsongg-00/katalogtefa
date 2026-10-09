@@ -46,9 +46,9 @@
         /* ---------- Sampul biru ---------- */
         .cover {
             width: 100%;
-            background: #06449b;
+            background: #0b60cf;
             border-collapse: collapse;
-            border-bottom: 2pt solid #0a4aa6;
+            border-bottom: 2pt solid #0a4fa8;
             margin-bottom: 6mm;
         }
 
@@ -95,7 +95,7 @@
             font-size: 17pt;
             font-weight: bold;
             line-height: 1.1;
-            color: #d7e8f8;
+            color: #dbe6f7;
         }
 
         /* ---------- Grid 3 kolom ---------- */
@@ -139,7 +139,7 @@
 
         .kartu {
             background: #ffffff;
-            border: 1px solid #d0d7e2;
+            border: 1px solid #e2e8f0;
             border-radius: 3mm;
             overflow: hidden;
             page-break-inside: avoid;
@@ -166,19 +166,19 @@
             font-weight: bold;
             line-height: 1;
             color: #ffffff;
-            background: #06449b;
-            border: 0.5pt solid #01326f;
+            background: #0b60cf;
+            border: 0.5pt solid #0a4fa8;
             border-radius: 3mm;
             padding: 0.5mm 2.5mm;
         }
 
         .pill.tipe {
-            background: #06449b;
+            background: #0b60cf;
         }
 
         .pill.tipe.jasa {
-            background: #b30d35;
-            border: 0.5pt solid #7d0a28;
+            background: #b91c1c;
+            border: 0.5pt solid #7f1d1d;
         }
 
         /* ---------- Gambar ----------
@@ -193,7 +193,7 @@
             width: 100%;
             height: 70mm;
             margin-top: 3mm;
-            background: #e2edf7;
+            background: #eef5ff;
             text-align: center;
             overflow: hidden;
         }
@@ -212,9 +212,9 @@
         .nama {
             font-size: 14pt;
             font-weight: bold;
-            color: #00357f;
+            color: #0b2448;
             line-height: 1.15;
-            border-top: 2px solid #0a4aa6;
+            border-top: 2px solid #0a4fa8;
             padding: 1mm 2.2mm 0 2.2mm;
             height: 13mm;
             overflow: hidden;
@@ -233,9 +233,9 @@
             font-size: 13pt;
             font-weight: bold;
             line-height: 1;
-            color: #00357f;
-            background: #e2edf7;
-            border-top: 1px solid #e0e6ef;
+            color: #0b2448;
+            background: #eef5ff;
+            border-top: 1px solid #dbe6f7;
             padding: 1.2mm 2.2mm;
             margin-top: 1.5mm;
         }
@@ -246,7 +246,7 @@
             text-align: center;
             color: #475569;
             font-size: 9pt;
-            border: 0.5pt solid #d7e8f8;
+            border: 0.5pt solid #dbe6f7;
         }
 
         /* ---------- Catatan kaki ---------- */
@@ -254,7 +254,7 @@
             width: 100%;
             border-collapse: collapse;
             background: #ffffff;
-            border-top: 1pt solid #cfd6e0;
+            border-top: 1pt solid #e2e8f0;
             margin-top: 2mm;
         }
 
@@ -279,7 +279,7 @@
             justify-content: space-between;
             flex-wrap: wrap;
             gap: 10px;
-            background: #00357f;
+            background: #0b1a2f;
             color: #ffffff;
             padding: 12px 24px;
             margin: -15mm -15mm 6mm;
@@ -308,8 +308,8 @@
             font-size: 8pt;
             font-weight: bold;
             color: #ffffff;
-            background: #06449b;
-            border: 1px solid #7fa8d9;
+            background: #0b60cf;
+            border: 1px solid #3d8ef4;
             border-radius: 3mm;
             padding: 1.6mm 4mm;
             cursor: pointer;
@@ -319,9 +319,9 @@
 
         .toolbar-pratinjau button.utama,
         .toolbar-pratinjau a.utama {
-            background: #f2b630;
-            border-color: #f2b630;
-            color: #00357f;
+            background: #ffffff;
+            border-color: #ffffff;
+            color: #0b1a2f;
         }
 
         .toolbar-pratinjau a:hover,
@@ -344,10 +344,10 @@
         <span class="judul-pratinjau">PRATINJAU — {{ $judul }}</span>
         <div class="aksi">
             <a href="{{ $preview['unduhUrl'] }}" class="utama" aria-label="{{ $preview['unduhLabel'] }} dalam format PDF">
-                ⬇ Unduh PDF
+Unduh PDF
             </a>
             <button type="button" onclick="window.print()" aria-label="Cetak pratinjau katalog ini langsung dari browser">
-                🖨 Cetak Langsung
+Cetak Langsung
             </button>
             <a href="{{ route('superadmin.dashboard') }}" aria-label="Kembali ke dashboard Super Admin">
                 ← Kembali ke Dashboard

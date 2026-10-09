@@ -1,159 +1,3 @@
-<style>
-  .tabs {
-    display: flex;
-    align-items: center;
-    gap: 18px;
-    padding: 14px 22px;
-    border-bottom: 1px solid var(--border);
-    flex-wrap: wrap;
-    background: #fafbfd;
-  }
-
-  .tab {
-    font-size: 13px;
-    font-weight: 700;
-    color: var(--muted);
-    padding-bottom: 6px;
-    border-bottom: 2px solid transparent;
-    cursor: pointer;
-    transition: color .15s;
-  }
-  .tab.active { color: var(--blue); border-bottom-color: var(--blue); }
-  .tab:hover { color: var(--text); }
-
-  .search-box {
-    margin-left: auto;
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    background: #ffffff;
-    border: 1px solid var(--border);
-    border-radius: 20px;
-    padding: 7px 14px;
-    font-size: 12.5px;
-    color: var(--muted);
-    min-width: 240px;
-    transition: border-color .15s, box-shadow .15s;
-  }
-  .search-box:focus-within {
-    border-color: var(--blue);
-    box-shadow: 0 0 0 3px rgba(10, 74, 166, 0.1);
-  }
-  .search-box input {
-    border: none;
-    background: transparent;
-    outline: none;
-    font-size: 12.5px;
-    width: 100%;
-    font-family: inherit;
-    color: var(--text);
-  }
-
-  .table-responsive {
-    width: 100%;
-    overflow-x: auto;
-  }
-
-  table.order-table {
-    width: 100%;
-    border-collapse: collapse;
-    font-size: 13px;
-  }
-
-  table.order-table thead th {
-    text-align: left;
-    color: var(--muted);
-    font-size: 11px;
-    font-weight: 800;
-    letter-spacing: 0.5px;
-    text-transform: uppercase;
-    padding: 13px 22px;
-    border-bottom: 1px solid var(--border);
-    background: #fafbfd;
-  }
-
-  table.order-table tbody td {
-    padding: 16px 22px;
-    border-bottom: 1px solid var(--border);
-    vertical-align: middle;
-  }
-
-  table.order-table tbody tr { transition: background .12s; }
-  table.order-table tbody tr:hover { background: #f8f9fc; }
-  table.order-table tbody tr:last-child td { border-bottom: none; }
-
-  .cust { display: flex; align-items: center; gap: 10px; }
-
-  .cust-av {
-    width: 32px; height: 32px;
-    border-radius: 50%;
-    background: #eef2fd;
-    color: var(--blue);
-    font-weight: 800;
-    font-size: 11px;
-    display: flex; align-items: center; justify-content: center;
-    flex-shrink: 0;
-  }
-
-  .order-id { color: var(--blue); font-weight: 700; }
-  .order-date {
-    color: var(--muted);
-    font-size: 11.5px;
-    display: block;
-    margin-top: 2px;
-  }
-
-  .badge {
-    font-size: 11.5px;
-    font-weight: 700;
-    padding: 4px 11px;
-    border-radius: 20px;
-    display: inline-block;
-    white-space: nowrap;
-  }
-  .badge-wait { background: #fef3d6; color: #b45309; }
-  .badge-review { background: #e8f0ff; color: #0a4aa6; }
-  .badge-progress { background: #f1e8fd; color: #7c3aed; }
-  .badge-done { background: #e4f7ee; color: #15803d; }
-  .badge-cancel { background: #fde3e4; color: #b91c1c; }
-
-  .btn-action-validate {
-    background: var(--green);
-    color: #fff;
-    border: none;
-    padding: 6px 14px;
-    border-radius: 8px;
-    font-size: 12px;
-    font-weight: 700;
-    transition: opacity .15s;
-  }
-  .btn-action-validate:hover { opacity: .9; }
-
-  .btn-action-assign {
-    background: var(--blue);
-    color: #fff;
-    border: none;
-    padding: 6px 12px;
-    border-radius: 8px;
-    font-size: 12px;
-    font-weight: 700;
-    white-space: nowrap;
-    transition: opacity .15s;
-  }
-  .btn-action-assign:hover { opacity: .9; }
-
-  .select-worker {
-    padding: 6px 10px;
-    font-size: 12px;
-    border: 1px solid var(--border);
-    border-radius: 8px;
-    background: #fff;
-    color: var(--text);
-    outline: none;
-    max-width: 150px;
-  }
-</style>
-
 <div class="card" id="orders-section">
   <div class="card-head">
     <div>
@@ -169,7 +13,7 @@
     <span class="tab" data-filter="Completed">Selesai ({{ $pesananSelesai }})</span>
 
     <div class="search-box">
-      <span>🔍</span>
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.3-4.3"/></svg>
       <input type="text" id="orderSearch" placeholder="Cari pelanggan, produk, #ID...">
     </div>
   </div>
@@ -241,13 +85,13 @@
             <!-- 5. Status Badge -->
             <td>
               @if(in_array(strtolower($pesanan->status_pesanan), ['pending', 'menunggu', 'menunggu konfirmasi', 'menunggu_konfirmasi']))
-                <span class="badge badge-wait">⏳ Menunggu</span>
+                <span class="badge badge-wait">Menunggu</span>
               @elseif(strtolower($pesanan->status_pesanan) === 'validated')
-                <span class="badge badge-review">✓ Tervalidasi</span>
+                <span class="badge badge-review">Tervalidasi</span>
               @elseif(in_array(strtolower($pesanan->status_pesanan), ['in progress', 'sedang_dikemas', 'bisa_diambil']))
-                <span class="badge badge-progress">⚙ Diproses</span>
+                <span class="badge badge-progress">Diproses</span>
               @elseif(in_array(strtolower($pesanan->status_pesanan), ['completed', 'selesai']))
-                <span class="badge badge-done">★ Selesai</span>
+                <span class="badge badge-done">Selesai</span>
               @else
                 <span class="badge badge-cancel">{{ $pesanan->status_pesanan }}</span>
               @endif
@@ -279,7 +123,7 @@
                   Worker: <strong style="color: var(--text);">{{ $latestPenugasan->worker->name ?? 'Belum ditentukan' }}</strong>
                 </div>
               @elseif($pesanan->status_pesanan === 'Completed')
-                <span style="font-size: 12px; color: var(--green); font-weight: 700;">✓ Pesanan Selesai</span>
+                <span style="font-size: 12px; color: var(--green); font-weight: 700;">Pesanan Selesai</span>
               @else
                 <span style="font-size: 12px; color: var(--muted);">-</span>
               @endif

@@ -31,8 +31,8 @@
     height: 24px;
     border-radius: 50%;
     background: #fff;
-    border: 3px solid #2f6fda;
-    box-shadow: 0 0 0 3px rgba(47, 111, 218, 0.12);
+    border: 3px solid var(--blue, #2f6fda);
+    box-shadow: 0 0 0 3px rgba(11, 96, 207, 0.12);
     display: flex;
     align-items: center;
     justify-content: center;
@@ -68,8 +68,8 @@
     width: 28px;
     height: 28px;
     border-radius: 50%;
-    background: #e8f0fe;
-    color: #2f6fda;
+    background: var(--blue-l, #e8f0fe);
+    color: var(--blue, #2f6fda);
     font-weight: 800;
     font-size: 11px;
     display: flex;
@@ -102,7 +102,7 @@
     gap: 6px;
     background: #f8fafc;
     border: 1px solid #e2e8f0;
-    color: #2563eb;
+    color: var(--blue, #2563eb);
     padding: 6px 12px;
     border-radius: 8px;
     font-size: 12px;
@@ -112,7 +112,7 @@
   .timeline-link-btn:hover {
     background: #eff6ff;
     border-color: #93c5fd;
-    color: #1d4ed8;
+    color: var(--blue, #1d4ed8);
   }
   .timeline-img-preview {
     max-height: 140px;
@@ -138,7 +138,7 @@
             </div>
           </div>
           <div class="timeline-time" title="{{ $log->created_at ? $log->created_at->format('d M Y - H:i') : '' }}">
-            🕒 {{ $log->created_at ? $log->created_at->format('d M Y, H:i') : '-' }}
+            {{ $log->created_at ? $log->created_at->format('d M Y, H:i') : '-' }}
             <span style="font-size: 10px; color: #94a3b8;">({{ $log->created_at ? $log->created_at->diffForHumans() : '' }})</span>
           </div>
         </div>
@@ -178,7 +178,6 @@
     </div>
   @empty
     <div style="background: #fff; border: 1px dashed #cbd5e1; border-radius: 12px; padding: 32px 20px; text-align: center; color: #64748b;">
-      <div style="font-size: 32px; margin-bottom: 8px;">⏳</div>
       <div style="font-weight: 700; font-size: 13.5px; color: #1e293b;">Belum ada riwayat progres timeline</div>
       <div style="font-size: 12px; margin-top: 4px;">Tambahkan catatan pengerjaan pertama Anda pada formulir di atas.</div>
     </div>
