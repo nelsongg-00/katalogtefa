@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Admin\MessageController as AdminMessageController;
 use App\Http\Controllers\Admin\OrderController as AdminOrderController;
+use App\Http\Controllers\Admin\PortfolioController as AdminPortfolioController;
 use App\Http\Controllers\Admin\ProductController as AdminProductController;
 use App\Http\Controllers\Admin\ProjectController as AdminProjectController;
 use App\Http\Controllers\Admin\ServiceController as AdminServiceController;
@@ -11,6 +12,7 @@ use App\Http\Controllers\CheckoutController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\JurusanController;
+use App\Http\Controllers\PortfolioController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\SuperAdmin\DashboardController as SuperAdminDashboardController;
 use App\Http\Controllers\SuperAdmin\DepartmentController as SuperAdminDepartmentController;
@@ -27,7 +29,8 @@ Route::get('/produk', [HomeController::class, 'produk'])->name('produk');
 Route::get('/produk/{product}', [HomeController::class, 'showProduct'])->name('produk.show');
 Route::get('/layanan-jasa', [HomeController::class, 'jasa'])->name('jasa');
 Route::get('/layanan-jasa/{service}', [HomeController::class, 'showService'])->name('jasa.show');
-Route::get('/portofolio', [HomeController::class, 'portofolio'])->name('portofolio');
+Route::get('/portofolio', [PortfolioController::class, 'index'])->name('portofolio');
+Route::get('/portofolio/{portfolio}', [PortfolioController::class, 'show'])->name('portofolio.show');
 Route::get('/jurusan/{slug}', [JurusanController::class, 'show'])->name('jurusan.show');
 Route::get('/lacak', [TrackingController::class, 'index'])->name('order.tracking.index');
 Route::get('/lacak/{order_code}', [TrackingController::class, 'show'])->name('order.track');
@@ -82,18 +85,24 @@ Route::middleware(['auth', 'verified'])->group(function () {
         Route::patch('/admin/orders/{order}/physical-status', [AdminOrderController::class, 'updatePhysicalStatus'])->name('admin.orders.physicalStatus');
         Route::resource('/admin/orders', AdminOrderController::class)->names('admin.orders');
 
-        // 5. Project Management
+        // 5. CRUD Portofolio Jurusan
+        Route::resource('/admin/portofolio', AdminPortfolioController::class)
+            ->names('admin.portofolio')
+            ->parameters(['portofolio' => 'portfolio'])
+            ->except(['show']);
+
+        // 6. Project Management
         Route::get('/admin/projects', [AdminProjectController::class, 'index'])->name('admin.projects.index');
         Route::post('/admin/projects', [AdminProjectController::class, 'store'])->name('admin.projects.store');
         Route::patch('/admin/projects/{project}', [AdminProjectController::class, 'update'])->name('admin.projects.update');
         Route::delete('/admin/projects/{project}', [AdminProjectController::class, 'destroy'])->name('admin.projects.destroy');
 
-        // 6. Worker Management
+        // 7. Worker Management
         Route::get('/admin/workers', [AdminWorkerController::class, 'index'])->name('admin.workers.index');
         Route::post('/admin/workers', [AdminWorkerController::class, 'store'])->name('admin.workers.store');
         Route::delete('/admin/workers/{user}', [AdminWorkerController::class, 'destroy'])->name('admin.workers.destroy');
 
-        // 7. Notification / Messages
+        // 8. Notification / Messages
         Route::get('/admin/messages', [AdminMessageController::class, 'index'])->name('admin.messages.index');
         Route::patch('/admin/messages/{pesanMasuk}/read', [AdminMessageController::class, 'markAsRead'])->name('admin.messages.read');
     });

@@ -1,981 +1,625 @@
 @extends('layouts.public')
 
-@section('title', 'Portofolio TEFA — SMKN 4 Tanjungpinang')
+@section('title', 'Portofolio — Katalog TEFA SMKN 4 Tanjungpinang')
 
 @section('content')
 <style>
-    /* Scoped Styles for Portofolio Page */
-    .portfolio-page-wrapper {
-        background-color: #f8fafc;
-        min-height: 80vh;
+    /* ==========================================================
+       PORTOFOLIO PAGE — kartu disamakan dengan Produk/Jasa.
+       Token di-scope ke .portofolio-page (bukan :root) supaya tidak
+       bocor ke halaman lain. Semua selector di-prefix .portofolio-page
+       agar menang spesifisitas atas aturan global di layouts/public.
+       ========================================================== */
+    .portofolio-page {
+        --color-primary: #0a4aa6;
+        --color-primary-dark: #00357f;
+        --color-accent-blue: #1414c8;
+        --color-text: #111111;
+        --color-muted: #666666;
+        --color-bg: #fafafa;
+        --color-white: #ffffff;
+        --color-placeholder: #cad2db;
+        --radius-card: 15px;
+        --radius-pill: 999px;
+        --font-display: 'Open Sauce Sans', 'Anton', 'Impact', 'Arial Narrow', sans-serif;
+
+        background-color: var(--color-bg);
+        color: var(--color-text);
         padding-bottom: 90px;
     }
 
-    /* Hero & Header Section */
-    .portfolio-header {
+    /* ---------- HERO ---------- */
+    .portofolio-page .pf-hero {
+        position: relative;
+        overflow: hidden;
+        background: #0b60cf;
+        color: var(--color-white);
         text-align: center;
-        padding: 55px 20px 30px;
-        max-width: 850px;
-        margin: 0 auto;
+        padding: 56px 24px 48px;
     }
-
-    .portfolio-badge-label {
-        display: inline-flex;
-        align-items: center;
-        gap: 6px;
-        background: #eff6ff;
-        color: #2563eb;
-        border: 1px solid #bfdbfe;
-        padding: 5px 16px;
-        border-radius: 999px;
-        font-size: 12.5px;
-        font-weight: 700;
-        letter-spacing: 0.5px;
-        text-transform: uppercase;
+    .portofolio-page .pf-hero__content {
+        position: relative;
+        z-index: 1;
+    }
+    .portofolio-page .pf-hero h1 {
+        font-family: var(--font-display);
+        font-size: 42px;
+        font-weight: 800;
+        letter-spacing: 1px;
         margin-bottom: 14px;
-    }
-
-    .portfolio-title {
-        font-size: 38px;
-        font-weight: 900;
-        color: #0a215e;
-        letter-spacing: -0.5px;
-        margin-bottom: 12px;
         text-transform: uppercase;
     }
-
-    .portfolio-subtitle {
-        font-size: 16px;
-        color: #64748b;
-        line-height: 1.6;
+    .portofolio-page .pf-hero p {
         max-width: 620px;
         margin: 0 auto;
+        font-size: 15px;
+        line-height: 1.55;
+        opacity: .95;
     }
 
-    /* Filter & Search Bar Container (Centered - Sesuai Gambar 3) */
-    .portfolio-controls-container {
-        max-width: 1240px;
-        margin: 0 auto 35px;
-        padding: 0 24px;
+    /* ---------- PENCARIAN & FILTER ---------- */
+    .portofolio-page .pf-filter {
         display: flex;
         flex-direction: column;
-        align-items: center;
-        gap: 16px;
+        gap: 12px;
+        max-width: 966px;
+        margin: 35px auto 0;
+        padding: 0 16px;
     }
-
-    /* Centered Search Bar (Matching Image 3) */
-    .search-box-wrapper {
+    .portofolio-page .pf-filter-tabs {
         display: flex;
-        align-items: center;
-        background: #ffffff;
-        border: 1.5px solid #dbeafe;
-        border-radius: 999px;
-        padding: 5px 6px 5px 18px;
-        box-shadow: 0 10px 30px -5px rgba(37, 99, 235, 0.12), 0 2px 6px rgba(0, 0, 0, 0.03);
-        transition: all 0.25s ease;
-        width: 100%;
-        max-width: 600px;
-    }
-
-    .search-box-wrapper:focus-within {
-        border-color: #2563eb;
-        box-shadow: 0 12px 35px -5px rgba(37, 99, 235, 0.22), 0 0 0 3px rgba(37, 99, 235, 0.15);
-    }
-
-    .search-icon-left {
-        color: #0284c7;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        flex-shrink: 0;
-        margin-right: 8px;
-    }
-
-    .search-input-field {
-        border: none;
-        background: transparent;
-        padding: 8px 6px;
-        font-size: 14.5px;
-        color: #0f172a;
-        outline: none;
-        width: 100%;
-        font-weight: 500;
-    }
-
-    .search-input-field::placeholder {
-        color: #94a3b8;
-    }
-
-    .search-btn-action {
-        background: #2563eb;
-        color: #ffffff;
-        border: none;
-        padding: 9px 24px;
-        border-radius: 999px;
+        gap: 28px;
+        overflow-x: auto;
+        padding-left: 4px;
+        white-space: nowrap;
         font-size: 14px;
         font-weight: 700;
+    }
+    .portofolio-page .pf-filter-tabs a {
+        padding: 2px 0;
+        font-size: 14px;
+        font-weight: 700;
+        color: var(--color-text);
+        text-decoration: none;
         cursor: pointer;
-        transition: all 0.2s ease;
-        box-shadow: 0 4px 12px rgba(37, 99, 235, 0.3);
-        flex-shrink: 0;
+        transition: color 0.2s ease;
     }
+    .portofolio-page .pf-filter-tabs a:hover { color: var(--color-primary); }
+    .portofolio-page .pf-filter-tabs a.active { color: var(--color-accent-blue); }
 
-    .search-btn-action:hover {
-        background: #1d4ed8;
-        transform: scale(1.02);
-        box-shadow: 0 6px 16px rgba(37, 99, 235, 0.4);
-    }
-
-    /* Filter Pills (Semua, RPL, TKJ, DKV, PSPT, ANIMASI, GIM) - Sesuai Gambar 3 */
-    .filter-pills-row {
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        gap: 10px;
-        flex-wrap: wrap;
+    .portofolio-page .pf-search {
+        position: relative;
         width: 100%;
-    }
-
-    .filter-pill-btn {
-        display: inline-flex;
+        display: flex;
         align-items: center;
         gap: 8px;
-        padding: 9px 20px;
-        border-radius: 999px;
-        font-size: 14px;
+    }
+    .portofolio-page .pf-search__icon {
+        position: absolute;
+        top: 50%;
+        left: 10px;
+        width: 14px;
+        height: 14px;
+        transform: translateY(-50%);
+        pointer-events: none;
+        z-index: 1;
+    }
+    .portofolio-page .pf-search__input {
+        flex: 1;
+        min-width: 0;
+        height: 38px;
+        padding: 0 10px 0 34px;
+        border: 1px solid #000000;
+        border-radius: 6px;
+        background: var(--color-white);
+        font-size: 13px;
+        font-weight: 700;
+        color: var(--color-text);
+        outline: none;
+        transition: border-color 0.2s ease, box-shadow 0.2s ease;
+    }
+    .portofolio-page .pf-search__input:focus {
+        border-color: var(--color-primary);
+        box-shadow: 0 0 0 3px rgba(10, 74, 166, 0.15);
+    }
+    .portofolio-page .pf-search__input::placeholder { color: #777777; opacity: 1; }
+    .portofolio-page .pf-search__btn {
+        flex-shrink: 0;
+        height: 38px;
+        padding: 0 20px;
+        background: var(--color-primary);
+        color: var(--color-white);
+        border: none;
+        border-radius: var(--radius-pill);
+        font: inherit;
+        font-size: 13px;
         font-weight: 700;
         cursor: pointer;
-        transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
-        border: 1.5px solid #e2e8f0;
-        background: #ffffff;
-        color: #475569;
-        text-decoration: none;
-        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
-        user-select: none;
+        transition: background-color 0.2s ease, transform 0.2s ease;
     }
-
-    .filter-pill-btn:hover {
-        border-color: #cbd5e1;
-        background: #f8fafc;
-        color: #0f172a;
+    .portofolio-page .pf-search__btn:hover {
+        background: var(--color-primary-dark);
         transform: translateY(-1px);
     }
 
-    .filter-pill-btn.active {
-        background: #0f172a;
-        color: #ffffff;
-        border-color: #0f172a;
-        box-shadow: 0 4px 12px rgba(15, 23, 42, 0.25);
+    /* ---------- GRID KARTU ---------- */
+    .portofolio-page .pf-area-kartu {
+        max-width: 1005px;
+        margin: 44px auto 0;
+        padding: 0 16px;
     }
-
-    .filter-pill-btn .pill-dot {
-        width: 8px;
-        height: 8px;
-        border-radius: 50%;
-    }
-
-    /* Portfolio Cards Grid */
-    .portfolio-grid {
-        max-width: 1240px;
-        margin: 0 auto;
-        padding: 0 24px;
+    .portofolio-page .pf-grid {
         display: grid;
-        grid-template-columns: repeat(3, 1fr);
-        gap: 28px;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 32px 16px;
     }
-
-    @media (max-width: 1024px) {
-        .portfolio-grid {
-            grid-template-columns: repeat(2, 1fr);
-            gap: 20px;
-        }
-    }
-
-    @media (max-width: 640px) {
-        .portfolio-grid {
-            grid-template-columns: 1fr;
-            gap: 18px;
-        }
-        .search-box-wrapper {
-            min-width: 100%;
-        }
-    }
-
-    /* Single Portfolio Card */
-    .portfolio-card {
-        background: #ffffff;
-        border-radius: 18px;
-        border: 1px solid #e2e8f0;
-        overflow: hidden;
-        box-shadow: 0 4px 15px -2px rgba(15, 23, 42, 0.05);
+    .portofolio-page .pf-kartu {
         display: flex;
         flex-direction: column;
-        cursor: pointer;
-        transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
-        position: relative;
-    }
-
-    .portfolio-card:hover {
-        transform: translateY(-6px);
-        box-shadow: 0 20px 30px -10px rgba(15, 23, 42, 0.12), 0 0 0 1.5px rgba(37, 99, 235, 0.2);
-    }
-
-    /* Card Thumbnail Container */
-    .portfolio-thumb {
-        width: 100%;
-        height: 220px;
-        position: relative;
+        background: var(--color-white);
+        border: 1px solid #e6eaef;
+        border-radius: var(--radius-card);
         overflow: hidden;
+        cursor: pointer;
+        text-align: left;
+        box-shadow: 0 2px 10px rgba(15, 23, 42, 0.05);
+        transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    .portofolio-page .pf-kartu:hover,
+    .portofolio-page .pf-kartu:focus-visible {
+        transform: translateY(-4px);
+        box-shadow: 0 18px 30px -12px rgba(15, 23, 42, 0.18);
+    }
+    .portofolio-page .pf-thumb {
+        position: relative;
+        width: 100%;
+        aspect-ratio: 7 / 8;
+        overflow: hidden;
+        background: var(--color-placeholder);
         display: flex;
         align-items: center;
         justify-content: center;
     }
-
-    .portfolio-thumb-bg {
+    .portofolio-page .pf-thumb-img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        display: block;
+        transition: transform 0.45s ease;
+    }
+    .portofolio-page .pf-kartu:hover .pf-thumb-img { transform: scale(1.05); }
+    .portofolio-page .pf-thumb-fallback {
         width: 100%;
         height: 100%;
         display: flex;
         align-items: center;
         justify-content: center;
-        color: #ffffff;
-        font-size: 68px;
+        font-size: 48px;
+        color: var(--color-white);
         position: relative;
-        transition: transform 0.5s ease;
     }
-
-    .portfolio-card:hover .portfolio-thumb-bg {
-        transform: scale(1.06);
-    }
-
-    .thumb-overlay-pattern {
+    .portofolio-page .pf-thumb-pattern {
         position: absolute;
         inset: 0;
         background-image: radial-gradient(rgba(255, 255, 255, 0.15) 1px, transparent 1px);
         background-size: 16px 16px;
-        opacity: 0.7;
     }
-
-    .thumb-badge {
+    .portofolio-page .pf-dept-badge {
         position: absolute;
-        top: 14px;
-        left: 14px;
-        font-size: 11.5px;
+        top: 12px;
+        left: 12px;
+        font-size: 10.5px;
         font-weight: 800;
-        padding: 5px 12px;
-        border-radius: 999px;
+        padding: 4px 10px;
+        border-radius: var(--radius-pill);
         letter-spacing: 0.5px;
         text-transform: uppercase;
-        box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.12);
         z-index: 2;
     }
-
-    .thumb-year {
-        position: absolute;
-        top: 14px;
-        right: 14px;
-        font-size: 11px;
-        font-weight: 700;
-        padding: 4px 10px;
-        border-radius: 999px;
-        background: rgba(15, 23, 42, 0.65);
-        color: #ffffff;
-        backdrop-filter: blur(4px);
-        z-index: 2;
-    }
-
-    /* Card Content */
-    .portfolio-content {
-        padding: 24px;
+    .portofolio-page .pf-isi {
+        padding: 14px 14px 16px;
         display: flex;
         flex-direction: column;
         flex-grow: 1;
     }
-
-    .portfolio-card-title {
-        font-size: 18px;
-        font-weight: 800;
-        color: #0f172a;
-        line-height: 1.35;
-        margin-bottom: 8px;
+    .portofolio-page .pf-judul {
+        font-size: 14.5px;
+        font-weight: 700;
+        color: var(--color-text);
+        line-height: 1.4;
+        margin-bottom: 6px;
         transition: color 0.2s ease;
     }
-
-    .portfolio-card:hover .portfolio-card-title {
-        color: #2563eb;
-    }
-
-    .portfolio-card-desc {
-        font-size: 13.5px;
-        color: #64748b;
-        line-height: 1.55;
-        margin-bottom: 20px;
+    .portofolio-page .pf-kartu:hover .pf-judul { color: var(--color-primary); }
+    .portofolio-page .pf-deskripsi {
+        font-size: 12.5px;
+        color: var(--color-muted);
+        line-height: 1.5;
+        margin-bottom: 10px;
         flex-grow: 1;
         display: -webkit-box;
         -webkit-line-clamp: 2;
         -webkit-box-orient: vertical;
         overflow: hidden;
     }
-
-    .portfolio-card-footer {
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-        padding-top: 14px;
-        border-top: 1px solid #f1f5f9;
-        font-size: 12.5px;
-    }
-
-    .portfolio-team-info {
+    .portofolio-page .pf-meta {
         display: flex;
         align-items: center;
         gap: 6px;
-        color: #475569;
-        font-weight: 600;
-    }
-
-    .portfolio-click-hint {
-        color: #2563eb;
+        font-size: 11.5px;
         font-weight: 700;
-        display: flex;
-        align-items: center;
-        gap: 4px;
-        transition: transform 0.2s ease;
-    }
-
-    .portfolio-card:hover .portfolio-click-hint {
-        transform: translateX(3px);
-    }
-
-    /* Empty State */
-    .portfolio-empty {
-        grid-column: 1 / -1;
-        background: #ffffff;
-        border-radius: 20px;
-        border: 1.5px dashed #cbd5e1;
-        padding: 70px 20px;
-        text-align: center;
-    }
-
-    .portfolio-empty-icon {
-        font-size: 52px;
+        color: var(--color-muted);
         margin-bottom: 12px;
     }
-
-    .portfolio-empty-title {
-        font-size: 19px;
-        font-weight: 800;
-        color: #0f172a;
-        margin-bottom: 6px;
+    .portofolio-page .pf-meta svg { width: 13px; height: 13px; flex-shrink: 0; }
+    .portofolio-page .pf-footer {
+        padding-top: 12px;
+        border-top: 1px solid #f1f5f9;
     }
-
-    .portfolio-empty-desc {
-        color: #64748b;
-        font-size: 14px;
-        max-width: 440px;
-        margin: 0 auto;
-    }
-
-    /* ==========================================================
-       MODAL POPUP STYLING (Penjelasan Portofolio)
-       ========================================================== */
-    .portfolio-modal-backdrop {
-        display: none;
-        position: fixed;
-        inset: 0;
-        background-color: rgba(15, 23, 42, 0.7);
-        backdrop-filter: blur(6px);
-        z-index: 99999;
-        overflow-y: auto;
-        padding: 24px 16px;
-        place-items: center;
-        animation: modalFadeIn 0.25s cubic-bezier(0.16, 1, 0.3, 1);
-    }
-
-    @keyframes modalFadeIn {
-        from { opacity: 0; }
-        to { opacity: 1; }
-    }
-
-    .portfolio-modal-container {
-        background: #ffffff;
-        border-radius: 24px;
-        max-width: 760px;
+    .portofolio-page .btn-card-detail {
+        position: relative;
+        overflow: hidden;
         width: 100%;
-        box-shadow: 0 25px 60px -15px rgba(15, 23, 42, 0.35);
-        border: 1px solid #e2e8f0;
-        overflow: hidden;
-        position: relative;
-        animation: modalSlideUp 0.3s cubic-bezier(0.16, 1, 0.3, 1);
-        margin: auto;
-    }
-
-    @keyframes modalSlideUp {
-        from { transform: scale(0.96) translateY(20px); opacity: 0; }
-        to { transform: scale(1) translateY(0); opacity: 1; }
-    }
-
-    /* Modal Hero Visual */
-    .modal-hero-banner {
-        height: 200px;
-        position: relative;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        color: #ffffff;
-        overflow: hidden;
-    }
-
-    .modal-close-btn {
-        position: absolute;
-        top: 16px;
-        right: 16px;
-        width: 38px;
-        height: 38px;
-        border-radius: 50%;
-        background: rgba(15, 23, 42, 0.6);
-        color: #ffffff;
-        border: 1px solid rgba(255, 255, 255, 0.2);
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        cursor: pointer;
-        font-size: 20px;
-        line-height: 1;
-        transition: all 0.2s ease;
-        backdrop-filter: blur(4px);
-        z-index: 10;
-    }
-
-    .modal-close-btn:hover {
-        background: #dc2626;
-        transform: rotate(90deg);
-    }
-
-    .modal-badge-dept {
-        position: absolute;
-        bottom: 16px;
-        left: 24px;
-        font-size: 12px;
-        font-weight: 800;
-        padding: 5px 14px;
-        border-radius: 999px;
-        letter-spacing: 0.5px;
-        box-shadow: 0 4px 10px rgba(0,0,0,0.2);
-    }
-
-    /* Modal Body Content */
-    .modal-body {
-        padding: 30px 32px 34px;
-        color: #0f172a;
-    }
-
-    .modal-project-title {
-        font-size: 26px;
-        font-weight: 900;
-        line-height: 1.25;
-        color: #0a215e;
-        margin-bottom: 16px;
-    }
-
-    .modal-meta-grid {
-        display: grid;
-        grid-template-columns: repeat(3, 1fr);
-        gap: 12px;
-        background: #f8fafc;
-        border: 1px solid #e2e8f0;
-        border-radius: 14px;
-        padding: 14px 18px;
-        margin-bottom: 24px;
-    }
-
-    @media (max-width: 600px) {
-        .modal-meta-grid {
-            grid-template-columns: 1fr;
-            gap: 10px;
-        }
-    }
-
-    .modal-meta-item {
-        display: flex;
-        flex-direction: column;
-    }
-
-    .modal-meta-label {
-        font-size: 11px;
+        background: var(--color-primary);
+        color: var(--color-white);
+        padding: 10px 14px;
+        border-radius: var(--radius-pill);
         font-weight: 700;
-        color: #64748b;
-        text-transform: uppercase;
-        letter-spacing: 0.5px;
-        margin-bottom: 2px;
-    }
-
-    .modal-meta-val {
-        font-size: 13.5px;
-        font-weight: 700;
-        color: #1e293b;
-    }
-
-    .modal-section-heading {
-        font-size: 15px;
-        font-weight: 800;
-        color: #0f172a;
-        text-transform: uppercase;
-        letter-spacing: 0.5px;
-        margin-bottom: 10px;
-        display: flex;
-        align-items: center;
-        gap: 8px;
-    }
-
-    .modal-desc-text {
-        font-size: 14.5px;
-        color: #334155;
-        line-height: 1.7;
-        margin-bottom: 24px;
-    }
-
-    .modal-features-list {
-        list-style: none;
-        padding: 0;
-        margin: 0 0 24px;
-        display: flex;
-        flex-direction: column;
-        gap: 8px;
-    }
-
-    .modal-feature-item {
-        display: flex;
-        align-items: flex-start;
-        gap: 10px;
-        font-size: 14px;
-        color: #334155;
-        line-height: 1.5;
-    }
-
-    .modal-feature-icon {
-        color: #10b981;
-        font-weight: bold;
-        flex-shrink: 0;
-        margin-top: 1px;
-    }
-
-    .modal-tech-pills {
-        display: flex;
-        flex-wrap: wrap;
-        gap: 8px;
-        margin-bottom: 28px;
-    }
-
-    .modal-tech-pill {
-        background: #eff6ff;
-        color: #1e40af;
-        border: 1px solid #bfdbfe;
         font-size: 12.5px;
-        font-weight: 700;
-        padding: 5px 12px;
-        border-radius: 999px;
-    }
-
-    /* Modal Action Buttons */
-    .modal-actions-row {
-        display: flex;
-        align-items: center;
-        gap: 14px;
-        padding-top: 20px;
-        border-top: 1px solid #e2e8f0;
-    }
-
-    .modal-btn-wa {
-        flex: 1;
-        background: #10b981;
-        color: #ffffff;
-        text-decoration: none;
-        padding: 13px 20px;
-        border-radius: 12px;
-        font-weight: 800;
-        font-size: 14.5px;
         display: inline-flex;
         align-items: center;
         justify-content: center;
         gap: 8px;
-        box-shadow: 0 4px 14px rgba(16, 185, 129, 0.3);
-        transition: all 0.2s ease;
+        transition: background-color 0.2s ease, transform 0.2s ease;
     }
-
-    .modal-btn-wa:hover {
-        background: #059669;
+    .portofolio-page .btn-card-detail:hover {
+        background: var(--color-primary-dark);
         transform: translateY(-1px);
-        box-shadow: 0 6px 18px rgba(16, 185, 129, 0.4);
     }
 
-    .modal-btn-close-secondary {
-        background: #f1f5f9;
-        color: #475569;
-        border: 1px solid #cbd5e1;
-        padding: 13px 24px;
-        border-radius: 12px;
-        font-weight: 700;
-        font-size: 14px;
-        cursor: pointer;
-        transition: all 0.2s ease;
+    /* ---------- EMPTY STATE ---------- */
+    .portofolio-page .pf-kosong {
+        grid-column: 1 / -1;
+        text-align: center;
+        padding: 70px 20px;
+        background: var(--color-white);
+        border-radius: var(--radius-card);
+        border: 1.5px dashed var(--color-placeholder);
+    }
+    .portofolio-page .pf-kosong__icon { font-size: 52px; margin-bottom: 14px; }
+    .portofolio-page .pf-kosong__title { font-size: 19px; font-weight: 800; margin-bottom: 8px; }
+    .portofolio-page .pf-kosong__text {
+        color: var(--color-muted);
+        font-size: 14.5px;
+        max-width: 480px;
+        margin: 0 auto;
+        line-height: 1.6;
     }
 
-    .modal-btn-close-secondary:hover {
-        background: #e2e8f0;
-        color: #0f172a;
+    .portofolio-page .pf-paginasi { margin-top: 40px; }
+
+    @media (max-width: 600px) {
+        .portofolio-page .pf-hero h1 { font-size: 30px; }
     }
+
+    /* ---------- BREAKPOINT >= 640px (tablet) ---------- */
+    @media (min-width: 640px) {
+        .portofolio-page .pf-filter {
+            flex-direction: row;
+            align-items: center;
+            justify-content: space-between;
+            gap: 24px;
+        }
+        .portofolio-page .pf-filter-tabs { overflow: visible; gap: 40px; }
+        .portofolio-page .pf-search { width: 314px; flex: none; }
+        .portofolio-page .pf-grid {
+            grid-template-columns: repeat(3, 1fr);
+            column-gap: 24px;
+            row-gap: 40px;
+        }
+    }
+
+    /* ---------- BREAKPOINT >= 1024px (desktop) ---------- */
+    @media (min-width: 1024px) {
+        .portofolio-page .pf-filter-tabs { gap: 50px; }
+        .portofolio-page .pf-grid {
+            grid-template-columns: repeat(4, 1fr);
+            column-gap: 28px;
+            row-gap: 44px;
+        }
+    }
+
+    /* ==========================================================
+       ANIMASI (FORCE)
+       Sengaja TIDAK memakai @media (prefers-reduced-motion) dan
+       properti animation memakai !important agar tetap jalan
+       walau perangkat mematikan efek gerak / ada aturan global.
+       ========================================================== */
+    @keyframes pf-rise {
+        from { opacity: 0; transform: translateY(22px); }
+        to   { opacity: 1; transform: translateY(0); }
+    }
+    @keyframes pf-fade {
+        from { opacity: 0; }
+        to   { opacity: 1; }
+    }
+    @keyframes pf-float {
+        0%, 100% { transform: translateY(0); }
+        50%      { transform: translateY(-8px); }
+    }
+    @keyframes pf-pop {
+        0%   { opacity: 0; transform: scale(.6); }
+        70%  { transform: scale(1.08); }
+        100% { opacity: 1; transform: scale(1); }
+    }
+    @keyframes pf-line {
+        from { transform: scaleX(0); }
+        to   { transform: scaleX(1); }
+    }
+
+    /* Banner: konten muncul bertahap (animasi diambil dari Produk/Layanan Jasa) */
+    .portofolio-page .pf-hero {
+        animation: pf-rise .7s cubic-bezier(.16,1,.3,1) both !important;
+    }
+    .portofolio-page .pf-hero::before,
+    .portofolio-page .pf-hero::after {
+        content: "";
+        position: absolute;
+        border-radius: 50%;
+        background: rgba(255,255,255,.10);
+        pointer-events: none;
+    }
+    .portofolio-page .pf-hero::before { width: 220px; height: 220px; right: -60px; top: -90px;
+        animation: pf-float 8s ease-in-out infinite !important; }
+    .portofolio-page .pf-hero::after  { width: 130px; height: 130px; left: 8%; bottom: -70px;
+        animation: pf-float 10s ease-in-out 1s infinite !important; }
+    .portofolio-page .pf-hero h1 { animation: pf-rise .7s cubic-bezier(.16,1,.3,1) .2s both !important; }
+    .portofolio-page .pf-hero p  { animation: pf-rise .7s cubic-bezier(.16,1,.3,1) .35s both !important; }
+
+    /* Filter tab & pencarian */
+    .portofolio-page .pf-filter-tabs { animation: pf-fade .6s ease .45s both !important; }
+    .portofolio-page .pf-search      { animation: pf-fade .6s ease .55s both !important; }
+    .portofolio-page .pf-filter-tabs a { position: relative; }
+    .portofolio-page .pf-filter-tabs a::after {
+        content: "";
+        position: absolute;
+        left: 0; right: 0; bottom: -3px;
+        height: 2px;
+        border-radius: 2px;
+        background: currentColor;
+        transform: scaleX(0);
+        transform-origin: left;
+        transition: transform .3s cubic-bezier(.16,1,.3,1);
+    }
+    .portofolio-page .pf-filter-tabs a:hover::after { transform: scaleX(1); }
+    .portofolio-page .pf-filter-tabs a.active::after {
+        transform: scaleX(1);
+        animation: pf-line .45s cubic-bezier(.16,1,.3,1) .7s both !important;
+    }
+    .portofolio-page .pf-search__input { transition: border-color .25s ease, box-shadow .25s ease, transform .25s ease; }
+    .portofolio-page .pf-search__input:focus { transform: translateY(-1px); }
+
+    /* Kartu: muncul saat di-scroll (diatur JS lewat .pp-ready / .pp-in) */
+    .portofolio-page.pp-ready .pf-kartu { opacity: 0; }
+    .portofolio-page.pp-ready .pf-kartu.pp-in {
+        animation: pf-rise .6s cubic-bezier(.16,1,.3,1) var(--pp-delay, 0ms) both !important;
+    }
+    .portofolio-page.pp-ready .pf-kartu.pp-in .pf-dept-badge {
+        animation: pf-pop .5s cubic-bezier(.34,1.56,.64,1) calc(var(--pp-delay, 0ms) + 250ms) both !important;
+    }
+
+    /* Hover kartu: kilau halus pada tombol */
+    .portofolio-page .btn-card-detail::after {
+        content: "";
+        position: absolute;
+        top: 0; bottom: 0; left: -60%;
+        width: 40%;
+        background: linear-gradient(100deg, transparent, rgba(255,255,255,.35), transparent);
+        transform: skewX(-20deg);
+        transition: left .6s ease;
+    }
+    .portofolio-page .pf-kartu:hover .btn-card-detail::after { left: 130%; }
+
+    /* Empty state */
+    .portofolio-page .pf-kosong { animation: pf-rise .6s cubic-bezier(.16,1,.3,1) both !important; }
+    .portofolio-page .pf-kosong__icon { display: inline-block;
+        animation: pf-float 3.6s ease-in-out infinite !important; }
 </style>
 
-<div class="portfolio-page-wrapper">
-    <!-- Header Section -->
-    <div class="portfolio-header">
-        <span class="portfolio-badge-label">
-            ✨ KARYA UNGGULAN SISWA
-        </span>
-        <h1 class="portfolio-title">PORTOFOLIO TEFA</h1>
-        <p class="portfolio-subtitle">
-            Karya dan proyek unggulan karya siswa-siswi SMKN 4 Tanjungpinang dari berbagai program keahlian.
-        </p>
+<div class="portofolio-page">
+    {{-- HERO --}}
+    <section class="pf-hero" aria-labelledby="pf-hero-title">
+        <div class="pf-hero__content">
+            <h1 id="pf-hero-title">PORTOFOLIO</h1>
+            <p>Eksplorasi berbagai solusi digital, aplikasi web, dan produk inovatif yang telah kami kembangkan. Sebuah representasi komitmen kami dalam mengubah ide menjadi karya nyata.</p>
+        </div>
+    </section>
+
+    {{-- PENCARIAN & FILTER --}}
+    <div class="pf-filter">
+        @php
+            $filterUrl = fn (string $kode) => route('portofolio', array_filter([
+                'jurusan' => $kode === 'all' ? null : $kode,
+                'q' => request('q'),
+            ], fn ($value) => $value !== null && $value !== ''));
+        @endphp
+
+        <nav aria-label="Filter program keahlian">
+            <div class="pf-filter-tabs">
+                <a href="{{ $filterUrl('all') }}" class="{{ $aktifJurusan === 'all' ? 'active' : '' }}">Semua</a>
+                @foreach($filters as $kode => $label)
+                    <a href="{{ $filterUrl($kode) }}" class="{{ $aktifJurusan === $kode ? 'active' : '' }}">{{ $label }}</a>
+                @endforeach
+            </div>
+        </nav>
+
+        <form class="pf-search" role="search" method="GET" action="{{ route('portofolio') }}">
+            @if($aktifJurusan !== 'all')
+                <input type="hidden" name="jurusan" value="{{ $aktifJurusan }}">
+            @endif
+            <svg class="pf-search__icon" viewBox="0 0 24 24" fill="none" stroke="#000000" stroke-width="2" stroke-linecap="round" aria-hidden="true">
+                <circle cx="10.5" cy="10.5" r="7"/>
+                <line x1="16" y1="16" x2="21.5" y2="21.5"/>
+            </svg>
+            <label class="visually-hidden" for="pf-search-input" style="position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap;">Cari portofolio</label>
+            <input class="pf-search__input"
+                   id="pf-search-input"
+                   name="q"
+                   type="search"
+                   value="{{ request('q') }}"
+                   placeholder="Cari portofolio..." />
+            <button type="submit" class="pf-search__btn">Cari</button>
+        </form>
     </div>
 
-    <!-- Filter & Search Controls (Centered - Sesuai Gambar 3) -->
-    <div class="portfolio-controls-container">
-        <!-- Centered Search Bar (Sesuai Gambar 3) -->
-        <div class="search-box-wrapper">
-            <span class="search-icon-left">
-                <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/>
-                </svg>
-            </span>
-            <input type="text" 
-                   id="portfolio-search-input" 
-                   class="search-input-field" 
-                   placeholder="Cari karya portofolio..." 
-                   oninput="filterPortfolios()" />
-            <button type="button" class="search-btn-action" onclick="filterPortfolios()">
-                Cari
-            </button>
-        </div>
+    {{-- GRID KARTU --}}
+    <main class="pf-area-kartu">
+        <div class="pf-grid">
+            @forelse($portfolios as $portfolio)
+                @php
+                    $rawKode = strtoupper($portfolio->jurusan->kode ?? 'TEFA');
+                    $deptKode = match(true) {
+                        str_contains($rawKode, 'ANI') => 'ANIMASI',
+                        str_contains($rawKode, 'GIM') => 'GIM',
+                        str_contains($rawKode, 'RPL') => 'RPL',
+                        str_contains($rawKode, 'TKJ') => 'TKJ',
+                        str_contains($rawKode, 'DKV') => 'DKV',
+                        str_contains($rawKode, 'PSPT') || str_contains($rawKode, 'PSTV') => 'PSPT',
+                        default => 'TEFA',
+                    };
 
-        <!-- Filter Pills Row (Semua, RPL, TKJ, DKV, PSPT, ANIMASI, GIM) - Sesuai Gambar 3 -->
-        <div class="filter-pills-row">
-            <button type="button" class="filter-pill-btn active" data-filter="all" onclick="setFilterCategory('all')">
-                <span>Semua</span>
-            </button>
-            <button type="button" class="filter-pill-btn" data-filter="RPL" onclick="setFilterCategory('RPL')">
-                <span>RPL</span>
-            </button>
-            <button type="button" class="filter-pill-btn" data-filter="TKJ" onclick="setFilterCategory('TKJ')">
-                <span>TKJ</span>
-            </button>
-            <button type="button" class="filter-pill-btn" data-filter="DKV" onclick="setFilterCategory('DKV')">
-                <span>DKV</span>
-            </button>
-            <button type="button" class="filter-pill-btn" data-filter="PSPT" onclick="setFilterCategory('PSPT')">
-                <span>PSPT</span>
-            </button>
-            <button type="button" class="filter-pill-btn" data-filter="Animasi" onclick="setFilterCategory('Animasi')">
-                <span>ANIMASI</span>
-            </button>
-            <button type="button" class="filter-pill-btn" data-filter="Gim" onclick="setFilterCategory('Gim')">
-                <span>GIM</span>
-            </button>
-        </div>
-    </div>
+                    $badgeStyle = match($deptKode) {
+                        'RPL' => 'background: #eff6ff; color: #2563eb; border: 1px solid #bfdbfe;',
+                        'DKV' => 'background: #faf5ff; color: #9333ea; border: 1px solid #e9d5ff;',
+                        'TKJ' => 'background: #ecfeff; color: #0891b2; border: 1px solid #a5f3fc;',
+                        'ANIMASI' => 'background: #fff7ed; color: #ea580c; border: 1px solid #fed7aa;',
+                        'PSPT' => 'background: #fff1f2; color: #e11d48; border: 1px solid #fecdd3;',
+                        'GIM' => 'background: #f0fdf4; color: #16a34a; border: 1px solid #bbf7d0;',
+                        default => 'background: #eff6ff; color: #2563eb; border: 1px solid #bfdbfe;',
+                    };
 
-    <!-- Portfolio Cards Grid -->
-    <div class="portfolio-grid" id="portfolio-items-grid">
-        @forelse($portfolios as $item)
-            <div class="portfolio-card" 
-                 data-id="{{ $item['id'] }}"
-                 data-jurusan="{{ $item['jurusan_code'] }}"
-                 data-title="{{ strtolower($item['title']) }}"
-                 data-desc="{{ strtolower($item['short_desc']) }}"
-                 onclick="openPortfolioModal({{ json_encode($item) }})">
-                
-                <!-- Thumbnail -->
-                <div class="portfolio-thumb">
-                    <div class="portfolio-thumb-bg" style="background: {{ $item['image_bg'] }};">
-                        <div class="thumb-overlay-pattern"></div>
-                        <span>{{ $item['icon'] }}</span>
+                    $fallbackBg = match($deptKode) {
+                        'RPL' => 'linear-gradient(135deg, #1e3a8a, #0284c7)',
+                        'DKV' => 'linear-gradient(135deg, #6b21a8, #7c3aed)',
+                        'TKJ' => 'linear-gradient(135deg, #0e7490, #0891b2)',
+                        'ANIMASI' => 'linear-gradient(135deg, #c2410c, #b45309)',
+                        'PSPT' => 'linear-gradient(135deg, #be123c, #e11d48)',
+                        'GIM' => 'linear-gradient(135deg, #15803d, #16a34a)',
+                        default => 'linear-gradient(135deg, #0a215e, #1e3a8a)',
+                    };
+
+                    $fallbackIcon = match($deptKode) {
+                        'RPL' => '💻',
+                        'DKV' => '🎨',
+                        'TKJ' => '🔧',
+                        'ANIMASI' => '🎬',
+                        'PSPT' => '🎥',
+                        'GIM' => '🎮',
+                        default => '🏆',
+                    };
+
+                    $cover = $portfolio->images->first();
+                @endphp
+
+                <a href="{{ route('portofolio.show', $portfolio) }}" class="pf-kartu">
+                    {{-- Thumbnail --}}
+                    <div class="pf-thumb">
+                        @if($cover)
+                            <img src="{{ asset('storage/'.$cover->image_path) }}"
+                                 alt="{{ $portfolio->title }}"
+                                 class="pf-thumb-img"
+                                 loading="lazy"
+                                 onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+                            <div class="pf-thumb-fallback" style="background: {{ $fallbackBg }}; display: none;">
+                                <div class="pf-thumb-pattern"></div>
+                                <span>{{ $fallbackIcon }}</span>
+                            </div>
+                        @else
+                            <div class="pf-thumb-fallback" style="background: {{ $fallbackBg }};">
+                                <div class="pf-thumb-pattern"></div>
+                                <span>{{ $fallbackIcon }}</span>
+                            </div>
+                        @endif
+
+                        <span class="pf-dept-badge" style="{{ $badgeStyle }}">{{ $deptKode }}</span>
                     </div>
 
-                    <!-- Department Badge -->
-                    <span class="thumb-badge" style="background: {{ $item['badge_bg'] }}; color: {{ $item['badge_color'] }}; border: 1px solid {{ $item['badge_border'] }};">
-                        {{ $item['jurusan_code'] }}
-                    </span>
+                    {{-- Content --}}
+                    <div class="pf-isi">
+                        <h3 class="pf-judul">{{ $portfolio->title }}</h3>
+                        <p class="pf-deskripsi">
+                            {{ $portfolio->description ?: 'Karya portofolio siswa unit Teaching Factory SMKN 4 Tanjungpinang.' }}
+                        </p>
 
-                    <!-- Academic Year Badge -->
-                    <span class="thumb-year">
-                        {{ $item['year'] }}
-                    </span>
-                </div>
-
-                <!-- Card Content -->
-                <div class="portfolio-content">
-                    <h3 class="portfolio-card-title">
-                        {{ $item['title'] }}
-                    </h3>
-
-                    <p class="portfolio-card-desc">
-                        {{ $item['short_desc'] }}
-                    </p>
-
-                    <div class="portfolio-card-footer">
-                        <div class="portfolio-team-info">
-                            <svg width="15" height="15" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"/>
-                            </svg>
-                            <span>{{ $item['team'] }}</span>
+                        <div class="pf-meta">
+                            <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><circle cx="9" cy="8" r="3.5"/><circle cx="17" cy="9" r="2.5"/><path d="M2 20c0-3.5 3-6 7-6s7 2.5 7 6z"/><path d="M15 14.5c3.5 0 7 2 7 5v.5h-5"/></svg>
+                            <span>{{ $portfolio->team_name ?: 'Tim Siswa SMKN 4' }}</span>
                         </div>
 
-                        <div class="portfolio-click-hint">
-                            <span>Detail</span>
-                            <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7"/>
-                            </svg>
+                        <div class="pf-footer">
+                            <span class="btn-card-detail">
+                                <span aria-hidden="true">🔎</span>
+                                <span>Lihat Detail</span>
+                            </span>
                         </div>
                     </div>
-                </div>
-            </div>
-        @empty
-            <div class="portfolio-empty">
-                <div class="portfolio-empty-icon">📁</div>
-                <div class="portfolio-empty-title">Belum Ada Portofolio</div>
-                <p class="portfolio-empty-desc">Data karya siswa sedang dalam proses kurasi. Silakan kembali lagi nanti.</p>
-            </div>
-        @endforelse
-    </div>
-
-    <!-- Empty Filter Result Alert -->
-    <div id="no-filter-match-alert" style="display: none; max-width: 600px; margin: 40px auto; text-align: center; background: #ffffff; padding: 40px 20px; border-radius: 18px; border: 1px solid #e2e8f0;">
-        <div style="font-size: 42px; margin-bottom: 10px;">🔍</div>
-        <h4 style="font-size: 18px; font-weight: 800; color: #0f172a; margin-bottom: 6px;">Karya Tidak Ditemukan</h4>
-        <p style="color: #64748b; font-size: 14px; margin-bottom: 16px;">Tidak ada karya yang sesuai dengan pencarian atau jurusan yang Anda pilih.</p>
-        <button type="button" onclick="resetAllFilters()" style="background: #2563eb; color: #ffffff; border: none; padding: 9px 20px; border-radius: 999px; font-size: 13.5px; font-weight: 700; cursor: pointer;">
-            Reset Filter & Cari Semua
-        </button>
-    </div>
-</div>
-
-<!-- ==============================================================
-     MODAL POPUP EXPLANATION DETAIL (INTERAKTIF POP UP PENJELASAN)
-     ============================================================== -->
-<div id="portfolio-modal" class="portfolio-modal-backdrop" onclick="handleBackdropClick(event)">
-    <div class="portfolio-modal-container">
-        <!-- Close Button -->
-        <button type="button" class="modal-close-btn" onclick="closePortfolioModal()" aria-label="Tutup Popup">
-            &times;
-        </button>
-
-        <!-- Modal Top Visual Banner -->
-        <div id="modal-banner" class="modal-hero-banner">
-            <div class="thumb-overlay-pattern"></div>
-            <div id="modal-icon" style="font-size: 76px; filter: drop-shadow(0 4px 10px rgba(0,0,0,0.3));"></div>
-            <span id="modal-dept-badge" class="modal-badge-dept"></span>
-        </div>
-
-        <!-- Modal Body Content -->
-        <div class="modal-body">
-            <h2 id="modal-title" class="modal-project-title"></h2>
-
-            <!-- Quick Metadata -->
-            <div class="modal-meta-grid">
-                <div class="modal-meta-item">
-                    <span class="modal-meta-label">👥 Tim Pengembang</span>
-                    <span id="modal-team" class="modal-meta-val"></span>
-                </div>
-                <div class="modal-meta-item">
-                    <span class="modal-meta-label">👨‍🏫 Pembimbing / Instruktur</span>
-                    <span id="modal-mentor" class="modal-meta-val"></span>
-                </div>
-                <div class="modal-meta-item">
-                    <span class="modal-meta-label">📅 Tahun Ajaran</span>
-                    <span id="modal-year" class="modal-meta-val"></span>
-                </div>
-            </div>
-
-            <!-- Description -->
-            <div class="modal-section-heading">
-                <span>📖</span>
-                <span>Tentang Proyek & Latar Belakang</span>
-            </div>
-            <p id="modal-desc" class="modal-desc-text"></p>
-
-            <!-- Key Features -->
-            <div class="modal-section-heading">
-                <span>✨</span>
-                <span>Fitur Utama & Inovasi Karya</span>
-            </div>
-            <ul id="modal-features" class="modal-features-list"></ul>
-
-            <!-- Tech Stack & Tools -->
-            <div class="modal-section-heading">
-                <span>🛠️</span>
-                <span>Teknologi & Tools Digunakan</span>
-            </div>
-            <div id="modal-tech" class="modal-tech-pills"></div>
-
-            <!-- Action Buttons -->
-            <div class="modal-actions-row">
-                <a id="modal-wa-link" href="#" target="_blank" class="modal-btn-wa">
-                    <span>💬</span>
-                    <span>Tertarik Proyek Serupa? Hubungi TEFA</span>
                 </a>
-                <button type="button" class="modal-btn-close-secondary" onclick="closePortfolioModal()">
-                    Tutup
-                </button>
-            </div>
+            @empty
+                <div class="pf-kosong">
+                    <div class="pf-kosong__icon" aria-hidden="true">🔍</div>
+                    <h3 class="pf-kosong__title">Portofolio Tidak Ditemukan</h3>
+                    <p class="pf-kosong__text">
+                        Tidak ada portofolio yang sesuai dengan kata kunci atau jurusan yang Anda pilih.
+                    </p>
+                </div>
+            @endforelse
         </div>
-    </div>
+
+        @if($portfolios->hasPages())
+            <div class="pf-paginasi">
+                {{ $portfolios->links() }}
+            </div>
+        @endif
+    </main>
 </div>
 
 <script>
-    let activeFilter = 'all';
+    /* ---------- ANIMASI KARTU PORTOFOLIO (reveal saat scroll) ---------- */
+    (function () {
+        var page  = document.querySelector('.portofolio-page');
+        var cards = document.querySelectorAll('.portofolio-page .pf-kartu');
+        if (!page || !cards.length) return;
 
-    function setFilterCategory(category) {
-        activeFilter = category;
+        // .pp-ready baru dipasang oleh JS: kalau JS gagal, kartu tetap terlihat normal.
+        page.classList.add('pp-ready');
 
-        // Update pills active status
-        document.querySelectorAll('.filter-pill-btn').forEach(btn => {
-            if (btn.getAttribute('data-filter') === category) {
-                btn.classList.add('active');
-            } else {
-                btn.classList.remove('active');
-            }
-        });
-
-        // Update dropdown selector
-        const select = document.getElementById('portfolio-jurusan-select');
-        if (select) {
-            select.value = category;
+        function show(card, i) {
+            card.style.setProperty('--pp-delay', ((i % 4) * 80) + 'ms'); // stagger per baris
+            card.classList.add('pp-in');
         }
 
-        filterPortfolios();
-    }
-
-    function handleSelectJurusan(val) {
-        setFilterCategory(val);
-    }
-
-    function resetAllFilters() {
-        const searchInput = document.getElementById('portfolio-search-input');
-        if (searchInput) searchInput.value = '';
-        setFilterCategory('all');
-    }
-
-    function filterPortfolios() {
-        const query = (document.getElementById('portfolio-search-input')?.value || '').toLowerCase().trim();
-        const cards = document.querySelectorAll('.portfolio-card');
-        let visibleCount = 0;
-
-        cards.forEach(card => {
-            const cardJurusan = card.getAttribute('data-jurusan') || '';
-            const cardTitle = card.getAttribute('data-title') || '';
-            const cardDesc = card.getAttribute('data-desc') || '';
-
-            const matchesCategory = (activeFilter === 'all' || cardJurusan.toUpperCase() === activeFilter.toUpperCase());
-            const matchesQuery = (!query || cardTitle.includes(query) || cardDesc.includes(query));
-
-            if (matchesCategory && matchesQuery) {
-                card.style.display = 'flex';
-                visibleCount++;
-            } else {
-                card.style.display = 'none';
-            }
-        });
-
-        const noMatchAlert = document.getElementById('no-filter-match-alert');
-        if (noMatchAlert) {
-            noMatchAlert.style.display = visibleCount === 0 ? 'block' : 'none';
-        }
-    }
-
-    // Modal Interactions
-    function openPortfolioModal(item) {
-        const modal = document.getElementById('portfolio-modal');
-        if (!modal) return;
-
-        // Set Banner & Badges
-        const banner = document.getElementById('modal-banner');
-        if (banner) banner.style.background = item.image_bg;
-
-        const icon = document.getElementById('modal-icon');
-        if (icon) icon.textContent = item.icon;
-
-        const deptBadge = document.getElementById('modal-dept-badge');
-        if (deptBadge) {
-            deptBadge.textContent = item.jurusan_name + ' (' + item.jurusan_code + ')';
-            deptBadge.style.background = item.badge_bg;
-            deptBadge.style.color = item.badge_color;
-            deptBadge.style.border = '1px solid ' + item.badge_border;
+        if (!('IntersectionObserver' in window)) {
+            cards.forEach(show);
+            return;
         }
 
-        // Set Information
-        document.getElementById('modal-title').textContent = item.title;
-        document.getElementById('modal-team').textContent = item.team;
-        document.getElementById('modal-mentor').textContent = item.mentor;
-        document.getElementById('modal-year').textContent = item.year;
-        document.getElementById('modal-desc').textContent = item.full_desc || item.short_desc;
+        var seen = 0;
+        var io = new IntersectionObserver(function (entries) {
+            entries.forEach(function (e) {
+                if (!e.isIntersecting) return;
+                show(e.target, seen++);
+                io.unobserve(e.target);
+            });
+            seen = 0; // reset stagger tiap gelombang kartu yang terlihat
+        }, { threshold: 0.12, rootMargin: '0px 0px -40px 0px' });
 
-        // Populate Features List
-        const featuresContainer = document.getElementById('modal-features');
-        if (featuresContainer) {
-            featuresContainer.innerHTML = '';
-            if (item.features && item.features.length) {
-                item.features.forEach(feat => {
-                    const li = document.createElement('li');
-                    li.className = 'modal-feature-item';
-                    li.innerHTML = '<span class="modal-feature-icon">✓</span><span>' + feat + '</span>';
-                    featuresContainer.appendChild(li);
-                });
-            }
-        }
+        cards.forEach(function (c) { io.observe(c); });
 
-        // Populate Tech Stack
-        const techContainer = document.getElementById('modal-tech');
-        if (techContainer) {
-            techContainer.innerHTML = '';
-            if (item.tech_stack && item.tech_stack.length) {
-                item.tech_stack.forEach(tech => {
-                    const span = document.createElement('span');
-                    span.className = 'modal-tech-pill';
-                    span.textContent = tech;
-                    techContainer.appendChild(span);
-                });
-            }
-        }
-
-        // WhatsApp Direct Link
-        const waLink = document.getElementById('modal-wa-link');
-        if (waLink) {
-            const message = encodeURIComponent('Halo Admin Teaching Factory SMKN 4 Tanjungpinang, saya melihat portofolio "' + item.title + '" (' + item.jurusan_code + ') di katalog TEFA. Saya tertarik untuk berkonsultasi mengenai pemesanan / pembuatan proyek serupa.');
-            waLink.href = 'https://wa.me/628781948317?text=' + message;
-        }
-
-        modal.style.display = 'grid';
-        document.body.style.overflow = 'hidden';
-    }
-
-    function closePortfolioModal() {
-        const modal = document.getElementById('portfolio-modal');
-        if (modal) {
-            modal.style.display = 'none';
-            document.body.style.overflow = '';
-        }
-    }
-
-    function handleBackdropClick(event) {
-        if (event.target.id === 'portfolio-modal') {
-            closePortfolioModal();
-        }
-    }
-
-    // Escape Key Listener to dismiss modal
-    document.addEventListener('keydown', function(e) {
-        if (e.key === 'Escape') {
-            closePortfolioModal();
-        }
-    });
+        // Pengaman: tampilkan semua kartu bila observer tidak memicu dalam 2 detik
+        setTimeout(function () {
+            cards.forEach(function (c) { if (!c.classList.contains('pp-in')) show(c, 0); });
+        }, 2000);
+    })();
 </script>
 @endsection
