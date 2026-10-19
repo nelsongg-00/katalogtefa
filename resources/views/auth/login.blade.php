@@ -51,6 +51,9 @@
       --field-height: calc(44px * var(--scale));
       --field-gap: calc(25px * var(--scale));
       --card-pad-x: calc(53px * var(--scale));
+
+      /* Badge */
+      --badge-size: calc(56px * var(--scale));
     }
 
     /* ==========================================================
@@ -83,11 +86,13 @@
        3. CARD
        ========================================================== */
     .login-card {
+      position: relative;
       width: 100%;
       max-width: var(--card-width);
       padding: calc(32px * var(--scale)) var(--card-pad-x) calc(20px * var(--scale));
       background: var(--color-card);
       border-radius: var(--radius-card);
+      animation: cardIn .7s ease-out both;
     }
     .login-card__header { text-align: center; }
     .login-card__title {
@@ -101,6 +106,23 @@
       font-size: var(--fs-subtitle);
       line-height: 1.35;
       color: var(--color-muted);
+    }
+
+    /* ==========================================================
+       3b. BADGE (logo di tepi atas kartu)
+       Pusat badge tepat di tepi atas kartu putih:
+       separuh di area biru, separuh menimpa kartu.
+       ========================================================== */
+    .login-card__badge {
+      position: absolute;
+      top: 0;
+      left: 50%;
+      width: var(--badge-size);
+      height: var(--badge-size);
+      transform: translate(-50%, -50%);
+      border-radius: 50%;
+      object-fit: cover;
+      animation: badgeIn .5s cubic-bezier(.34, 1.56, .64, 1) .5s both;
     }
 
     /* ==========================================================
@@ -217,19 +239,39 @@
     .login-card__footer a { margin-left: 4px; }
 
     /* ==========================================================
-       7. SMALL SCREENS
+       7. ANIMATIONS
+       ========================================================== */
+    @keyframes cardIn {
+      from { opacity: 0; transform: translateY(20px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+    @keyframes badgeIn {
+      from { opacity: 0; transform: translate(-50%, -50%) scale(.8); }
+      to   { opacity: 1; transform: translate(-50%, -50%) scale(1); }
+    }
+
+    /* ==========================================================
+       8. SMALL SCREENS
        ========================================================== */
     @media (max-width: 520px) {
       :root { --card-pad-x: 24px; --radius-card: 32px; }
       .login-card { padding-top: 28px; padding-bottom: 22px; }
     }
+
+    @media (prefers-reduced-motion: reduce) {
+      .login-card, .login-card__badge { animation: none; }
+    }
   </style>
 </head>
 <body>
+  @include('partials.particle-network')
+
   @include('partials.navbar')
 
   <div class="login-shell">
     <main class="login-card">
+    <img class="login-card__badge" src="{{ asset('asset/img/login_logo.png') }}" alt="" aria-hidden="true">
+
     <header class="login-card__header">
       <h1 class="login-card__title">Masuk ke Akun</h1>
       <p class="login-card__subtitle">Masukkan email dan kata sandi Anda untuk melanjutkan</p>
