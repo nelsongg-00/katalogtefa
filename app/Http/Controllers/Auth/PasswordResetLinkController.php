@@ -37,9 +37,14 @@ class PasswordResetLinkController extends Controller
             $request->only('email')
         );
 
-        return $status == Password::RESET_LINK_SENT
-                    ? back()->with('status', __($status))
-                    : back()->withInput($request->only('email'))
-                        ->withErrors(['email' => __($status)]);
+        if ($status != Password::RESET_LINK_SENT) {
+            return back()->withInput($request->only('email'))
+                ->withErrors(['email' => __($status)]);
+        }
+
+        // Selain link reset Breeze, kirim juga kode OTP lalu arahkan ke halaman verifikasi.
+        OtpVerificationController::issue($request->email);
+
+        return redirect()->route('password.otp.show');
     }
 }
