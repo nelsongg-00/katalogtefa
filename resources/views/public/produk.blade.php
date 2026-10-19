@@ -430,6 +430,35 @@
         background: var(--color-primary-dark);
     }
 
+    /* ================= REVEAL SAAT SCROLL =================
+       Dipaksa selalu jalan: pengaturan reduced-motion perangkat diabaikan.
+       Memakai keyframes (bukan transition) supaya transition hover kartu
+       dan .produk-thumb-img tidak tertimpa. Hanya aktif jika JS jalan (.js). */
+    .js [data-scroll-reveal] {
+        opacity: 0;
+    }
+
+    .js [data-scroll-reveal].is-visible {
+        opacity: 1;
+        animation: produkReveal 0.75s cubic-bezier(0.16, 1, 0.3, 1) both;
+        animation-delay: var(--d, 0ms);
+    }
+
+    /* Kartu katalog: opacity saja — transform-nya dipakai efek hover kartu. */
+    .js [data-scroll-reveal="fade"].is-visible {
+        animation-name: produkRevealFade;
+    }
+
+    @keyframes produkReveal {
+        from { opacity: 0; transform: translateY(30px); }
+        to   { opacity: 1; transform: none; }
+    }
+
+    @keyframes produkRevealFade {
+        from { opacity: 0; }
+        to   { opacity: 1; }
+    }
+
     /* ---------- BREAKPOINT >= 640px (tablet) ---------- */
     @media (min-width: 640px) {
         .produk-page .banner {
@@ -478,7 +507,7 @@
 <div class="produk-page">
     <main class="produk-main">
         <!-- ================= BANNER ================= -->
-        <section class="banner" aria-labelledby="banner-title">
+        <section class="banner" aria-labelledby="banner-title" data-scroll-reveal>
             <div class="banner__content">
                 <h1 class="banner__title" id="banner-title">Katalog Produk TEFA</h1>
                 <a href="#produk-items-grid" class="banner__cta">Lihat Selengkapnya</a>
@@ -486,7 +515,7 @@
         </section>
 
         <!-- ================= FILTER BAR + SEARCH ================= -->
-        <div class="filter">
+        <div class="filter" data-scroll-reveal style="--d:120ms">
             @php
                 $aktifJurusan = request('jurusan', 'all');
                 $qSekarang = request('q');
@@ -579,7 +608,8 @@
 
                     @endphp
 
-                    <a href="{{ route('produk.show', $product) }}" class="produk-card" data-id="{{ $product->id }}">
+                    <a href="{{ route('produk.show', $product) }}" class="produk-card" data-id="{{ $product->id }}"
+                       data-scroll-reveal="fade" style="--d:{{ min($loop->index, 8) * 60 }}ms">
 
                         <!-- Thumbnail -->
                         <div class="produk-thumb">
@@ -659,5 +689,35 @@
         </section>
     </main>
 </div>
+
+{{-- Reveal saat scroll; dipaksa jalan (prefers-reduced-motion diabaikan) --}}
+<script>
+    (function () {
+        document.documentElement.classList.add('js');
+
+        var items = document.querySelectorAll('[data-scroll-reveal]');
+        if (!items.length) { return; }
+
+        function reveal(el) {
+            el.classList.add('is-visible');
+        }
+
+        if (!('IntersectionObserver' in window)) {
+            Array.prototype.forEach.call(items, reveal);
+            return;
+        }
+
+        var io = new IntersectionObserver(function (entries) {
+            entries.forEach(function (entry) {
+                if (entry.isIntersecting) {
+                    reveal(entry.target);
+                    io.unobserve(entry.target);
+                }
+            });
+        }, { threshold: 0.15, rootMargin: '0px 0px -6% 0px' });
+
+        Array.prototype.forEach.call(items, function (el) { io.observe(el); });
+    })();
+</script>
 
 @endsection

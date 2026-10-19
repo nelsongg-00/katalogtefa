@@ -141,6 +141,12 @@ class CatalogModalAndAuthTest extends TestCase
         $this->assertEquals($targetUrl, session('url.intended'));
     }
 
+    public function test_auth_pages_render_particle_network_background(): void
+    {
+        $this->get(route('login'))->assertSee('id="particle-bg"', false);
+        $this->get(route('register'))->assertSee('id="particle-bg"', false);
+    }
+
     public function test_authenticated_client_can_order_service_and_order_is_recorded_with_wa_redirect(): void
     {
         $response = $this->actingAs($this->client)->get(route('services.order', $this->service->id));
