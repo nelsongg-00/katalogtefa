@@ -126,6 +126,14 @@ return [
             'replace_placeholders' => true,
         ],
 
+        // Satu file tanpa rotasi, supaya riwayat semua OTP ada di satu tempat.
+        'otp' => [
+            'driver' => 'single',
+            'path' => storage_path('logs/otp.log'),
+            'level' => 'debug',
+            'replace_placeholders' => true,
+        ],
+
         'null' => [
             'driver' => 'monolog',
             'handler' => NullHandler::class,

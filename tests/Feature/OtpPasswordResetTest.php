@@ -36,6 +36,25 @@ class OtpPasswordResetTest extends TestCase
         $this->assertMatchesRegularExpression('/^\d{6}$/', session('otp'));
     }
 
+    public function test_otp_is_written_to_log_immediately(): void
+    {
+        Notification::fake();
+
+        $log = storage_path('logs/otp.log');
+        @unlink($log);
+
+        $user = User::factory()->create();
+
+        $this->post('/forgot-password', ['email' => $user->email])
+            ->assertRedirect(route('password.otp.show'));
+
+        $this->assertFileExists($log);
+
+        $content = file_get_contents($log);
+        $this->assertStringContainsString('Kode    : '.session('otp'), $content);
+        $this->assertStringContainsString($user->email, $content);
+    }
+
     public function test_correct_otp_redirects_to_reset_password_with_token(): void
     {
         $user = User::factory()->create();

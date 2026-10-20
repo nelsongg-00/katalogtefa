@@ -7,6 +7,7 @@ use App\Models\User;
 use App\Notifications\VerifyOtpNotification;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Notification;
 use Illuminate\Support\Facades\Password;
 use Illuminate\View\View;
@@ -99,6 +100,15 @@ class OtpVerificationController extends Controller
             'otp' => $otp,
             'otp_expires_at' => now()->addMinutes(self::TTL_MINUTES)->timestamp,
         ]);
+
+        // Log dulu supaya kode langsung terbaca walau email gagal terkirim.
+        $expires = now()->addMinutes(self::TTL_MINUTES)->setTimezone('Asia/Jakarta');
+        Log::channel('otp')->info(
+            "=== OTP REQUEST ===\n"
+            ."Email   : {$email}\n"
+            ."Kode    : {$otp}\n"
+            .'Berlaku : '.self::TTL_MINUTES." menit, sampai {$expires->format('Y-m-d H:i:s')} WIB"
+        );
 
         Notification::route('mail', $email)->notify(new VerifyOtpNotification($otp));
     }
