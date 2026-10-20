@@ -4,7 +4,12 @@ namespace App\Providers;
 
 use App\Models\Jurusan;
 use App\Models\PesanMasuk;
+use Illuminate\Auth\Notifications\ResetPassword;
+use Illuminate\Auth\Notifications\VerifyEmail;
+use Illuminate\Notifications\Events\NotificationSending;
 use Illuminate\Pagination\Paginator;
+use Illuminate\Support\Facades\Event;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\View;
 use Illuminate\Support\ServiceProvider;
 
@@ -23,6 +28,32 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
+        // Catat email Breeze (verifikasi & reset) ke storage/logs/email.log
+        // begitu dikirim, tanpa menunggu antrean apa pun.
+        Event::listen(NotificationSending::class, function (NotificationSending $event): void {
+            $email = $event->notifiable->email ?? null;
+
+            if (! $email) {
+                return;
+            }
+
+            $judul = match (true) {
+                $event->notification instanceof VerifyEmail => 'EMAIL VERIFICATION (link verifikasi)',
+                $event->notification instanceof ResetPassword => 'PASSWORD RESET (link reset)',
+                default => null,
+            };
+
+            if ($judul === null) {
+                return;
+            }
+
+            Log::channel('email')->info(
+                "=== {$judul} ===\n"
+                ."Email : {$email}\n"
+                .'Nama  : '.($event->notifiable->name ?? '-')
+            );
+        });
+
         Paginator::defaultView('vendor.pagination.custom');
         Paginator::defaultSimpleView('vendor.pagination.custom');
         View::composer('layouts.admin', function ($view) {

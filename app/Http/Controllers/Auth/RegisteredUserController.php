@@ -50,6 +50,12 @@ class RegisteredUserController extends Controller
 
         event(new Registered($user));
 
+        // Interface MustVerifyEmail sengaja tidak dipasang (lihat AccountAccessTest:
+        // akun tanpa verifikasi tetap boleh masuk), jadi email verifikasi dikirim manual.
+        if (! $user->hasVerifiedEmail()) {
+            $user->sendEmailVerificationNotification();
+        }
+
         Auth::login($user);
 
         $request->session()->regenerate();

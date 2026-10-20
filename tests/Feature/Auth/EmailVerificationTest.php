@@ -22,6 +22,25 @@ class EmailVerificationTest extends TestCase
         $response->assertStatus(200);
     }
 
+    public function test_registration_sends_verification_email_and_logs_it(): void
+    {
+        $log = storage_path('logs/email.log');
+        @unlink($log);
+
+        $this->post('/register', [
+            'name' => 'Pengguna Log Email',
+            'email' => 'email.log.tester@example.com',
+            'password' => 'password',
+            'password_confirmation' => 'password',
+        ]);
+
+        $this->assertFileExists($log);
+
+        $content = file_get_contents($log);
+        $this->assertStringContainsString('EMAIL VERIFICATION', $content);
+        $this->assertStringContainsString('email.log.tester@example.com', $content);
+    }
+
     public function test_email_can_be_verified(): void
     {
         $user = User::factory()->unverified()->create();

@@ -134,6 +134,14 @@ return [
             'replace_placeholders' => true,
         ],
 
+        // Email Breeze (verifikasi & link reset) terpisah dari OTP.
+        'email' => [
+            'driver' => 'single',
+            'path' => storage_path('logs/email.log'),
+            'level' => 'debug',
+            'replace_placeholders' => true,
+        ],
+
         'null' => [
             'driver' => 'monolog',
             'handler' => NullHandler::class,
