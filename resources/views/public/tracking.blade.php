@@ -213,6 +213,26 @@
         .status-page .info { padding: 40px 65px 48px; }
         .status-page .steps { gap: 38px; }
     }
+
+    /* ---------- MOBILE ≤640px: sentuh 44px, input 16px, stepper menumpuk ---------- */
+    @media (max-width: 640px) {
+        .status-page .search__input { height: 44px; font-size: 16px; }
+        .status-page .search__button { height: 44px; }
+
+        /* stepper 4 kolom memakai inline style → butuh !important; tumpuk vertikal */
+        div[style*="repeat(4, 1fr)"] {
+            grid-template-columns: 1fr !important;
+            gap: 16px !important;
+        }
+
+        /* tombol "Salin" inline (padding 4px 8px, font 12px) → target 44px */
+        button[title="Salin Kode"] {
+            min-height: 44px;
+            font-size: 13px !important;
+        }
+
+        a[href*="wa.me"] { min-height: 44px; }
+    }
 </style>
 <div class="status-page">
     <section class="hero">

@@ -9,6 +9,10 @@
 .site-header * {
     font-family: 'Open Sauce Sans', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
+/* Positioning context agar panel menu mobile (absolute) menempel di bawah navbar. */
+.site-header {
+    position: relative;
+}
 
         /* --- NAVBAR --- */
         .navbar {
@@ -253,6 +257,78 @@
             background: #fef2f2;
             color: #b91c1c;
         }
+
+        /* --- HAMBURGER + PANEL MENU MOBILE (hanya tampil ≤960px) --- */
+        .nav-toggle {
+            display: none;
+            width: 44px;
+            height: 44px;
+            align-items: center;
+            justify-content: center;
+            background: #ffffff;
+            border: 1px solid #e2e8f0;
+            border-radius: 10px;
+            color: #1e3a8a;
+            cursor: pointer;
+        }
+        .nav-toggle:hover { background: #f8fafc; }
+        .nav-mobile-panel {
+            display: none;
+            position: absolute;
+            top: 100%;
+            left: 0;
+            right: 0;
+            flex-direction: column;
+            gap: 2px;
+            background: #ffffff;
+            padding: 8px 12px 14px;
+            box-shadow: 0 12px 24px -8px rgba(15,23,42,0.18);
+            border-top: 1px solid #f1f5f9;
+            z-index: 1000;
+        }
+        .nav-mobile-panel.open { display: flex; }
+        .nav-mobile-panel a {
+            display: flex;
+            align-items: center;
+            min-height: 44px;
+            padding: 10px 14px;
+            border-radius: 10px;
+            text-decoration: none;
+            color: #1e3a8a;
+            font-weight: 600;
+            font-size: 15px;
+        }
+        .nav-mobile-panel a:hover { background: #f8fafc; }
+        .nav-mobile-panel a.active {
+            background: #2563eb;
+            color: #ffffff;
+        }
+        .nav-mobile-panel .btn-login,
+        .nav-mobile-panel .btn-register {
+            justify-content: center;
+            text-align: center;
+            margin-top: 4px;
+        }
+        .nav-mobile-panel .btn-register { border: 1.5px solid #2563eb; border-radius: 50px; }
+        .nav-mobile-panel .btn-login { border: 1.5px solid transparent; border-radius: 50px; }
+
+        @media (max-width: 960px) {
+            .navbar { padding: 12px 20px; }
+            .navbar-center { display: none; }
+            /* Tombol auth pindah ke panel; kontrol akun (keranjang/avatar) tetap di bar atas */
+            .navbar-auth > .btn-login,
+            .navbar-auth > .btn-register { display: none; }
+            .nav-toggle { display: inline-flex; }
+        }
+        @media (max-width: 640px) {
+            .navbar { padding: 10px 14px; }
+            .navbar-brand { gap: 8px; min-width: 0; }
+            .navbar-brand img { height: 36px; }
+            .brand-text-main { font-size: 13.5px; }
+            .brand-text-sub { font-size: 10.5px; }
+            .navbar-auth { gap: 8px; }
+            .nav-avatar-btn .nav-role-badge { display: none; }
+        }
 </style>
 
     <!-- NAVBAR UTAMA -->
@@ -401,7 +477,29 @@
                 </div>
             @endauth
         </div>
+
+        <!-- HAMBURGER: hanya tampil ≤960px -->
+        <button type="button" class="nav-toggle" id="nav-mobile-toggle"
+                aria-label="Buka menu navigasi" aria-expanded="false" aria-controls="nav-mobile-menu"
+                onclick="togglePublicMobileMenu(event)">
+            <svg width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 12h16M4 18h16"/>
+            </svg>
+        </button>
     </nav>
+
+    <!-- PANEL MENU MOBILE (stacked, ≤960px) -->
+    <div class="nav-mobile-panel" id="nav-mobile-menu">
+        <a href="{{ route('home') }}" class="{{ request()->routeIs('home') ? 'active' : '' }}">Beranda</a>
+        <a href="{{ route('profil') }}" class="{{ request()->routeIs('profil') ? 'active' : '' }}">Profil Tefa</a>
+        <a href="{{ route('produk') }}" class="{{ request()->routeIs('produk') ? 'active' : '' }}">Produk</a>
+        <a href="{{ route('jasa') }}" class="{{ request()->routeIs('jasa') ? 'active' : '' }}">Layanan Jasa</a>
+        <a href="{{ route('portofolio') }}" class="{{ request()->routeIs('portofolio') ? 'active' : '' }}">Portofolio</a>
+        @guest
+            <a href="{{ route('login') }}" class="btn-login">Masuk</a>
+            <a href="{{ route('register') }}" class="btn-register">Daftar</a>
+        @endguest
+    </div>
 
 <script>
     function togglePublicDropdown(event) {
@@ -437,6 +535,33 @@
                 const chevron = document.getElementById('public-dropdown-chevron');
                 if (chevron) chevron.style.transform = 'rotate(0deg)';
             }
+            closePublicMobileMenu();
+        }
+    });
+
+    function togglePublicMobileMenu(event) {
+        event.stopPropagation();
+        const panel = document.getElementById('nav-mobile-menu');
+        const btn = document.getElementById('nav-mobile-toggle');
+        if (!panel) return;
+        const open = panel.classList.toggle('open');
+        if (btn) btn.setAttribute('aria-expanded', open ? 'true' : 'false');
+    }
+
+    function closePublicMobileMenu() {
+        const panel = document.getElementById('nav-mobile-menu');
+        const btn = document.getElementById('nav-mobile-toggle');
+        if (panel) panel.classList.remove('open');
+        if (btn) btn.setAttribute('aria-expanded', 'false');
+    }
+
+    // Tutup panel saat tap di luar panel
+    document.addEventListener('click', function(e) {
+        const panel = document.getElementById('nav-mobile-menu');
+        const btn = document.getElementById('nav-mobile-toggle');
+        if (panel && panel.classList.contains('open') &&
+            !panel.contains(e.target) && (!btn || !btn.contains(e.target))) {
+            closePublicMobileMenu();
         }
     });
 </script>

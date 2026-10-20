@@ -247,6 +247,7 @@
         .portofolio-detail .dua-kolom { grid-template-columns: 1fr; }
         .portofolio-detail .judul-utama { font-size: 26px; }
         .portofolio-detail .cta h2 { font-size: 26px; }
+        .portofolio-detail .slide-nav { width: 44px; height: 44px; }
     }
     @media (max-width: 520px) {
         .portofolio-detail .cta { margin: 64px 16px 56px; padding: 40px 22px; }

@@ -219,8 +219,16 @@
        7. SMALL SCREENS
        ========================================================== */
     @media (max-width: 520px) {
-      :root { --card-pad-x: 24px; --radius-card: 32px; }
+      :root {
+        --card-pad-x: 24px;
+        --radius-card: 32px;
+        /* HP: input 16px (cegah auto-zoom iOS), field & tombol 44px */
+        --fs-input: 16px;
+        --field-height: 44px;
+      }
       .register-card { padding-top: 28px; padding-bottom: 22px; }
+      /* Area tap 44px untuk toggle mata */
+      .field__toggle { width: 44px; height: 44px; right: 0; }
     }
 
     @media (prefers-reduced-motion: reduce) {

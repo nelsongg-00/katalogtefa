@@ -218,7 +218,8 @@
             to   { transform: translate3d(22px, -20px, 0) scale(1.08); }
         }
 
-        /* Siluet gelombang di dasar hero; mengisi ruang ke warna surface (#fafafa). */
+        /* Siluet gelombang di dasar hero; mengisi ruang ke warna surface (#fafafa).
+           Gelombang depan tidak diberi parallax agar dasar hero tetap tertutup saat scroll. */
         .tefa-hero__wave {
             position: absolute;
             inset: auto 0 0 0;
@@ -420,6 +421,10 @@
                 font-size: clamp(26px, 7vw, 30px);
             }
 
+            /* CTA hero: target sentuh 44px, boleh wrap bila sempit */
+            .tefa-hero__actions { flex-wrap: wrap; gap: 10px; }
+            .tefa-hero__btn { min-height: 44px; padding: 0 22px; font-size: 14px; }
+
             .js [data-reveal="left"]  { transform: translateX(-36px); }
             .js [data-reveal="right"] { transform: translateX(36px); }
         }
@@ -475,8 +480,8 @@
                 </svg>
             </div>
 
-            {{-- Gelombang depan (warna surface) --}}
-            <div class="tefa-hero__wave" data-parallax-y="-0.02" aria-hidden="true">
+            {{-- Gelombang depan (warna surface); tanpa parallax agar tidak meninggalkan garis biru di dasar hero --}}
+            <div class="tefa-hero__wave" aria-hidden="true">
                 <svg viewBox="0 0 815 145" preserveAspectRatio="none">
                     <path
                         fill="#fafafa"
@@ -649,6 +654,23 @@
                 total: 6,
                 moving: false,
                 timer: null,
+                touchX: 0,
+
+                /* Swipe sentuh: catat posisi awal, lanjutkan di swipeEnd. */
+                swipeStart: function (e) {
+                    this.touchX = e.touches[0].clientX;
+                    this.pause();
+                },
+
+                swipeEnd: function (e) {
+                    var dx = e.changedTouches[0].clientX - this.touchX;
+                    if (Math.abs(dx) > 40) {
+                        if (dx > 0) { this.prev(); } else { this.next(); }
+                        this.restart();
+                    } else {
+                        this.resume();
+                    }
+                },
 
                 init: function () {
                     this.addClones();

@@ -495,6 +495,14 @@
             row-gap: 44px;
         }
     }
+
+    /* ---------- MOBILE <=640px: input 16px (cegah zoom iOS), target sentuh 44px ---------- */
+    @media (max-width: 640px) {
+        .jasa-page .search__input { height: 44px; font-size: 16px; }
+        .jasa-page .search__btn { height: 44px; font-size: 14px; }
+        .jasa-page .btn-card-consult { min-height: 44px; font-size: 13px; }
+        .jasa-page .filter-pill-btn { padding: 11px 4px; }
+    }
 </style>
 
 <div class="jasa-page">

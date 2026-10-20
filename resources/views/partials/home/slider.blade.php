@@ -36,6 +36,26 @@
             transition: none;
         }
     }
+
+    /* Area tap 44px untuk panah & dot tanpa mengubah ukuran visual.
+       shortcut: dot hanya 18px lebar (44px tinggi) karena jarak antar dot 18px —
+       naikkan bila jarak dot diperbesar. */
+    [data-slider-prev]::after,
+    [data-slider-next]::after {
+        content: "";
+        position: absolute;
+        inset: -4px;
+    }
+
+    [data-slider-dots] button {
+        position: relative;
+    }
+
+    [data-slider-dots] button::after {
+        content: "";
+        position: absolute;
+        inset: -17px -4px;
+    }
 </style>
 
 <div class="relative mx-auto max-w-[1000px] sm:px-12"
@@ -47,7 +67,9 @@
      @mouseenter="pause()"
      @mouseleave="resume()"
      @focusin="pause()"
-     @focusout="resume()">
+     @focusout="resume()"
+    @touchstart="swipeStart($event)"
+    @touchend="swipeEnd($event)">
 
     <button type="button"
             class="absolute left-2 top-1/2 z-10 grid h-9 w-9 -translate-y-1/2 place-items-center rounded-full border border-line bg-white text-ink shadow-arrow sm:left-0"

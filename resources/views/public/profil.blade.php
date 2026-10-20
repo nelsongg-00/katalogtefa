@@ -319,6 +319,7 @@
         .pf-about__frame { height: 300px; }
         .pf-about__float { right: 6px; }
         .pf-cta { padding: 48px 22px; }
+        .pf-btn { min-height: 44px; }
         .js [data-reveal="left"]  { transform: translateX(-36px); }
         .js [data-reveal="right"] { transform: translateX(36px); }
     }

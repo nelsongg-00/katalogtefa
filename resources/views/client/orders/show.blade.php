@@ -3,6 +3,24 @@
 @section('title', 'Status Pesanan ' . $order->order_code . ' — Katalog TeFa')
 
 @section('content')
+{{-- override gaya inline saat ≤640px: selector atribut + !important karena inline style menang --}}
+<style>
+@media (max-width: 640px) {
+    /* stepper 4 kolom → tumpuk vertikal, label penuh, tanpa tumpang tindih */
+    div[style*="repeat(4, 1fr)"] {
+        grid-template-columns: 1fr !important;
+        gap: 16px !important;
+    }
+    /* grid detail 1fr 1fr → 1 kolom */
+    div[style*="grid-template-columns: 1fr 1fr"] {
+        grid-template-columns: 1fr !important;
+    }
+    a[href*="wa.me"] {
+        min-height: 44px;
+        font-size: 13px;
+    }
+}
+</style>
 <div class="page-header" style="background: linear-gradient(135deg, #0a215e 0%, #1e3a8a 100%); color: #fff; padding: 40px 20px; text-align: center;">
     <h1 style="font-size: 26px; font-weight: 800; margin-bottom: 6px;">Status Pesanan Produk Fisik</h1>
     <p style="color: #cbd5e1; font-size: 14.5px;">Pantau tahapan proses pengemasan dan instruksi pengambilan barang di lab jurusan.</p>

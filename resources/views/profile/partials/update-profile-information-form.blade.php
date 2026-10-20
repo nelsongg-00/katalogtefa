@@ -5,6 +5,162 @@
     @csrf
 </form>
 
+<style>
+    /* ==========================================================
+       BIODATA: semua aturan dibatasi di #profileBiodataForm
+       agar tidak mengubah bagian lain halaman.
+       ========================================================== */
+
+    /* Susunan dua kolom: biodata (kiri) dan foto (kanan) */
+    #profileBiodataForm .biodata {
+        display: grid;
+        grid-template-columns: minmax(0, 1fr) 200px;
+        gap: 32px;
+        align-items: start;
+    }
+
+    /* Reset margin & padding bawaan dl, dt, dd */
+    #profileBiodataForm dl.info,
+    #profileBiodataForm dt.info__label,
+    #profileBiodataForm dd.info__value {
+        margin: 0;
+        padding: 0;
+    }
+
+    /* Daftar baris biodata */
+    #profileBiodataForm dl.info {
+        display: flex;
+        flex-direction: column;
+        gap: 12px;
+    }
+
+    /* Satu baris: label kiri (lebar tetap) + nilai kanan */
+    #profileBiodataForm .info__row {
+        display: grid;
+        grid-template-columns: 140px minmax(0, 1fr);
+        column-gap: 16px;
+        align-items: center;
+        margin: 0;
+        padding: 0;
+    }
+
+    #profileBiodataForm .info__label {
+        display: flex;
+        align-items: center;
+        min-height: 40px;
+        line-height: 1.3;
+        font-weight: 600;
+    }
+
+    #profileBiodataForm .info__value {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        min-height: 40px;
+        min-width: 0;
+        line-height: 1.3;
+    }
+
+    /* Baris nilai (mode lihat): teks + tombol aksi sejajar */
+    #profileBiodataForm .info__inline {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        min-height: 40px;
+        line-height: 1.3;
+    }
+
+    #profileBiodataForm .info__text {
+        min-width: 0;
+        overflow-wrap: anywhere;
+    }
+
+    #profileBiodataForm .info__action,
+    #profileBiodataForm .info__badge {
+        line-height: 1.3;
+    }
+
+    /* Input (mode ubah): tinggi dan padding seragam */
+    #profileBiodataForm .info__input {
+        display: block;
+        width: 100%;
+        height: 40px;
+        padding: 0 12px;
+        box-sizing: border-box;
+        line-height: normal;
+    }
+
+    #profileBiodataForm [data-edit] {
+        width: 100%;
+    }
+
+    /* Mode lihat / ubah ditentukan oleh data-editing di #biodataForm */
+    #profileBiodataForm #biodataForm[data-editing="true"] [data-view] {
+        display: none;
+    }
+
+    #profileBiodataForm #biodataForm[data-editing="false"] [data-edit] {
+        display: none;
+    }
+
+    /* Tombol Simpan / Batal */
+    #profileBiodataForm .info__actions {
+        margin-top: 16px;
+        display: flex;
+        align-items: center;
+        gap: 12px;
+    }
+
+    /* Kolom foto: rata tengah */
+    #profileBiodataForm .photo {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 10px;
+        text-align: center;
+    }
+
+    #profileBiodataForm .photo__avatar,
+    #profileBiodataForm .photo__avatar-img {
+        width: 120px;
+        height: 120px;
+        border-radius: 50%;
+        object-fit: cover;
+    }
+
+    #profileBiodataForm .photo__choose {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        min-width: 140px;
+        height: 36px;
+        padding: 0 16px;
+        box-sizing: border-box;
+        cursor: pointer;
+    }
+
+    #profileBiodataForm .photo__hint {
+        margin: 0;
+        line-height: 1.5;
+    }
+
+    /* Responsif: di layar sempit, label di atas nilai dan foto di bawah */
+    @media (max-width: 720px) {
+        #profileBiodataForm .biodata {
+            grid-template-columns: 1fr;
+        }
+
+        #profileBiodataForm .info__row {
+            grid-template-columns: 1fr;
+            row-gap: 6px;
+        }
+
+        #profileBiodataForm .info__label {
+            min-height: 0;
+        }
+    }
+</style>
+
 <form id="profileBiodataForm" method="post" action="{{ route('profile.update') }}" enctype="multipart/form-data">
     @csrf
     @method('patch')
@@ -101,22 +257,14 @@
                                 @endif
                             </div>
                             <div data-edit>
-                                <div class="info__inline">
-                                    <input id="phone"
-                                           name="phone"
-                                           type="tel"
-                                           class="info__input"
-                                           value="{{ old('phone', $user->phone) }}"
-                                           placeholder="08xxxxxxxxxx"
-                                           maxlength="30"
-                                           autocomplete="tel" />
-
-                                    @unless ($user->phone)
-                                        <button type="button"
-                                                class="info__action info__action--link"
-                                                data-focus-target="phone">tambah</button>
-                                    @endunless
-                                </div>
+                                <input id="phone"
+                                       name="phone"
+                                       type="tel"
+                                       class="info__input"
+                                       value="{{ old('phone', $user->phone) }}"
+                                       placeholder="08xxxxxxxxxx"
+                                       maxlength="30"
+                                       autocomplete="tel" />
                                 <x-input-error :messages="$errors->get('phone')" />
                             </div>
                         </dd>
@@ -198,12 +346,6 @@
             const trigger = event.target.closest('[data-edit-trigger]');
             if (trigger) {
                 setEditing(true, trigger.dataset.focus);
-                return;
-            }
-
-            const focusOnly = event.target.closest('[data-focus-target]');
-            if (focusOnly) {
-                focusField(focusOnly.dataset.focusTarget);
                 return;
             }
 

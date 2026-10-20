@@ -286,6 +286,21 @@
                 }
             }
 
+            /* Override komponen Breeze (text-sm 14px, py-2 ~36px) HANYA di kartu guest
+               ≤640px: input 16px (cegah auto-zoom iOS) + target sentuh 44px.
+               Komponen bersama sengaja tidak diedit agar halaman admin aman. */
+            @media (max-width: 640px) {
+                .guest-form-card input:not([type="checkbox"]):not([type="radio"]),
+                .guest-form-card textarea {
+                    font-size: 16px;
+                    min-height: 44px;
+                }
+                .guest-form-card button {
+                    min-height: 44px;
+                    font-size: 16px;
+                }
+            }
+
             /* Footer */
             .guest-footer {
                 text-align: center;

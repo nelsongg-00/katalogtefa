@@ -127,6 +127,27 @@
         }
 
         /* ==========================================================
+           BREAKPOINT <= 640px (HP): target sentuh 44px, teks 13px
+        ========================================================== */
+        @media (max-width: 640px) {
+            .site-footer { font-size: 13px; }
+            .site-footer .footer__body { padding: 32px 16px 28px; }
+            /* Ikon sosial tetap 30px secara visual, area tap diperbesar via padding+margin */
+            .site-footer .footer__social a {
+                display: flex;
+                align-items: center;
+                padding: 7px;
+                margin: -7px;
+            }
+            .site-footer .footer__contact-item { align-items: center; min-height: 44px; }
+            .site-footer .footer__contact-item a {
+                display: inline-flex;
+                align-items: center;
+                min-height: 44px;
+            }
+        }
+
+        /* ==========================================================
            5. BREAKPOINT >= 1024px (desktop)
            ========================================================== */
         @media (min-width: 1024px) {

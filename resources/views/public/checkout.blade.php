@@ -121,6 +121,12 @@
         .co-product { flex-direction: column; }
         .co-qty { flex-direction: column; align-items: flex-start; }
     }
+    /* HP portrait: input 16px (cegah auto-zoom iOS), stepper 44px. Desktop tak berubah. */
+    @media (max-width: 640px) {
+        .co-field input, .co-field textarea { font-size: 16px; }
+        .co-stepper button { width: 44px; height: 44px; }
+        .co-stepper input { width: 68px; height: 44px; font-size: 16px; }
+    }
 </style>
 
 <div class="co">

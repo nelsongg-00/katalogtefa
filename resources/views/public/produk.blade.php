@@ -502,6 +502,14 @@
             row-gap: 44px;
         }
     }
+
+    /* ---------- MOBILE <=640px: input 16px (cegah zoom iOS), target sentuh 44px ---------- */
+    @media (max-width: 640px) {
+        .produk-page .search__input { height: 44px; font-size: 16px; }
+        .produk-page .search__btn { height: 44px; font-size: 14px; }
+        .produk-page .btn-card-order { min-height: 44px; font-size: 13px; }
+        .produk-page .filter-pill-btn { padding: 11px 4px; }
+    }
 </style>
 
 <div class="produk-page">

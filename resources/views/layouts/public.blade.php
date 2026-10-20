@@ -263,6 +263,24 @@
             color: #94a3b8;
             cursor: default;
         }
+
+        /* --- MOBILE (≤640px): target sentuh 44px & teks aman. Desktop tidak berubah. --- */
+        @media (max-width: 640px) {
+            img { max-width: 100%; }
+
+            .page-header { padding: 40px 16px; }
+            .page-header h1 { font-size: 28px; }
+            .page-header p { font-size: 15px; }
+
+            .page-btn { min-height: 44px; padding: 10px 14px; }
+            .page-num { min-width: 44px; height: 44px; }
+
+            /* toast memakai style inline (max-width 420px) → butuh !important */
+            #smart-toast-public {
+                max-width: calc(100vw - 32px) !important;
+                right: 16px !important;
+            }
+        }
     </style>
 </head>
 <body>

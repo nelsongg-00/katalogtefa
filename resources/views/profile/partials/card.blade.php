@@ -245,6 +245,15 @@
     .field__input::placeholder { color: var(--color-muted); opacity: 1; }
 
     /* ==========================================================
+       MOBILE <=640px: input 16px (cegah auto-zoom iOS), target sentuh 44px
+       ========================================================== */
+    @media (max-width: 640px) {
+        .info__input, .field__input { height: 44px; font-size: 16px; }
+        .btn { height: 44px; padding: 0 16px; }
+        .info__action { min-height: 44px; display: inline-flex; align-items: center; }
+    }
+
+    /* ==========================================================
        6. BREAKPOINT >= 640px (tablet)
        ========================================================== */
     @media (min-width: 640px) {

@@ -303,6 +303,14 @@
         .portofolio-page .pf-hero h1 { font-size: 30px; }
     }
 
+    /* ---------- MOBILE <=640px: input 16px (cegah zoom iOS), target sentuh 44px ---------- */
+    @media (max-width: 640px) {
+        .portofolio-page .pf-search__input { height: 44px; font-size: 16px; }
+        .portofolio-page .pf-search__btn { height: 44px; font-size: 14px; }
+        .portofolio-page .btn-card-detail { min-height: 44px; font-size: 13px; }
+        .portofolio-page .pf-filter-tabs a { min-height: 44px; display: inline-flex; align-items: center; }
+    }
+
     /* ---------- BREAKPOINT >= 640px (tablet) ---------- */
     @media (min-width: 640px) {
         .portofolio-page .pf-filter {
