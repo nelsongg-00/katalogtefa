@@ -165,6 +165,8 @@ class AdminJurusanController extends Controller
      */
     public function validateOrder(Request $request, Pesanan $pesanan): RedirectResponse
     {
+        $this->authorize('validate', $pesanan);
+
         $pesanan->update(['status_pesanan' => 'Validated']);
 
         return redirect()->back()->with('success', 'Pesanan berhasil divalidasi.');
@@ -175,6 +177,8 @@ class AdminJurusanController extends Controller
      */
     public function assignTask(Request $request, Pesanan $pesanan): RedirectResponse
     {
+        $this->authorize('assign', $pesanan);
+
         $request->validate(['worker_id' => 'required|exists:users,id']);
 
         Penugasan::create([
@@ -257,6 +261,8 @@ class AdminJurusanController extends Controller
      */
     public function updateProject(Request $request, Project $project): RedirectResponse
     {
+        $this->authorize('update', $project);
+
         $request->validate([
             'status' => 'required|in:pending,in_progress,completed,cancelled',
             'progress' => 'required|integer|min:0|max:100',
@@ -279,6 +285,8 @@ class AdminJurusanController extends Controller
      */
     public function deleteProject(Project $project): RedirectResponse
     {
+        $this->authorize('delete', $project);
+
         $project->delete();
 
         return redirect()->back()->with('success', 'Projek berhasil dihapus.');

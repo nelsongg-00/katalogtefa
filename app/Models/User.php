@@ -94,4 +94,49 @@ class User extends Authenticatable
     {
         return $this->hasMany(Project::class, 'worker_id');
     }
+
+    /**
+     * ID jurusan yang boleh diakses user ini, termasuk jurusan ber-kode sama.
+     *
+     * @return list<int>
+     */
+    public function jurusanIds(): array
+    {
+        $ids = $this->jurusan_id ? [(int) $this->jurusan_id] : [];
+
+        if ($this->jurusan && $this->jurusan->kode) {
+            $ids = array_merge(
+                $ids,
+                Jurusan::where('kode', $this->jurusan->kode)->pluck('id')->map(fn ($id) => (int) $id)->all()
+            );
+        }
+
+        return array_values(array_unique($ids));
+    }
+
+    /**
+     * Super admin bebas; role lain hanya untuk jurusannya sendiri.
+     */
+    public function ownsJurusan(?int $jurusanId): bool
+    {
+        if ($this->role === 'super_admin') {
+            return true;
+        }
+
+        return $jurusanId !== null && in_array((int) $jurusanId, $this->jurusanIds(), true);
+    }
+
+    /**
+     * Pesanan legacy tidak punya kolom jurusan; pemiliknya ditentukan dari produknya.
+     */
+    public function ownsPesananJurusan(Pesanan $pesanan): bool
+    {
+        if ($this->role === 'super_admin') {
+            return true;
+        }
+
+        return $pesanan->detailPesanans->contains(
+            fn (DetailPesanan $detail) => $this->ownsJurusan($detail->produk?->jurusan_id ?? $detail->product?->jurusan_id)
+        );
+    }
 }

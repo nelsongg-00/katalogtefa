@@ -33,14 +33,14 @@
         --color-border: #cfcfcf;
         --color-step-bg: #f1f1f1;
 
-        /* Tipografi */
+        /* Tipografi — ukuran disamakan dengan halaman Portofolio */
         --font-body: "Open Sauce Sans", "Hanken Grotesk", "Helvetica Neue", Arial, sans-serif;
-        --fs-xs: 0.8125rem;
+        --fs-xs: 11.5px;
         --fs-base: 0.9375rem;
-        --fs-md: 1rem;
-        --fs-hero-title: clamp(1.75rem, 5vw, 3rem);
-        --fs-hero-text: clamp(1rem, 2.5vw, 1.375rem);
-        --fs-card-title: clamp(1.25rem, 3vw, 1.5rem);
+        --fs-md: 12.5px;
+        --fs-hero-title: 42px;
+        --fs-hero-text: 15px;
+        --fs-card-title: 14.5px;
 
         /* Jarak & bentuk */
         --space-2: 0.5rem;
@@ -107,7 +107,7 @@
         max-width: 47rem;
         margin: 35px auto 0;
         font-size: var(--fs-hero-text);
-        line-height: 1.1;
+        line-height: 1.55;
     }
 
     /* ---------- AREA KONTEN + SEARCH BAR ---------- */
@@ -135,7 +135,7 @@
         border: 0;
         outline: none;
         background: transparent;
-        font-size: var(--fs-md);
+        font-size: 13px;
         font-weight: 600;
         text-transform: uppercase;
         color: var(--color-text);
@@ -154,7 +154,7 @@
         border-radius: var(--radius-pill);
         background: var(--color-track);
         font-weight: 700;
-        font-size: var(--fs-md);
+        font-size: 13px;
         letter-spacing: 0.02em;
         color: var(--color-white);
         cursor: pointer;
@@ -194,9 +194,9 @@
         border-radius: var(--radius-step);
         background: var(--color-step-bg);
     }
-    .status-page .step__number { font-size: 1.375rem; font-weight: 700; line-height: 1.2; }
+    .status-page .step__number { font-size: 19px; font-weight: 700; line-height: 1.2; }
     .status-page .step__title { margin-top: 8px; font-size: var(--fs-xs); font-weight: 700; line-height: 1.4; }
-    .status-page .step__text { margin-top: 12px; font-size: 0.6875rem; line-height: 1.1; color: var(--color-muted); }
+    .status-page .step__text { margin-top: 12px; font-size: 11.5px; line-height: 1.5; color: var(--color-muted); }
 
     /* ---------- BREAKPOINT >= 640px (tablet) ---------- */
     @media (min-width: 640px) {
@@ -217,7 +217,7 @@
     /* ---------- MOBILE ≤640px: sentuh 44px, input 16px, stepper menumpuk ---------- */
     @media (max-width: 640px) {
         .status-page .search__input { height: 44px; font-size: 16px; }
-        .status-page .search__button { height: 44px; }
+        .status-page .search__button { height: 44px; font-size: 14px; }
 
         /* stepper 4 kolom memakai inline style → butuh !important; tumpuk vertikal */
         div[style*="repeat(4, 1fr)"] {
@@ -232,6 +232,11 @@
         }
 
         a[href*="wa.me"] { min-height: 44px; }
+    }
+
+    /* hero menyusut di layar kecil — mengikuti pola halaman Portofolio */
+    @media (max-width: 600px) {
+        .status-page .hero__title { font-size: 30px; }
     }
 </style>
 <div class="status-page">
@@ -256,15 +261,15 @@
         <!-- Order Not Found -->
         <div style="background: #fff; border-radius: 16px; border: 1px solid #fee2e2; padding: 48px 24px; text-align: center; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05);">
             <div style="font-size: 48px; margin-bottom: 14px;">🔎</div>
-            <h3 style="font-size: 20px; font-weight: 800; color: #1e293b; margin-bottom: 8px;">Pesanan Tidak Ditemukan</h3>
+            <h3 style="font-size: 19px; font-weight: 800; color: #1e293b; margin-bottom: 8px;">Pesanan Tidak Ditemukan</h3>
             <p style="color: #64748b; font-size: 14.5px; max-width: 520px; margin: 0 auto 24px; line-height: 1.6;">
                 Kode tracking <strong style="color: #dc2626; font-family: inherit; background: #fef2f2; padding: 2px 8px; border-radius: 4px;">{{ $searchedCode }}</strong> tidak terdaftar dalam database kami. Pastikan format kode sudah sesuai (contoh: <code>TEFA-9821</code> untuk jasa atau <code>TEFA-FISIK-XXXX</code> untuk produk fisik).
             </p>
             <div style="display: flex; justify-content: center; gap: 12px; flex-wrap: wrap;">
-                <a href="{{ route('order.tracking.index') }}" style="background: #f1f5f9; color: #334155; padding: 10px 20px; border-radius: 10px; font-weight: 700; text-decoration: none; font-size: 13.5px;">
+                <a href="{{ route('order.tracking.index') }}" style="background: #f1f5f9; color: #334155; padding: 10px 20px; border-radius: 10px; font-weight: 700; text-decoration: none; font-size: 12.5px;">
                     Cari Kode Lain
                 </a>
-                <a href="https://wa.me/6281234567890?text=Halo%20Admin%20TeFa,%20saya%20ingin%20menanyakan%20kode%20pelacakan%20{{ $searchedCode }}" target="_blank" style="background: #25d366; color: #fff; padding: 10px 20px; border-radius: 10px; font-weight: 700; text-decoration: none; font-size: 13.5px; display: inline-flex; align-items: center; gap: 6px;">
+                <a href="https://wa.me/6281234567890?text=Halo%20Admin%20TeFa,%20saya%20ingin%20menanyakan%20kode%20pelacakan%20{{ $searchedCode }}" target="_blank" style="background: #25d366; color: #fff; padding: 10px 20px; border-radius: 10px; font-weight: 700; text-decoration: none; font-size: 12.5px; display: inline-flex; align-items: center; gap: 6px;">
                     <span>💬</span> Hubungi Admin WhatsApp
                 </a>
             </div>
@@ -318,20 +323,20 @@
                 <div style="padding: 24px; border-bottom: 1px solid #f1f5f9; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 16px; background: #fafcff;">
                     <div>
                         <div style="display: flex; align-items: center; gap: 8px;">
-                            <span style="font-size: 11px; font-weight: 800; background: #e0e7ff; color: #3730a3; padding: 2px 8px; border-radius: 4px; text-transform: uppercase;">
+                            <span style="font-size: 10.5px; font-weight: 800; background: #e0e7ff; color: #3730a3; padding: 2px 8px; border-radius: 4px; text-transform: uppercase;">
                                 Layanan Jasa
                             </span>
-                            <span style="font-size: 12px; font-weight: 600; color: #64748b;">Nomor Resi / Pelacakan</span>
+                            <span style="font-size: 11.5px; font-weight: 600; color: #64748b;">Nomor Resi / Pelacakan</span>
                         </div>
                         <div style="display: flex; align-items: center; gap: 10px; margin-top: 4px;">
-                            <span style="font-family: inherit; font-size: 24px; font-weight: 800; color: #1e3a8a;">{{ $order->order_code }}</span>
-                            <button type="button" onclick="navigator.clipboard.writeText('{{ $order->order_code }}'); alert('Kode tracking tersalin!');" title="Salin Kode" style="background: #eff6ff; border: 1px solid #bfdbfe; color: #2563eb; border-radius: 6px; padding: 4px 8px; font-size: 12px; cursor: pointer; font-weight: 700;">
+                            <span style="font-family: inherit; font-size: 19px; font-weight: 800; color: #1e3a8a;">{{ $order->order_code }}</span>
+                            <button type="button" onclick="navigator.clipboard.writeText('{{ $order->order_code }}'); alert('Kode tracking tersalin!');" title="Salin Kode" style="background: #eff6ff; border: 1px solid #bfdbfe; color: #2563eb; border-radius: 6px; padding: 4px 8px; font-size: 12.5px; cursor: pointer; font-weight: 700;">
                                 📋 Salin
                             </button>
                         </div>
                     </div>
                     <div>
-                        <span style="background: {{ $statusBg }}; color: {{ $statusColor }}; font-weight: 800; font-size: 13px; padding: 8px 16px; border-radius: 999px; display: inline-flex; align-items: center; gap: 6px; border: 1px solid rgba(0,0,0,0.05);">
+                        <span style="background: {{ $statusBg }}; color: {{ $statusColor }}; font-weight: 800; font-size: 12.5px; padding: 8px 16px; border-radius: 999px; display: inline-flex; align-items: center; gap: 6px; border: 1px solid rgba(0,0,0,0.05);">
                             <span style="width: 8px; height: 8px; border-radius: 50%; background: {{ $statusColor }};"></span>
                             {{ $statusLabel }}
                         </span>
@@ -340,7 +345,7 @@
 
                 <!-- Progress Bar -->
                 <div style="padding: 20px 24px; background: #fff; border-bottom: 1px solid #f1f5f9;">
-                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; font-size: 13px; font-weight: 700; color: #334155;">
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; font-size: 12.5px; font-weight: 700; color: #334155;">
                         <span>Progres Pengerjaan Keseluruhan</span>
                         <span style="color: #2563eb; font-weight: 800;">{{ $progressPercent }}%</span>
                     </div>
@@ -352,40 +357,40 @@
                 <!-- Meta Information Grid -->
                 <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 20px; padding: 24px; background: #fff;">
                     <div>
-                        <span style="font-size: 12px; color: #64748b; display: block; margin-bottom: 4px;">Pemesan</span>
-                        <strong style="color: #0f172a; font-size: 15px;">{{ $order->customer_name }}</strong>
+                        <span style="font-size: 11.5px; color: #64748b; display: block; margin-bottom: 4px;">Pemesan</span>
+                        <strong style="color: #0f172a; font-size: 14.5px;">{{ $order->customer_name }}</strong>
                     </div>
 
                     <div>
-                        <span style="font-size: 12px; color: #64748b; display: block; margin-bottom: 4px;">Layanan Jasa</span>
-                        <strong style="color: #0f172a; font-size: 15px;">{{ $order->service->nama_layanan ?? 'Layanan Jasa' }}</strong>
-                        <div style="font-size: 12px; color: #059669; font-weight: 600; margin-top: 2px;">
+                        <span style="font-size: 11.5px; color: #64748b; display: block; margin-bottom: 4px;">Layanan Jasa</span>
+                        <strong style="color: #0f172a; font-size: 14.5px;">{{ $order->service->nama_layanan ?? 'Layanan Jasa' }}</strong>
+                        <div style="font-size: 11.5px; color: #059669; font-weight: 600; margin-top: 2px;">
                             {{ $order->service->department->nama_jurusan ?? ($order->department->nama_jurusan ?? 'Unit Teaching Factory') }}
                         </div>
                     </div>
 
                     <div>
-                        <span style="font-size: 12px; color: #64748b; display: block; margin-bottom: 4px;">Talenta Siswa (Worker PJ)</span>
+                        <span style="font-size: 11.5px; color: #64748b; display: block; margin-bottom: 4px;">Talenta Siswa (Worker PJ)</span>
                         @if($order->worker)
                             <div style="display: flex; align-items: center; gap: 8px; margin-top: 2px;">
                                 <div style="width: 28px; height: 28px; border-radius: 50%; background: #2563eb; color: #fff; display: flex; align-items: center; justify-content: center; font-size: 12px; font-weight: 700;">
                                     {{ strtoupper(substr($order->worker->name, 0, 1)) }}
                                 </div>
-                                <strong style="color: #0f172a; font-size: 14px;">{{ $order->worker->name }}</strong>
+                                <strong style="color: #0f172a; font-size: 14.5px;">{{ $order->worker->name }}</strong>
                             </div>
                         @else
-                            <span style="color: #94a3b8; font-style: italic; font-size: 13.5px;">Tim Produksi Jurusan</span>
+                            <span style="color: #94a3b8; font-style: italic; font-size: 12.5px;">Tim Produksi Jurusan</span>
                         @endif
                     </div>
 
                     <div>
-                        <span style="font-size: 12px; color: #64748b; display: block; margin-bottom: 4px;">Tanggal Pemesanan</span>
-                        <strong style="color: #0f172a; font-size: 14px;">{{ $order->created_at ? $order->created_at->translatedFormat('d F Y, H:i') . ' WIB' : '-' }}</strong>
+                        <span style="font-size: 11.5px; color: #64748b; display: block; margin-bottom: 4px;">Tanggal Pemesanan</span>
+                        <strong style="color: #0f172a; font-size: 14.5px;">{{ $order->created_at ? $order->created_at->translatedFormat('d F Y, H:i') . ' WIB' : '-' }}</strong>
                     </div>
                 </div>
 
                 @if($order->catatan || $order->catatan_pelanggan)
-                    <div style="padding: 14px 24px; background: #f8fafc; border-top: 1px solid #f1f5f9; font-size: 13px; color: #475569;">
+                    <div style="padding: 14px 24px; background: #f8fafc; border-top: 1px solid #f1f5f9; font-size: 12.5px; color: #475569;">
                         <strong style="color: #1e293b;">Catatan Khusus Klien:</strong> {{ $order->catatan ?: $order->catatan_pelanggan }}
                     </div>
                 @endif
@@ -395,10 +400,10 @@
             <div style="background: #fff; border-radius: 16px; border: 1px solid #e2e8f0; padding: 28px 24px; box-shadow: 0 4px 12px rgba(0,0,0,0.05);">
                 <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px; border-bottom: 1px solid #f1f5f9; padding-bottom: 16px; flex-wrap: wrap; gap: 10px;">
                     <div>
-                        <h3 style="font-size: 18px; font-weight: 800; color: #0f172a; margin: 0 0 4px;">Lini Masa Progres Pengerjaan</h3>
-                        <p style="font-size: 13px; color: #64748b; margin: 0;">Catatan progres dan milestone pengerjaan oleh siswa worker dan instruktur TeFa.</p>
+                        <h3 style="font-size: 14.5px; font-weight: 800; color: #0f172a; margin: 0 0 4px;">Lini Masa Progres Pengerjaan</h3>
+                        <p style="font-size: 12.5px; color: #64748b; margin: 0;">Catatan progres dan milestone pengerjaan oleh siswa worker dan instruktur TeFa.</p>
                     </div>
-                    <span style="font-size: 12px; background: #eff6ff; color: #2563eb; font-weight: 700; padding: 4px 12px; border-radius: 999px;">
+                    <span style="font-size: 11.5px; background: #eff6ff; color: #2563eb; font-weight: 700; padding: 4px 12px; border-radius: 999px;">
                         Real-time Update
                     </span>
                 </div>
@@ -423,16 +428,16 @@
                                         <div style="width: 24px; height: 24px; border-radius: 50%; background: #e0e7ff; color: #2563eb; display: flex; align-items: center; justify-content: center; font-size: 11px; font-weight: 700;">
                                             👤
                                         </div>
-                                        <span style="font-size: 13.5px; font-weight: 700; color: {{ $index === 0 ? '#1e3a8a' : '#1e293b' }};">
+                                        <span style="font-size: 12.5px; font-weight: 700; color: {{ $index === 0 ? '#1e3a8a' : '#1e293b' }};">
                                             {{ $log->worker->name ?? ($order->worker->name ?? 'Tim TeFa') }}
                                         </span>
                                     </div>
-                                    <span style="font-size: 12px; color: #64748b; font-weight: 500;">
+                                    <span style="font-size: 11.5px; color: #64748b; font-weight: 500;">
                                         {{ $log->created_at ? $log->created_at->translatedFormat('d M Y, H:i') . ' WIB' : '-' }}
                                     </span>
                                 </div>
 
-                                <p style="font-size: 14px; color: #334155; line-height: 1.6; margin: 0 0 12px;">
+                                <p style="font-size: 12.5px; color: #334155; line-height: 1.6; margin: 0 0 12px;">
                                     {{ $log->catatan }}
                                 </p>
 
@@ -467,17 +472,17 @@
                         <div style="text-align: center; padding: 36px 20px; color: #64748b;">
                             <div style="font-size: 34px; margin-bottom: 8px;">⏳</div>
                             <strong style="color: #1e293b; display: block; font-size: 14.5px; margin-bottom: 4px;">Belum Ada Catatan Log Terbaru</strong>
-                            <p style="margin: 0; font-size: 13.5px;">Worker sedang mempersiapkan tahap pengerjaan. Catatan perkembangan dan milestone akan muncul di sini secara otomatis.</p>
+                            <p style="margin: 0; font-size: 12.5px;">Worker sedang mempersiapkan tahap pengerjaan. Catatan perkembangan dan milestone akan muncul di sini secara otomatis.</p>
                         </div>
                     @endforelse
                 </div>
 
                 <!-- Help Contact Footer -->
                 <div style="margin-top: 24px; padding-top: 20px; border-top: 1px solid #f1f5f9; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px;">
-                    <div style="font-size: 13px; color: #64748b;">
+                    <div style="font-size: 12.5px; color: #64748b;">
                         Punya pertanyaan atau ingin menyampaikan revisi terkait pesanan ini?
                     </div>
-                    <a href="https://wa.me/6281234567890?text=Halo%20Admin%20TeFa,%20saya%20ingin%20konsultasi%20mengenai%20pesanan%20jasa%20dengan%20kode%20{{ $order->order_code }}" target="_blank" style="background: #25d366; color: #fff; font-size: 13px; font-weight: 700; padding: 8px 18px; border-radius: 8px; text-decoration: none; display: inline-flex; align-items: center; gap: 6px;">
+                    <a href="https://wa.me/6281267143014?text=Halo%20Admin%20TeFa,%20saya%20ingin%20konsultasi%20mengenai%20pesanan%20jasa%20dengan%20kode%20{{ $order->order_code }}" target="_blank" style="background: #25d366; color: #fff; font-size: 12.5px; font-weight: 700; padding: 8px 18px; border-radius: 8px; text-decoration: none; display: inline-flex; align-items: center; gap: 6px;">
                         <span>💬</span> Hubungi Tim via WhatsApp
                     </a>
                 </div>
@@ -518,27 +523,27 @@
                 <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px; margin-bottom: 24px; border-bottom: 1px solid #f1f5f9; padding-bottom: 16px;">
                     <div>
                         <div style="display: flex; align-items: center; gap: 8px;">
-                            <span style="font-size: 11px; font-weight: 800; background: #ecfdf5; color: #059669; padding: 2px 8px; border-radius: 4px; text-transform: uppercase;">
+                            <span style="font-size: 10.5px; font-weight: 800; background: #ecfdf5; color: #059669; padding: 2px 8px; border-radius: 4px; text-transform: uppercase;">
                                 Produk Fisik (COD)
                             </span>
-                            <span style="font-size: 12px; color: #64748b; font-weight: 600;">Nomor Pelacakan</span>
+                            <span style="font-size: 11.5px; color: #64748b; font-weight: 600;">Nomor Pelacakan</span>
                         </div>
                         <div style="display: flex; align-items: center; gap: 10px; margin-top: 4px;">
-                            <span style="font-family: inherit; font-size: 24px; font-weight: 800; color: #1e3a8a;">{{ $order->order_code }}</span>
-                            <button type="button" onclick="navigator.clipboard.writeText('{{ $order->order_code }}'); alert('Kode tracking tersalin!');" title="Salin Kode" style="background: #eff6ff; border: 1px solid #bfdbfe; color: #2563eb; border-radius: 6px; padding: 4px 8px; font-size: 12px; cursor: pointer; font-weight: 700;">
+                            <span style="font-family: inherit; font-size: 19px; font-weight: 800; color: #1e3a8a;">{{ $order->order_code }}</span>
+                            <button type="button" onclick="navigator.clipboard.writeText('{{ $order->order_code }}'); alert('Kode tracking tersalin!');" title="Salin Kode" style="background: #eff6ff; border: 1px solid #bfdbfe; color: #2563eb; border-radius: 6px; padding: 4px 8px; font-size: 12.5px; cursor: pointer; font-weight: 700;">
                                 📋 Salin
                             </button>
                         </div>
                     </div>
                     <div>
-                        <span style="{{ $badgeStyle }} font-size: 13px; font-weight: 800; padding: 8px 16px; border-radius: 999px; display: inline-block;">
+                        <span style="{{ $badgeStyle }} font-size: 12.5px; font-weight: 800; padding: 8px 16px; border-radius: 999px; display: inline-block;">
                             {{ $badgeText }}
                         </span>
                     </div>
                 </div>
 
                 @if($statusKey === 'dibatalkan')
-                    <div style="background: #fef2f2; border-radius: 12px; padding: 18px; color: #b91c1c; font-size: 13.5px; line-height: 1.6;">
+                    <div style="background: #fef2f2; border-radius: 12px; padding: 18px; color: #b91c1c; font-size: 12.5px; line-height: 1.6;">
                         <strong>Pesanan Dibatalkan.</strong> Stok produk telah dikembalikan ke sistem. Jika terdapat kekeliruan, silakan hubungi admin jurusan terkait.
                     </div>
                 @else
@@ -599,11 +604,11 @@
                     <div style="display: flex; gap: 14px; align-items: flex-start;">
                         <div style="font-size: 28px; line-height: 1;">🏢🎉</div>
                         <div>
-                            <h3 style="font-size: 16px; font-weight: 800; color: #065f46; margin: 0 0 6px;">
+                            <h3 style="font-size: 14.5px; font-weight: 800; color: #065f46; margin: 0 0 6px;">
                                 Pesanan Siap Diambil di Lab Jurusan!
                             </h3>
-                            <p style="font-size: 14px; color: #047857; line-height: 1.6; margin: 0 0 8px;">
-                                Pesanan Anda sudah siap diambil di <strong>{{ $order->lokasi_pengambilan ?? 'Lab Jurusan TeFa' }}</strong>. Mohon siapkan uang tunai pas sebesar <strong style="color: #064e3b; font-size: 15px;">Rp {{ number_format($order->total_harga ?: $order->total_biaya, 0, ',', '.') }}</strong> saat pengambilan di kasir lab.
+                            <p style="font-size: 12.5px; color: #047857; line-height: 1.6; margin: 0 0 8px;">
+                                Pesanan Anda sudah siap diambil di <strong>{{ $order->lokasi_pengambilan ?? 'Lab Jurusan TeFa' }}</strong>. Mohon siapkan uang tunai pas sebesar <strong style="color: #064e3b; font-size: 14.5px;">Rp {{ number_format($order->total_harga ?: $order->total_biaya, 0, ',', '.') }}</strong> saat pengambilan di kasir lab.
                             </p>
                             <div style="font-size: 12.5px; color: #065f46;">
                                 📍 Lokasi Kampus: SMKN 4 Tanjungpinang (Jl. Nusantara No.KM.14 Batu IX). Jam Operasional: 08.00 - 15.30 WIB (Hari Kerja).
@@ -617,7 +622,7 @@
             <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 20px; margin-bottom: 24px;">
                 <!-- Info Barang -->
                 <div style="background: #ffffff; border-radius: 14px; border: 1px solid #e2e8f0; padding: 20px;">
-                    <h4 style="font-size: 13px; font-weight: 800; color: #64748b; margin: 0 0 14px; text-transform: uppercase; letter-spacing: 0.5px;">
+                    <h4 style="font-size: 12.5px; font-weight: 800; color: #64748b; margin: 0 0 14px; text-transform: uppercase; letter-spacing: 0.5px;">
                         Rincian Barang Pesanan
                     </h4>
                     <div style="display: flex; gap: 14px; align-items: center; margin-bottom: 14px;">
@@ -629,11 +634,11 @@
                             @endif
                         </div>
                         <div>
-                            <strong style="font-size: 15px; color: #1e293b; display: block;">{{ $order->product->nama_produk ?? 'Produk Fisik TeFa' }}</strong>
+                            <strong style="font-size: 14.5px; color: #1e293b; display: block;">{{ $order->product->nama_produk ?? 'Produk Fisik TeFa' }}</strong>
                             <span style="font-size: 12.5px; color: #64748b;">{{ $order->jumlah }} unit &times; Rp {{ number_format($order->product->harga ?? ($order->total_harga / max(1, $order->jumlah)), 0, ',', '.') }}</span>
                         </div>
                     </div>
-                    <div style="border-top: 1px solid #f1f5f9; padding-top: 10px; display: flex; justify-content: space-between; font-size: 14px; font-weight: 800;">
+                    <div style="border-top: 1px solid #f1f5f9; padding-top: 10px; display: flex; justify-content: space-between; font-size: 14.5px; font-weight: 800;">
                         <span>Total Tagihan COD:</span>
                         <span style="color: #2563eb;">Rp {{ number_format($order->total_harga ?: $order->total_biaya, 0, ',', '.') }}</span>
                     </div>
@@ -641,22 +646,22 @@
 
                 <!-- Info Pengambilan & Metode -->
                 <div style="background: #ffffff; border-radius: 14px; border: 1px solid #e2e8f0; padding: 20px;">
-                    <h4 style="font-size: 13px; font-weight: 800; color: #64748b; margin: 0 0 14px; text-transform: uppercase; letter-spacing: 0.5px;">
+                    <h4 style="font-size: 12.5px; font-weight: 800; color: #64748b; margin: 0 0 14px; text-transform: uppercase; letter-spacing: 0.5px;">
                         Lokasi & Metode Transaksi
                     </h4>
                     <div style="margin-bottom: 8px;">
-                        <span style="font-size: 12px; color: #64748b;">Metode Pengambilan:</span>
-                        <div style="font-size: 13.5px; font-weight: 700; color: #0f172a;">Ambil di Tempat (Self Pick-up)</div>
+                        <span style="font-size: 11.5px; color: #64748b;">Metode Pengambilan:</span>
+                        <div style="font-size: 12.5px; font-weight: 700; color: #0f172a;">Ambil di Tempat (Self Pick-up)</div>
                     </div>
                     <div style="margin-bottom: 8px;">
-                        <span style="font-size: 12px; color: #64748b;">Lokasi Lab Jurusan:</span>
-                        <div style="font-size: 13.5px; font-weight: 800; color: #16a34a;">
+                        <span style="font-size: 11.5px; color: #64748b;">Lokasi Lab Jurusan:</span>
+                        <div style="font-size: 12.5px; font-weight: 800; color: #16a34a;">
                             {{ $order->lokasi_pengambilan ?? ($order->product?->jurusan?->lokasi_pengambilan ?? 'Lab Teaching Factory SMKN 4') }}
                         </div>
                     </div>
                     <div>
-                        <span style="font-size: 12px; color: #64748b;">Metode Pembayaran:</span>
-                        <div style="font-size: 13px; font-weight: 700; color: #2563eb;">Cash on Delivery (Bayar Tunai di Kasir Lab)</div>
+                        <span style="font-size: 11.5px; color: #64748b;">Metode Pembayaran:</span>
+                        <div style="font-size: 12.5px; font-weight: 700; color: #2563eb;">Cash on Delivery (Bayar Tunai di Kasir Lab)</div>
                     </div>
                 </div>
             </div>
@@ -669,13 +674,13 @@
                         <h4 style="margin: 0 0 4px; font-size: 14.5px; font-weight: 800; color: #1e3a8a;">
                             Kelola Pesanan Lebih Mudah Lewat Akun Anda
                         </h4>
-                        <p style="margin: 0; font-size: 13px; color: #1e40af; line-height: 1.5;">
+                        <p style="margin: 0; font-size: 12.5px; color: #1e40af; line-height: 1.5;">
                             Untuk produk fisik, Anda juga dapat memantau status pesanan dan rincian pengambilan langsung melalui menu <strong>Pesanan Saya</strong> di akun Anda.
                         </p>
                     </div>
                 </div>
                 <div>
-                    <a href="{{ route('client.orders') }}" style="background: #2563eb; color: #fff; padding: 10px 20px; border-radius: 10px; font-weight: 700; text-decoration: none; font-size: 13.5px; display: inline-flex; align-items: center; gap: 6px; box-shadow: 0 4px 10px rgba(37,99,235,0.25);">
+                    <a href="{{ route('client.orders') }}" style="background: #2563eb; color: #fff; padding: 10px 20px; border-radius: 10px; font-weight: 700; text-decoration: none; font-size: 12.5px; display: inline-flex; align-items: center; gap: 6px; box-shadow: 0 4px 10px rgba(37,99,235,0.25);">
                         <span>Buka Pesanan Saya &rarr;</span>
                     </a>
                 </div>
@@ -683,10 +688,10 @@
 
             <!-- Help Contact Footer -->
             <div style="background: #fff; border-radius: 14px; border: 1px solid #e2e8f0; padding: 18px 24px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px;">
-                <div style="font-size: 13px; color: #64748b;">
+                <div style="font-size: 12.5px; color: #64748b;">
                     Ingin koordinasi atau konfirmasi kedatangan pengambilan pesanan fisik?
                 </div>
-                <a href="https://wa.me/6281234567890?text=Halo%20Admin%20TeFa,%20saya%20ingin%20konfirmasi%20pengambilan%20pesanan%20fisik%20dengan%20kode%20{{ $order->order_code }}" target="_blank" style="background: #25d366; color: #fff; font-size: 13px; font-weight: 700; padding: 8px 18px; border-radius: 8px; text-decoration: none; display: inline-flex; align-items: center; gap: 6px;">
+                <a href="https://wa.me/6281234567890?text=Halo%20Admin%20TeFa,%20saya%20ingin%20konfirmasi%20pengambilan%20pesanan%20fisik%20dengan%20kode%20{{ $order->order_code }}" target="_blank" style="background: #25d366; color: #fff; font-size: 12.5px; font-weight: 700; padding: 8px 18px; border-radius: 8px; text-decoration: none; display: inline-flex; align-items: center; gap: 6px;">
                     <span>💬</span> Chat Admin Pengambilan via WA
                 </a>
             </div>

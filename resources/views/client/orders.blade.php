@@ -41,16 +41,16 @@
         --status-done: #62e89c;      /* Selesai           — hijau      */
         --status-rejected: #ff1f2d;  /* Dibatalkan        — merah      */
 
-        /* Tipografi */
+        /* Tipografi — ukuran disamakan dengan halaman Portofolio */
         --font-body: "Open Sauce Sans", "Hanken Grotesk", "Helvetica Neue", Arial, sans-serif;
-        --fs-xs: 0.8125rem;
-        --fs-sm: 0.875rem;
+        --fs-xs: 11.5px;
+        --fs-sm: 12.5px;
         --fs-base: 0.9375rem;
-        --fs-md: 1rem;
-        --fs-price: 1.375rem;
-        --fs-order-title: 1.5rem;
-        --fs-hero-title: clamp(1.75rem, 5vw, 3rem);
-        --fs-hero-text: clamp(1rem, 2.5vw, 1.375rem);
+        --fs-md: 12.5px;
+        --fs-price: 19px;
+        --fs-order-title: 14.5px;
+        --fs-hero-title: 42px;
+        --fs-hero-text: 15px;
 
         /* Jarak & bentuk */
         --space-2: 0.5rem;
@@ -109,7 +109,7 @@
         max-width: 41rem;
         margin: 23px auto 0;
         font-size: var(--fs-hero-text);
-        line-height: 1.1;
+        line-height: 1.55;
     }
 
     /* ==========================================================
@@ -155,9 +155,9 @@
     }
 
     .my-orders-page .order__title {
-        font-size: 1.25rem;
+        font-size: var(--fs-order-title);
         font-weight: 600;
-        line-height: 1.2;
+        line-height: 1.4;
     }
 
     .my-orders-page .order__meta {
@@ -180,7 +180,7 @@
 
     .my-orders-page .order__code-chip {
         font-family: inherit;
-        font-size: 12px;
+        font-size: 11.5px;
         font-weight: 700;
         color: var(--color-primary);
         background: rgba(10, 74, 166, 0.08);
@@ -219,7 +219,7 @@
         align-items: center;
         gap: 6px;
         margin-top: 10px;
-        font-size: 13px;
+        font-size: 12.5px;
         font-weight: 700;
         color: var(--color-action);
     }
@@ -284,7 +284,7 @@
     }
 
     .my-orders-page .empty-card__title {
-        font-size: 1.25rem;
+        font-size: 19px;
         font-weight: 800;
     }
 
@@ -310,7 +310,7 @@
         padding: 12px 24px;
         border-radius: 12px;
         font-weight: 700;
-        font-size: 14px;
+        font-size: 12.5px;
     }
 
     .my-orders-page .empty-card__actions .btn-ghost {
@@ -320,6 +320,11 @@
     }
 
     .my-orders-page .empty-card__actions .btn-ghost:hover { background: var(--color-bg); }
+
+    /* Hero mengecil di layar kecil — mengikuti pola halaman Portofolio */
+    @media (max-width: 600px) {
+        .my-orders-page .hero__title { font-size: 30px; }
+    }
 
     /* ==========================================================
        6. BREAKPOINT >= 640px (tablet)
@@ -340,7 +345,6 @@
             font-size: 1.375rem;
         }
 
-        .my-orders-page .order__title { font-size: var(--fs-order-title); }
         .my-orders-page .order__meta { margin-top: 17px; }
 
         .my-orders-page .order__side {

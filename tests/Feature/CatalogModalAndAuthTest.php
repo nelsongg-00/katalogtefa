@@ -110,7 +110,7 @@ class CatalogModalAndAuthTest extends TestCase
         $response->assertStatus(200);
         $response->assertSee('Jasa Pembuatan Web Profil Perusahaan');
         $response->assertSee('Konsultasi via WhatsApp');
-        $response->assertSee('https://wa.me/628781948317', false);
+        $response->assertSee('https://wa.me/6281267143014', false);
         $response->assertSee('Kembali ke Katalog');
         $response->assertSee(route('jasa'), false);
     }
@@ -154,7 +154,7 @@ class CatalogModalAndAuthTest extends TestCase
         // Harus dialihkan ke WhatsApp dengan nomor tujuan dan pesan terenkode
         $response->assertRedirect();
         $targetUrl = $response->headers->get('Location');
-        $this->assertStringContainsString('https://wa.me/6281234567890', $targetUrl);
+        $this->assertStringContainsString('https://wa.me/6281267143014', $targetUrl);
         $this->assertStringContainsString('Jasa%20Pembuatan%20Web%20Profil%20Perusahaan', $targetUrl);
 
         // Verifikasi Order tercatat di DB

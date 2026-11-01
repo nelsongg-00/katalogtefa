@@ -71,6 +71,8 @@ class ProjectController extends Controller
      */
     public function update(Request $request, Project $project): RedirectResponse
     {
+        $this->authorize('update', $project);
+
         $request->validate([
             'status' => 'required|in:pending,in_progress,completed,cancelled',
             'progress' => 'required|integer|min:0|max:100',
@@ -93,6 +95,8 @@ class ProjectController extends Controller
      */
     public function destroy(Project $project): RedirectResponse
     {
+        $this->authorize('delete', $project);
+
         $project->delete();
 
         return redirect()->route('admin.projects.index')->with('success', 'Projek berhasil dihapus.');

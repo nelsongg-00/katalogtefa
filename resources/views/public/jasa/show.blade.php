@@ -355,8 +355,8 @@
                 $hasRealPhoto = !empty($service->foto) && !str_starts_with($service->foto, 'http') && file_exists(public_path('storage/' . $service->foto));
                 $photoUrl = $hasRealPhoto ? asset('storage/' . $service->foto) : null;
 
-                $waMessage = urlencode("Halo Admin Teaching Factory SMKN 4 Tanjungpinang, saya tertarik untuk berkonsultasi mengenai layanan jasa: {$service->nama_layanan} ({$deptNama}). Mohon info prosedur dan jadwalnya.");
-                $waUrl = "https://wa.me/628781948317?text={$waMessage}";
+                $waMessage = urlencode("Halo Admin Teaching Factory SMKN 4 Tanjungpinang, saya ingin memesan layanan jasa *{$service->nama_layanan}* ({$deptNama}). Mohon info detail prosedur, estimasi harga, dan jadwal pengerjaannya. Terima kasih!");
+                $waUrl = "https://wa.me/6281267143014?text={$waMessage}";
             @endphp
 
             <!-- Hero Thumbnail -->

@@ -137,6 +137,8 @@ class WorkerController extends Controller
      */
     public function updateProgress(Request $request, Penugasan $penugasan): RedirectResponse
     {
+        $this->authorize('update', $penugasan);
+
         $request->validate(['keterangan_progres' => 'required']);
 
         Progres::create([

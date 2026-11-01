@@ -366,39 +366,6 @@
             color: #0b60cf;
         }
 
-        /* Petunjuk scroll (mouse kecil) di dasar hero. */
-        .tefa-hero__scroll {
-            position: absolute;
-            z-index: 2;
-            left: 50%;
-            bottom: 22px;
-            width: 22px;
-            height: 36px;
-            margin-left: -11px;
-            border: 2px solid rgba(11, 96, 207, 0.55);
-            border-radius: 14px;
-            transition: opacity 0.3s ease;
-        }
-
-        .tefa-hero__scroll::before {
-            content: '';
-            position: absolute;
-            top: 6px;
-            left: 50%;
-            width: 3px;
-            height: 7px;
-            margin-left: -1.5px;
-            border-radius: 2px;
-            background: #0b60cf;
-            animation: wheel 1.6s ease-in-out infinite;
-        }
-
-        @keyframes wheel {
-            0%   { opacity: 0; transform: translateY(0); }
-            30%  { opacity: 1; }
-            100% { opacity: 0; transform: translateY(12px); }
-        }
-
         @media (min-width: 601px) and (max-width: 1023px) {
             .tefa-hero h1 {
                 font-size: 34px;
@@ -500,8 +467,6 @@
                     />
                 </svg>
             </div>
-
-            <div class="tefa-hero__scroll" id="heroScroll" aria-hidden="true"></div>
         </section>
 
         {{-- ================= ABOUT ================= --}}
@@ -898,7 +863,6 @@
                 var bar = document.getElementById('scrollProgress');
                 var hero = document.getElementById('hero');
                 var heroContent = document.getElementById('heroContent');
-                var heroScroll = document.getElementById('heroScroll');
                 var layers = document.querySelectorAll('[data-parallax-y]');
                 var imgs = document.querySelectorAll('[data-parallax-img]');
                 var ticking = false;
@@ -924,10 +888,6 @@
                             var fade = Math.max(0, 1 - y / (hero.offsetHeight * 0.55));
                             heroContent.style.transform = 'translate3d(0,' + (y * 0.28).toFixed(1) + 'px,0)';
                             heroContent.style.opacity = fade;
-                        }
-
-                        if (heroScroll) {
-                            heroScroll.style.opacity = Math.max(0, 1 - y / 120);
                         }
                     }
 

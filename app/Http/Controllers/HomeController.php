@@ -162,11 +162,11 @@ class HomeController extends Controller
             'is_service_via_wa' => true,
         ]);
 
-        $waPhone = '6281234567890';
-        $waMessage = "Halo Admin TeFa SMKN 4 Tanjungpinang, saya {$user->name} ingin konsultasi / konfirmasi pemesanan layanan jasa *{$service->nama_layanan}*.\n".
+        $waPhone = '6281267143014';
+        $waMessage = "Halo Admin TeFa SMKN 4 Tanjungpinang, saya {$user->name} ingin memesan layanan jasa *{$service->nama_layanan}*.\n".
             "Kode Pesanan: *{$order->order_code}*\n".
             'Estimasi Biaya: Rp '.number_format($service->estimasi_harga, 0, ',', '.')."\n".
-            'Mohon informasi tindak lanjut dan jadwal pengerjaannya. Terima kasih!';
+            'Mohon informasi detail prosedur, estimasi waktu, dan jadwal pengerjaannya. Terima kasih!';
 
         $waUrl = 'https://wa.me/'.$waPhone.'?text='.rawurlencode($waMessage);
 
