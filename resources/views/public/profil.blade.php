@@ -4,10 +4,11 @@
 
 @section('content')
 <style>
-    /* Halaman Profil TEFA — biru #0b60cf, aksen kuning #f2b630. */
+    /* Halaman Profil TEFA — biru #0b60cf, aksen kuning #f2b630, overlay hero #4681d7. */
     .pf {
         --blue: #0b60cf;
         --blue-soft: #6c9ddd;
+        --blue-overlay: #4681d7;
         --blue-deep: #08306b;
         --yellow: #f2b630;
         --ink: #0f1b33;
@@ -68,13 +69,15 @@
     /* titik berlian kecil (pengganti simbol/emoji) */
     .pf-dot { display: inline-block; width: 8px; height: 8px; background: var(--yellow); transform: rotate(45deg); flex: none; }
 
-    /* ================= HERO (banner persegi panjang) ================= */
+    /* ================= HERO ================= */
     .pf-hero {
-        position: relative; min-height: 540px; display: flex; align-items: center; overflow: hidden; isolation: isolate;
+        --hero-wave-height: 58%; /* sama dengan homepage */
+        --hero-wave-drop: 0px; /* posisi wave normal, sama dengan homepage */
+        position: relative; min-height: 600px; display: flex; align-items: flex-start; overflow: hidden; isolation: isolate;
         background:
-            linear-gradient(120deg, rgba(8,48,107,.9) 0%, rgba(11,96,207,.74) 55%, rgba(60,121,213,.5) 100%),
+            linear-gradient(120deg, rgba(70,129,215,.94) 0%, rgba(70,129,215,.78) 50%, rgba(70,129,215,.5) 100%),
             var(--hero-img) center / cover no-repeat;
-        background-color: #08306b;
+        background-color: var(--blue-overlay);
     }
 
     .pf-hero__grid {
@@ -103,7 +106,7 @@
     .pf-orb--3 > i { animation-duration: 13s; animation-delay: -6s; }
     @keyframes float { from { transform: translate3d(-18px,14px,0) scale(.95); } to { transform: translate3d(22px,-20px,0) scale(1.08); } }
 
-    .pf-hero__inner { position: relative; z-index: 2; width: 100%; display: grid; grid-template-columns: 1.15fr .85fr; gap: 40px; align-items: center; padding-top: 70px; padding-bottom: 70px; }
+    .pf-hero__inner { position: relative; z-index: 2; width: 100%; display: grid; grid-template-columns: 1.15fr .85fr; gap: 40px; align-items: start; padding-top: 44px; padding-bottom: 0; }
     .pf-hero__content { will-change: transform, opacity; }
 
     .pf-pill {
@@ -117,7 +120,7 @@
 
     .pf-hero h1 {
         margin: 0; color: #fff; font-family: 'Open Sauce One', 'Plus Jakarta Sans', sans-serif;
-        font-size: clamp(30px, 5vw, 52px); line-height: 1; font-weight: 800; letter-spacing: -1.1px; text-transform: uppercase;
+        font-size: clamp(28px, 3.4vw, 44px); line-height: 1.04; font-weight: 800; letter-spacing: -1px; text-transform: uppercase;
     }
     .pf-hero h1 em { font-style: normal; color: var(--yellow); }
     .pf-hero__line { display: block; overflow: hidden; padding-bottom: .1em; margin-bottom: -.1em; }
@@ -125,14 +128,14 @@
     @keyframes lineUp { to { transform: none; } }
 
     .pf-hero__lead {
-        max-width: 520px; margin: 18px 0 0; color: rgba(255,255,255,.9); font-size: 15px; line-height: 1.7;
+        max-width: 640px; margin: 14px 0 0; color: rgba(255,255,255,.9); font-size: 15px; line-height: 1.6;
         opacity: 0; transform: translateY(18px); animation: fadeUp .9s cubic-bezier(.16,1,.3,1) .75s forwards;
     }
     .pf-hero__actions { display: flex; align-items: center; gap: 12px; margin-top: 26px; flex-wrap: wrap; opacity: 0; transform: translateY(18px); animation: fadeUp .9s cubic-bezier(.16,1,.3,1) .95s forwards; }
     @keyframes fadeUp { to { opacity: 1; transform: none; } }
 
     /* kartu kaca + chip melayang di sisi kanan */
-    .pf-hero__visual { position: relative; height: 340px; opacity: 0; animation: fadeUp 1s cubic-bezier(.16,1,.3,1) .8s forwards; }
+    .pf-hero__visual { position: relative; height: 250px; align-self: start; opacity: 0; animation: fadeUp 1s cubic-bezier(.16,1,.3,1) .8s forwards; }
     .pf-glass {
         position: absolute; inset: 30px 10px; display: grid; place-items: center; text-align: center; padding: 24px;
         background: rgba(255,255,255,.12); border: 1px solid rgba(255,255,255,.35); border-radius: 28px;
@@ -149,14 +152,24 @@
         box-shadow: 0 14px 24px -12px rgba(0,0,0,.5); animation: bob 5s ease-in-out infinite alternate; will-change: transform;
     }
     .pf-chip--a { top: 0; left: 6%; }
-    .pf-chip--b { top: 14%; right: -2%; animation-delay: -1.5s; }
-    .pf-chip--c { bottom: 16%; left: -4%; animation-delay: -3s; }
-    .pf-chip--d { bottom: 0; right: 10%; animation-delay: -2.2s; }
+    .pf-chip--b { top: 8%; right: 2%; animation-delay: -1.5s; }
+    .pf-chip--c { top: 46%; left: -4%; animation-delay: -3s; }
+    .pf-chip--d { bottom: 2%; right: 12%; animation-delay: -2.2s; }
+    .pf-chip--e { top: 38%; right: -4%; animation-delay: -4s; }
+    .pf-chip--f { bottom: 6%; left: 20%; animation-delay: -0.8s; }
     @keyframes bob { from { transform: translateY(-7px) rotate(-1.5deg); } to { transform: translateY(9px) rotate(1.5deg); } }
 
-    /* garis aksen bawah banner */
-    .pf-hero__bar { position: absolute; inset: auto 0 0 0; height: 5px; z-index: 3; background: linear-gradient(90deg, transparent, var(--yellow), #ffd873, var(--yellow), transparent); background-size: 200% 100%; animation: barRun 4s linear infinite; }
-    @keyframes barRun { to { background-position: -200% 0; } }
+    /* ================= GELOMBANG HERO (identik dengan homepage) ================= */
+    .pf-hero__wave {
+        position: absolute; inset: auto 0 calc(var(--hero-wave-drop) * -1) 0; width: 100%;
+        height: var(--hero-wave-height); z-index: 1;
+        pointer-events: none; will-change: transform;
+    }
+    .pf-hero__wave svg { display: block; width: 100%; height: 100%; }
+    .pf-hero__wave svg.is-mobile { display: none; }
+    .pf-hero__wave--back { height: calc(var(--hero-wave-height) + 10%); }
+    .pf-hero__wave--back svg { width: 112%; margin-left: -6%; animation: drift 10s ease-in-out infinite alternate; }
+    @keyframes drift { from { transform: translateX(-4%); } to { transform: translateX(4%); } }
 
     .pf-btn {
         position: relative; display: inline-flex; align-items: center; justify-content: center; gap: 8px;
@@ -314,14 +327,21 @@
         .pf-loop { display: none; }
     }
     @media (max-width: 640px) {
-        .pf-hero { min-height: 500px; }
-        .pf-hero__inner { padding-top: 60px; padding-bottom: 60px; }
+        .pf-hero__inner { padding-top: 60px; padding-bottom: 120px; }
         .pf-about__frame { height: 300px; }
         .pf-about__float { right: 6px; }
         .pf-cta { padding: 48px 22px; }
         .pf-btn { min-height: 44px; }
         .js [data-reveal="left"]  { transform: translateX(-36px); }
         .js [data-reveal="right"] { transform: translateX(36px); }
+    }
+    /* Wave mobile: sama dengan homepage (≤600px) */
+    @media (max-width: 600px) {
+        .pf-hero { min-height: 100vh; --hero-wave-height: 50%; --hero-wave-drop: 0px; }
+        .pf-hero__wave { height: 190px; }
+        .pf-hero__wave--back { height: 215px; }
+        .pf-hero__wave svg.is-desktop { display: none; }
+        .pf-hero__wave svg.is-mobile { display: block; }
     }
 </style>
 
@@ -344,15 +364,13 @@
                     <div class="pf-pill">Profil Teaching Factory</div>
                     <h1 aria-label="Teaching Factory SMKN 4 Tanjungpinang">
                         <span class="pf-hero__line" style="--i:0" aria-hidden="true"><span>TEACHING <em>FACTORY</em></span></span>
-                        <span class="pf-hero__line" style="--i:1" aria-hidden="true"><span>SMKN 4</span></span>
-                        <span class="pf-hero__line" style="--i:2" aria-hidden="true"><span>TANJUNGPINANG</span></span>
+                        <span class="pf-hero__line" style="--i:1" aria-hidden="true"><span>SMKN 4 TANJUNGPINANG</span></span>
                     </h1>
                     <p class="pf-hero__lead">
                         Model pembelajaran berbasis produksi dan jasa nyata yang memadukan kurikulum kejuruan dengan standar operasional industri modern di 6 unit keahlian unggulan.
                     </p>
                     <div class="pf-hero__actions">
                         <a href="#jembatan" class="pf-btn pf-btn--primary">Kenali TEFA Lebih Dekat</a>
-                        <a href="{{ route('produk') }}" class="pf-btn pf-btn--outline">Katalog Produk TEFA</a>
                     </div>
                 </div>
 
@@ -370,11 +388,29 @@
                     <div class="pf-chip pf-chip--b" data-mouse="-30"><i class="pf-dot"></i>TKJ</div>
                     <div class="pf-chip pf-chip--c" data-mouse="34"><i class="pf-dot"></i>DKV</div>
                     <div class="pf-chip pf-chip--d" data-mouse="-24"><i class="pf-dot"></i>ANIMASI</div>
+                    <div class="pf-chip pf-chip--e" data-mouse="20"><i class="pf-dot"></i>GIM</div>
+                    <div class="pf-chip pf-chip--f" data-mouse="-18"><i class="pf-dot"></i>PSPT</div>
                 </div>
             </div>
         </div>
 
-        <div class="pf-hero__bar" aria-hidden="true"></div>
+        {{-- Wave: 2 lapis, identik dengan homepage (home.blade.php:456-525) --}}
+        <div class="pf-hero__wave pf-hero__wave--back" data-parallax-y="-0.06" aria-hidden="true">
+            <svg class="is-desktop" viewBox="0 0 815 145" preserveAspectRatio="none">
+                <path fill="rgba(250,250,250,0.35)" d="M 0 60 C 60 30, 120 40, 190 62 C 260 84, 330 70, 400 46 C 470 22, 540 24, 610 50 C 680 76, 750 62, 815 34 L 815 145 L 0 145 Z"/>
+            </svg>
+            <svg class="is-mobile" viewBox="0 0 815 145" preserveAspectRatio="xMidYMax slice">
+                <path fill="rgba(250,250,250,0.35)" d="M 0 60 C 60 30, 120 40, 190 62 C 260 84, 330 70, 400 46 C 470 22, 540 24, 610 50 C 680 76, 750 62, 815 34 L 815 145 L 0 145 Z"/>
+            </svg>
+        </div>
+        <div class="pf-hero__wave" aria-hidden="true">
+            <svg class="is-desktop" viewBox="0 0 815 145" preserveAspectRatio="none">
+                <path fill="#fafafa" d="M 0 75 C 28 89, 58 93, 91 92 C 143 90, 193 75, 235 54 C 285 29, 336 19, 376 19 C 416 19, 472 28, 516 51 C 579 84, 652 82, 712 72 C 754 65, 786 54, 815 30 L 815 145 L 0 145 Z"/>
+            </svg>
+            <svg class="is-mobile" viewBox="0 0 815 145" preserveAspectRatio="xMidYMax slice">
+                <path fill="#fafafa" d="M 0 75 C 28 89, 58 93, 91 92 C 143 90, 193 75, 235 54 C 285 29, 336 19, 376 19 C 416 19, 472 28, 516 51 C 579 84, 652 82, 712 72 C 754 65, 786 54, 815 30 L 815 145 L 0 145 Z"/>
+            </svg>
+        </div>
     </section>
 
     {{-- ================= TENTANG ================= --}}

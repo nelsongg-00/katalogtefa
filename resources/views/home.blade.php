@@ -236,6 +236,11 @@
             height: 100%;
         }
 
+        /* Versi mobile tidak dipakai di desktop. */
+        .tefa-hero__wave svg.is-mobile {
+            display: none;
+        }
+
         /* Gelombang belakang: lebih tinggi, tembus pandang, melayang ke kiri-kanan. */
         .tefa-hero__wave--back {
             height: calc(var(--hero-wave-height) + 10%);
@@ -378,6 +383,23 @@
                 --hero-wave-height: 50%;
             }
 
+            /* Gelombang mobile: tinggi tetap agar lengkungnya tidak tertarik vertikal */
+            .tefa-hero__wave {
+                height: 190px;
+            }
+
+            .tefa-hero__wave--back {
+                height: 215px;
+            }
+
+            .tefa-hero__wave svg.is-desktop {
+                display: none;
+            }
+
+            .tefa-hero__wave svg.is-mobile {
+                display: block;
+            }
+
             .tefa-hero__content {
                 width: calc(100% - 44px);
                 margin: 0 auto;
@@ -428,9 +450,26 @@
                 </div>
             </div>
 
-            {{-- Gelombang belakang (tembus pandang) --}}
+            {{-- Gelombang belakang (tembus pandang).
+                 is-desktop: desktop (preserveAspectRatio none, seperti desain)
+                 is-mobile : mobile (xMidYMax slice, proporsi lengkung tetap) --}}
             <div class="tefa-hero__wave tefa-hero__wave--back" data-parallax-y="-0.06" aria-hidden="true">
-                <svg viewBox="0 0 815 145" preserveAspectRatio="none">
+                <svg class="is-desktop" viewBox="0 0 815 145" preserveAspectRatio="none">
+                    <path
+                        fill="rgba(250,250,250,0.35)"
+                        d="
+                            M 0 60
+                            C 60 30, 120 40, 190 62
+                            C 260 84, 330 70, 400 46
+                            C 470 22, 540 24, 610 50
+                            C 680 76, 750 62, 815 34
+                            L 815 145
+                            L 0 145
+                            Z
+                        "
+                    />
+                </svg>
+                <svg class="is-mobile" viewBox="0 0 815 145" preserveAspectRatio="xMidYMax slice">
                     <path
                         fill="rgba(250,250,250,0.35)"
                         d="
@@ -449,7 +488,24 @@
 
             {{-- Gelombang depan (warna surface); tanpa parallax agar tidak meninggalkan garis biru di dasar hero --}}
             <div class="tefa-hero__wave" aria-hidden="true">
-                <svg viewBox="0 0 815 145" preserveAspectRatio="none">
+                <svg class="is-desktop" viewBox="0 0 815 145" preserveAspectRatio="none">
+                    <path
+                        fill="#fafafa"
+                        d="
+                            M 0 75
+                            C 28 89, 58 93, 91 92
+                            C 143 90, 193 75, 235 54
+                            C 285 29, 336 19, 376 19
+                            C 416 19, 472 28, 516 51
+                            C 579 84, 652 82, 712 72
+                            C 754 65, 786 54, 815 30
+                            L 815 145
+                            L 0 145
+                            Z
+                        "
+                    />
+                </svg>
+                <svg class="is-mobile" viewBox="0 0 815 145" preserveAspectRatio="xMidYMax slice">
                     <path
                         fill="#fafafa"
                         d="
